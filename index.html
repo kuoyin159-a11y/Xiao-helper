@@ -33,39 +33,6 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .add-btn{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;box-shadow:0 4px 14px var(--shadow);flex-shrink:0;}
 .add-btn:active{transform:scale(.9);}
 
-/* ── AI BAR ── */
-.ai-bar{margin:0 16px 12px;background:var(--surface);border:2px solid var(--blue);border-radius:16px;padding:12px 14px;box-shadow:0 2px 10px rgba(123,155,186,.12);}
-.ai-bar-label{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
-.ai-row{display:flex;gap:8px;align-items:flex-end;}
-.ai-textarea{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:13px;font-weight:600;outline:none;resize:none;line-height:1.5;min-height:44px;max-height:100px;}
-.ai-textarea:focus{border-color:var(--blue);}
-.ai-textarea::placeholder{color:var(--muted);}
-.ai-voice-btn{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ai-voice-btn.recording{background:var(--red-s);border-color:var(--red);animation:pulse 1s ease-in-out infinite;}
-.ai-send-btn{padding:10px 14px;border-radius:10px;border:none;background:var(--blue);color:#fff;font-size:12px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;flex-shrink:0;}
-.ai-send-btn:disabled{opacity:.5;}
-.ai-result{margin:0 16px 12px;background:var(--surface);border:2px solid var(--blue-s);border-radius:16px;padding:14px;display:none;box-shadow:0 2px 10px rgba(123,155,186,.1);}
-.ai-result.visible{display:block;}
-.ai-result-title{font-size:11px;font-weight:800;color:var(--blue);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;}
-.ai-result-card{background:var(--bg);border-radius:12px;padding:12px;margin-bottom:10px;border:1.5px solid var(--border);}
-.ai-result-type{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:4px;text-transform:uppercase;}
-.ai-result-text{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4;}
-.ai-result-tags{display:flex;gap:5px;flex-wrap:wrap;}
-.ai-rtag{padding:2px 9px;border-radius:10px;font-size:10px;font-weight:700;}
-.ai-rtag.schedule{background:var(--green-s);color:var(--green-d);}
-.ai-rtag.task-soon{background:var(--blue-s);color:var(--blue);}
-.ai-rtag.task-year{background:var(--purple-s);color:var(--purple);}
-.ai-rtag.note{background:#e8f0e4;color:#5a7a52;}
-.ai-reasoning{font-size:11px;color:var(--muted);margin-top:6px;font-weight:600;}
-.ai-actions{display:flex;gap:8px;margin-top:10px;}
-.ai-accept{flex:2;padding:10px;border-radius:10px;border:none;background:var(--green);color:#fff;font-size:13px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;}
-.ai-reject{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:13px;font-weight:700;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;}
-.ai-dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--blue);margin:0 2px;animation:dotBounce 1.2s ease-in-out infinite;}
-.ai-dots span:nth-child(2){animation-delay:.2s;}
-.ai-dots span:nth-child(3){animation-delay:.4s;}
-@keyframes dotBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-
 /* ── NAV TABS ── */
 .nav-tabs{display:flex;padding:0 12px;gap:5px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;}
 .nav-tabs::-webkit-scrollbar{display:none;}
@@ -99,9 +66,11 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .cal-cell.selected{background:var(--green-s);border:2px solid var(--green);}
 .cal-num{font-size:13px;font-weight:700;color:var(--text);line-height:1;}
 .cal-dots{display:flex;gap:2px;margin-top:2px;justify-content:center;}
-.cal-dot{width:4px;height:4px;border-radius:50%;}
+.cal-dot{width:5px;height:5px;border-radius:50%;}
 .cal-dot.schedule{background:var(--green);}
-.cal-dot.task{background:var(--blue);}
+.cal-dot.task-soon{background:var(--blue);}
+.cal-dot.task-year{background:var(--purple);}
+.cal-dot.trip{background:var(--orange);}
 
 .cal-day-panel{background:var(--surface);border-radius:16px;padding:14px;margin-top:14px;border:1.5px solid var(--border);box-shadow:0 2px 8px var(--shadow);}
 .cal-day-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;}
@@ -266,6 +235,17 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .today-summary{background:var(--surface);border-radius:14px;padding:12px 14px;margin-bottom:12px;border:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .today-summary-label{font-size:12px;font-weight:700;color:var(--muted);}
 .today-summary-count{font-size:13px;font-weight:800;color:var(--green-d);}
+
+/* sync */
+.nav-tab.active-sync{background:#e8f0e4;border-color:#5a7a52;color:#5a7a52;}
+.sync-card{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.sync-card-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.sync-card-desc{font-size:12px;color:var(--muted);font-weight:600;line-height:1.6;margin-bottom:14px;}
+.sync-btn{width:100%;padding:13px;border-radius:12px;border:none;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:8px;}
+.sync-btn-export{background:var(--green);color:#fff;box-shadow:0 3px 10px var(--shadow);}
+.sync-btn-import{background:var(--surface);color:var(--text);border:2px solid var(--border);}
+.sync-btn:active{opacity:.85;}
+.sync-last{font-size:11px;color:var(--muted);font-weight:600;text-align:center;margin-top:4px;}
 </style>
 </head>
 <body>
@@ -283,28 +263,18 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <button class="add-btn" onclick="openModal()">＋</button>
 </div>
 
-<!-- AI Bar -->
-<div class="ai-bar">
-  <div class="ai-bar-label">✦ AI 智慧輸入　語音或打字自動分類</div>
-  <div class="ai-row">
-    <textarea class="ai-textarea" id="ai-textarea" placeholder="說或打一件事…例如「5/7 17:00 去拿蛋糕」" rows="2"></textarea>
-    <button class="ai-voice-btn" id="ai-voice-btn" onclick="toggleAiVoice()">🎙</button>
-    <button class="ai-send-btn" id="ai-send-btn" onclick="aiClassify()">分析</button>
-  </div>
-</div>
-<div class="ai-result" id="ai-result"></div>
-
 <!-- Nav Tabs -->
 <div class="nav-tabs">
-  <button class="nav-tab"  id="tab-cal"    onclick="switchTab('cal')">📅<br>月曆</button>
-  <button class="nav-tab active-today"  id="tab-today"  onclick="switchTab('today')">📌<br>今日</button>
+  <button class="nav-tab active-cal"  id="tab-cal"    onclick="switchTab('cal')">📅<br>月曆</button>
+  <button class="nav-tab"             id="tab-today"  onclick="switchTab('today')">📌<br>今日</button>
   <button class="nav-tab"             id="tab-tasks"  onclick="switchTab('tasks')">✅<br>任務</button>
   <button class="nav-tab"             id="tab-weight" onclick="switchTab('weight')">⚖️<br>體重</button>
   <button class="nav-tab"             id="tab-kb"     onclick="switchTab('kb')">📝<br>知識庫</button>
+  <button class="nav-tab"             id="tab-sync"   onclick="switchTab('sync')">🔄<br>同步</button>
 </div>
 
 <!-- CALENDAR SECTION -->
-<div class="section" id="sec-cal">
+<div class="section visible" id="sec-cal">
   <div class="cal-header">
     <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
     <div class="cal-month" id="cal-month-label"></div>
@@ -315,6 +285,15 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div class="cal-dow">三</div><div class="cal-dow">四</div><div class="cal-dow">五</div><div class="cal-dow">六</div>
   </div>
   <div class="cal-grid" id="cal-grid"></div>
+
+  <!-- legend -->
+  <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 2px 0;margin-bottom:4px;">
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>行程</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0"></div>出差</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>近期任務</div>
+    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0"></div>年度目標</div>
+  </div>
+
   <div class="cal-day-panel" id="cal-day-panel" style="display:none">
     <div class="cal-day-title" id="cal-day-title"></div>
     <div id="cal-day-list"></div>
@@ -322,7 +301,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 </div>
 
 <!-- TODAY SECTION -->
-<div class="section visible" id="sec-today">
+<div class="section" id="sec-today">
   <div class="sec-label" style="color:var(--green-d)">今日行程</div>
   <div class="today-summary">
     <span class="today-summary-label">完成進度</span>
@@ -384,6 +363,37 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div id="kb-list"></div>
 </div>
 
+<!-- SYNC SECTION -->
+<div class="section" id="sec-sync">
+  <div class="sec-label" style="color:#5a7a52">資料同步</div>
+
+  <div class="sync-card">
+    <div class="sync-card-title">📤 匯出資料</div>
+    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
+    <button class="sync-btn sync-btn-export" onclick="exportData()">匯出到檔案</button>
+    <div class="sync-last" id="export-last"></div>
+  </div>
+
+  <div class="sync-card">
+    <div class="sync-card-title">📥 匯入資料</div>
+    <div class="sync-card-desc">選擇從另一台匯出的檔案，匯入後會覆蓋這台的現有資料，請確認後再操作。</div>
+    <button class="sync-btn sync-btn-import" onclick="document.getElementById('import-file').click()">選擇檔案匯入</button>
+    <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+    <div class="sync-last" id="import-last"></div>
+  </div>
+
+  <div class="sync-card" style="background:var(--green-s);border-color:var(--green)">
+    <div class="sync-card-title" style="color:var(--green-d)">💡 同步步驟</div>
+    <div class="sync-card-desc" style="color:var(--green-d)">
+      1. 在三星手機點「匯出到檔案」<br>
+      2. 用 LINE 把檔案傳給自己<br>
+      3. 在 iPad 打開 LINE 下載檔案<br>
+      4. iPad 點「選擇檔案匯入」選剛下載的檔案<br>
+      5. 完成！兩台資料就同步了 ✓
+    </div>
+  </div>
+</div>
+
 <button class="voice-fab" id="voice-fab" onclick="voiceFAB()">🎙</button>
 <div class="toast" id="toast"></div>
 
@@ -392,7 +402,6 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-title">新增項目</div>
-
     <div class="voice-area" id="voice-area" onclick="toggleModalVoice()">
       <span style="font-size:20px">🎙</span>
       <span id="voice-hint">點我語音輸入</span>
@@ -416,7 +425,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
         <input type="time" class="field-input" id="modal-time">
       </div>
       <div class="trip-toggle-row">
-        <span class="trip-toggle-label">📍 需提前提醒（出差/外出看診）</span>
+        <span class="trip-toggle-label">📍 提醒（出差／外出看診）</span>
         <label class="toggle-switch">
           <input type="checkbox" id="modal-trip">
           <span class="toggle-slider"></span>
@@ -432,7 +441,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">取消</button>
-      <button class="btn-save" onclick="saveItem()">儲存</button>
+      <button class="btn-save" onclick="saveItem()"><span id="btn-save-label">儲存</span></button>
     </div>
   </div>
 </div>
@@ -478,14 +487,14 @@ let kbNotes=JSON.parse(localStorage.getItem(KB_KEY)||'[]');
 let chartMonths=1;
 let kbFilter='all';
 
-let currentTab='today';
+let currentTab='cal';
 let selectedType='schedule';
+let editingId=null;  // null = new item, string = editing existing
 let calYear=new Date().getFullYear();
 let calMonth=new Date().getMonth();
 let selectedDate=todayStr();
 
 let modalVoiceRecording=false, modalVoiceRec=null;
-let aiVoiceRecording=false, aiVoiceRec=null;
 let nextId=100;
 
 // ═══════════ HELPERS ═══════════
@@ -553,10 +562,14 @@ function renderCalendar(){
     const isToday=dateStr===today;
     const isSel=dateStr===selectedDate;
     const dayEvents=events.filter(e=>e.date===dateStr);
-    const hasSched=dayEvents.some(e=>e.type==='schedule'||e.type==='task-soon');
-    const hasTask=dayEvents.some(e=>e.type==='task-year');
+    const hasSched=dayEvents.some(e=>e.type==='schedule'&&!e.trip);
+    const hasTrip=dayEvents.some(e=>e.type==='schedule'&&e.trip);
+    const hasSoon=dayEvents.some(e=>e.type==='task-soon');
+    const hasYear=dayEvents.some(e=>e.type==='task-year');
     const dots=(hasSched?`<div class="cal-dot schedule"></div>`:'')+
-               (hasTask?`<div class="cal-dot task"></div>`:'');
+               (hasTrip?`<div class="cal-dot trip"></div>`:'')+
+               (hasSoon?`<div class="cal-dot task-soon"></div>`:'')+
+               (hasYear?`<div class="cal-dot task-year"></div>`:'');
     cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''}" onclick="selectDate('${dateStr}')">
       <div class="cal-num">${day}</div>
       ${dots?`<div class="cal-dots">${dots}</div>`:''}
@@ -611,7 +624,10 @@ function eventCardHTML(e){
       <div class="event-name ${e.done?'done':''}">${escHtml(e.name)}</div>
       <div class="event-meta">${tags}</div>
     </div>
-    <button class="event-del" onclick="deleteEvent('${e.id}')">✕</button>
+    <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
+      <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="openEditModal('${e.id}')">✏️</button>
+      <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="deleteEvent('${e.id}')">✕</button>
+    </div>
   </div>`;
 }
 
@@ -721,7 +737,7 @@ function updateBadges(){
 // ═══════════ SWITCH TAB ═══════════
 function switchTab(tab){
   currentTab=tab;
-  ['cal','today','tasks','weight','kb'].forEach(c=>{
+  ['cal','today','tasks','weight','kb','sync'].forEach(c=>{
     const el=document.getElementById('tab-'+c);
     const badge=el?.querySelector('.tab-badge');
     if(el){el.className='nav-tab'+(c===tab?' active-'+c:'');if(badge)el.appendChild(badge);}
@@ -732,6 +748,9 @@ function switchTab(tab){
 
 // ═══════════ ADD MODAL ═══════════
 function openModal(dateStr){
+  editingId=null;
+  document.getElementById('modal-title').textContent='新增項目';
+  document.getElementById('btn-save-label').textContent='儲存';
   document.getElementById('modal-name').value='';
   document.getElementById('modal-date').value=dateStr||selectedDate||todayStr();
   document.getElementById('modal-time').value='';
@@ -742,7 +761,24 @@ function openModal(dateStr){
   selType(document.querySelector('.type-btn[data-type="schedule"]'));
   document.getElementById('overlay').classList.add('visible');
 }
-function closeModal(){ document.getElementById('overlay').classList.remove('visible'); stopModalVoice(); }
+
+function openEditModal(id){
+  const e=events.find(x=>x.id===id); if(!e)return;
+  editingId=id;
+  document.getElementById('modal-title').textContent='編輯項目';
+  document.getElementById('btn-save-label').textContent='更新';
+  document.getElementById('modal-name').value=e.name||'';
+  document.getElementById('modal-date').value=e.date||todayStr();
+  document.getElementById('modal-time').value=e.time||'';
+  document.getElementById('modal-deadline').value=e.deadline||'';
+  document.getElementById('modal-trip').checked=!!e.trip;
+  document.getElementById('voice-hint').textContent='點我語音輸入';
+  document.getElementById('voice-area').classList.remove('active');
+  selType(document.querySelector(`.type-btn[data-type="${e.type}"]`));
+  document.getElementById('overlay').classList.add('visible');
+}
+
+function closeModal(){ document.getElementById('overlay').classList.remove('visible'); stopModalVoice(); editingId=null; }
 function overlayClick(e){ if(e.target.id==='overlay') closeModal(); }
 
 function selType(btn){
@@ -755,18 +791,37 @@ function selType(btn){
 function saveItem(){
   const name=document.getElementById('modal-name').value.trim();
   if(!name){ showToast('請輸入名稱'); return; }
-  const e={ id:uid(), type:selectedType, name, done:false, carried:false };
-  if(selectedType==='schedule'){
-    e.date=document.getElementById('modal-date').value||todayStr();
-    e.time=document.getElementById('modal-time').value||'';
-    e.trip=document.getElementById('modal-trip').checked;
+
+  if(editingId){
+    // Edit existing
+    const e=events.find(x=>x.id===editingId); if(!e)return;
+    e.name=name;
+    e.type=selectedType;
+    if(selectedType==='schedule'){
+      e.date=document.getElementById('modal-date').value||todayStr();
+      e.time=document.getElementById('modal-time').value||'';
+      e.trip=document.getElementById('modal-trip').checked;
+      e.deadline='';
+    } else {
+      e.date='';
+      e.deadline=document.getElementById('modal-deadline').value||'';
+      e.time=''; e.trip=false;
+    }
+    saveEvents(); renderAll(); closeModal(); showToast('✓ 已更新');
   } else {
-    e.date='';
-    e.deadline=document.getElementById('modal-deadline').value||'';
+    // New item
+    const e={ id:uid(), type:selectedType, name, done:false, carried:false };
+    if(selectedType==='schedule'){
+      e.date=document.getElementById('modal-date').value||todayStr();
+      e.time=document.getElementById('modal-time').value||'';
+      e.trip=document.getElementById('modal-trip').checked;
+    } else {
+      e.date='';
+      e.deadline=document.getElementById('modal-deadline').value||'';
+    }
+    events.push(e);
+    saveEvents(); renderAll(); closeModal(); showToast('✓ 已儲存');
   }
-  events.push(e);
-  saveEvents(); renderAll(); closeModal();
-  showToast('✓ 已儲存');
 }
 
 // ═══════════ VOICE (MODAL) ═══════════
@@ -782,102 +837,6 @@ function startModalSR(SR){
   modalVoiceRec.onend=()=>stopModalVoice(); modalVoiceRec.onerror=()=>stopModalVoice(); modalVoiceRec.start();
 }
 function stopModalVoice(){ modalVoiceRecording=false; document.getElementById('voice-area').classList.remove('active'); if(modalVoiceRec){try{modalVoiceRec.stop();}catch(e){} modalVoiceRec=null;} }
-
-// ═══════════ AI ═══════════
-async function aiClassify(){
-  const text=document.getElementById('ai-textarea').value.trim();
-  if(!text){showToast('請先輸入內容');return;}
-  const btn=document.getElementById('ai-send-btn');
-  btn.disabled=true;
-  const resultEl=document.getElementById('ai-result');
-  resultEl.classList.add('visible');
-  resultEl.innerHTML=`<div style="display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;font-weight:700;"><div class="ai-dots"><span></span><span></span><span></span></div> AI 分析中…</div>`;
-  const yearTasks=events.filter(e=>e.type==='task-year').map(e=>e.name).join('、');
-  const prompt=`你是繁體中文智慧助理，分析用戶輸入，判斷類型並回傳 JSON。
-
-用戶輸入：「${text}」
-現有年度任務：${yearTasks||'（無）'}
-
-JSON 格式：
-{
-  "type": "schedule"（有時間的行程）或 "task-soon"（近期任務）或 "task-year"（年度目標）或 "note"（知識筆記），
-  "name": "名稱",
-  "date": "YYYY-MM-DD"（schedule時，若有提到日期），
-  "time": "HH:MM"（schedule時，若有提到時間），
-  "deadline": "YYYY-MM-DD"（task-soon時，若有截止日），
-  "trip": true或false（是否為出差/外出看診），
-  "topic": "annual"或"study"或"other"（note時），
-  "noteBody": "筆記內容"（note時），
-  "linkedTask": "相關年度任務名稱"或null,
-  "reasoning": "一句話理由"
-}
-
-規則：
-- 有具體時間或約定時間點 → schedule
-- 「要做、完成、安排」但無時間點 → task-soon
-- 長期大計畫 → task-year
-- 訣竅、學到的事 → note
-- 提到看診/出差/外出 → trip:true
-- 今年year=${new Date().getFullYear()}，推算日期時請用今年
-只回覆JSON`;
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})});
-    const data=await resp.json();
-    const raw=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
-    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
-    showAiResult(parsed);
-  }catch(e){
-    resultEl.innerHTML=`<div style="color:var(--red);font-size:13px;font-weight:700;">⚠️ 分析失敗，請手動新增</div>`;
-  }
-  btn.disabled=false;
-}
-
-function showAiResult(p){
-  const typeLabel={schedule:'行程',['task-soon']:'近期任務',['task-year']:'年度目標',note:'知識筆記'}[p.type]||p.type;
-  const tagClass={schedule:'schedule',['task-soon']:'task-soon',['task-year']:'task-year',note:'note'}[p.type]||'note';
-  let meta=`<span class="ai-rtag ${tagClass}">${typeLabel}</span>`;
-  if(p.date) meta+=`<span class="ai-rtag" style="background:var(--bg);color:var(--muted);border:1px solid var(--border)">${p.date}</span>`;
-  if(p.time) meta+=`<span class="ai-rtag" style="background:var(--bg);color:var(--muted);border:1px solid var(--border)">🕐 ${p.time}</span>`;
-  if(p.trip) meta+=`<span class="ai-rtag" style="background:var(--orange-s);color:var(--orange)">📍 出差行程</span>`;
-  if(p.deadline) meta+=`<span class="ai-rtag task-soon">截止 ${p.deadline}</span>`;
-  document.getElementById('ai-result').innerHTML=`
-    <div class="ai-result-title">✦ AI 分析結果</div>
-    <div class="ai-result-card">
-      <div class="ai-result-type">${typeLabel}</div>
-      <div class="ai-result-text">${escHtml(p.name||p.noteBody||'')}</div>
-      <div class="ai-result-tags">${meta}</div>
-      <div class="ai-reasoning">💬 ${escHtml(p.reasoning||'')}</div>
-    </div>
-    <div class="ai-actions">
-      <button class="ai-accept" onclick="acceptAi(${JSON.stringify(JSON.stringify(p))})">✓ 接受並儲存</button>
-      <button class="ai-reject" onclick="dismissAi()">重新輸入</button>
-    </div>`;
-}
-
-function acceptAi(pStr){
-  const p=JSON.parse(pStr);
-  if(p.type==='note'){
-    kbNotes.push({id:uid(),title:p.name||p.noteBody||'筆記',body:p.noteBody||'',topic:p.topic||'other',linkedTask:p.linkedTask||null,date:fmtDate(todayStr())});
-    saveKB(); renderKB(); switchTab('kb'); showToast('✓ 已加入知識庫');
-  } else {
-    const e={id:uid(),type:p.type,name:p.name,done:false,carried:false};
-    if(p.type==='schedule'){e.date=p.date||todayStr();e.time=p.time||'';e.trip=!!p.trip;}
-    else{e.date='';e.deadline=p.deadline||'';}
-    events.push(e); saveEvents(); renderAll();
-    if(p.type==='schedule'){selectedDate=e.date;switchTab('cal');}
-    showToast('✓ 已儲存');
-  }
-  document.getElementById('ai-textarea').value='';
-  dismissAi();
-}
-
-function dismissAi(){ const el=document.getElementById('ai-result'); el.classList.remove('visible'); el.innerHTML=''; }
-
-// AI Voice
-function voiceFAB(){ document.getElementById('ai-textarea').value=''; toggleAiVoice(); }
-function toggleAiVoice(){ if(aiVoiceRecording){stopAiVoice();return;} const SR=window.SpeechRecognition||window.webkitSpeechRecognition; if(SR)startAiSR(SR); else showToast('此裝置不支援語音'); }
-function startAiSR(SR){ aiVoiceRec=new SR(); aiVoiceRec.lang='zh-TW'; aiVoiceRec.continuous=false; aiVoiceRec.interimResults=true; aiVoiceRec.onstart=()=>{ aiVoiceRecording=true; document.getElementById('ai-voice-btn').classList.add('recording'); document.getElementById('voice-fab').classList.add('recording'); }; aiVoiceRec.onresult=e=>{ const t=Array.from(e.results).map(r=>r[0].transcript).join(''); document.getElementById('ai-textarea').value=t; }; aiVoiceRec.onend=()=>stopAiVoice(); aiVoiceRec.onerror=()=>stopAiVoice(); aiVoiceRec.start(); }
-function stopAiVoice(){ aiVoiceRecording=false; document.getElementById('ai-voice-btn').classList.remove('recording'); document.getElementById('voice-fab').classList.remove('recording'); if(aiVoiceRec){try{aiVoiceRec.stop();}catch(e){} aiVoiceRec=null;} }
 
 // ═══════════ WEIGHT ═══════════
 function renderWeight(){
@@ -984,7 +943,56 @@ function renderKB(){
 }
 function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); }
 
+// ═══════════ SYNC ═══════════
+function exportData(){
+  const data={
+    events, weightLog, weightGoal, kbNotes,
+    exportedAt: new Date().toISOString(),
+    version: 1
+  };
+  const json=JSON.stringify(data,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const d=new Date();
+  const fname=`小幫手_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
+  a.href=url; a.download=fname; a.click();
+  URL.revokeObjectURL(url);
+  const now=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('export-last').textContent=`上次匯出：${now}`;
+  showToast('✓ 已匯出，請用 LINE 傳到另一台');
+}
+
+function importData(event){
+  const file=event.target.files[0];
+  if(!file){ return; }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.events&&!data.weightLog&&!data.kbNotes){
+        showToast('⚠️ 檔案格式錯誤'); return;
+      }
+      if(!confirm('匯入後會覆蓋這台的現有資料，確定嗎？')){return;}
+      if(data.events)    { events=data.events;     saveEvents(); }
+      if(data.weightLog) { weightLog=data.weightLog; saveWt(); }
+      if(data.weightGoal){ weightGoal=data.weightGoal; saveGoal(); }
+      if(data.kbNotes)   { kbNotes=data.kbNotes;   saveKB(); }
+      renderAll();
+      const d=new Date();
+      const now=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+      document.getElementById('import-last').textContent=`上次匯入：${now}`;
+      showToast('✓ 匯入成功！資料已同步');
+    } catch(err){
+      showToast('⚠️ 檔案讀取失敗，請確認格式');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
 // ═══════════ TOAST / CLOCK ═══════════
+function voiceFAB(){ openModal(); setTimeout(toggleModalVoice,300); }
 let toastTimer=null;
 function showToast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); if(toastTimer)clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2600); }
 function updateClock(){ const d=new Date(); document.getElementById('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
