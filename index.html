@@ -1197,6 +1197,25 @@ function openModal(dateStr){
 }
 
 function openEditModal(id){
+  // Check if it's a KB note first
+  const note=kbNotes.find(x=>x.id===id);
+  if(note){
+    editingId=id;
+    document.getElementById('modal-title').textContent='編輯知識';
+    document.getElementById('btn-save-label').textContent='更新';
+    document.getElementById('modal-name').value=note.title||'';
+    document.getElementById('modal-date').value=note.dateStr||todayStr();
+    document.getElementById('modal-time').value='';
+    document.getElementById('modal-deadline').value='';
+    document.getElementById('modal-trip').checked=false;
+    document.getElementById('voice-hint').textContent='點我語音輸入';
+    document.getElementById('voice-area').classList.remove('active');
+    noteTopic=note.topic||'other';
+    selType(document.querySelector('.type-btn[data-type="note"]'));
+    document.getElementById('overlay').classList.add('visible');
+    return;
+  }
+  // Otherwise it's an event
   const e=events.find(x=>x.id===id); if(!e)return;
   editingId=id;
   document.getElementById('modal-title').textContent='編輯項目';
@@ -1260,6 +1279,14 @@ function saveItem(){
   if(!name){ showToast('請輸入內容'); return; }
 
   if(editingId){
+    // Check KB note first
+    const note=kbNotes.find(x=>x.id===editingId);
+    if(note){
+      note.title=name;
+      note.topic=noteTopic;
+      saveKB(); renderKB(); renderToday(); closeModal(); showToast('✓ 知識已更新'); return;
+    }
+    // Otherwise event
     const e=events.find(x=>x.id===editingId); if(!e)return;
     e.name=name; e.type=selectedType;
     if(selectedType==='schedule'){
@@ -1268,9 +1295,10 @@ function saveItem(){
       e.trip=document.getElementById('modal-trip').checked;
       e.deadline='';
     } else if(selectedType==='note'){
-      // editing note - find in kbNotes
-      const n=kbNotes.find(x=>x.id===editingId);
-      if(n){ n.title=name; saveKB(); renderKB(); closeModal(); showToast('✓ 已更新'); return; }
+      // Changing event to note — remove from events, add to kb
+      events=events.filter(x=>x.id!==editingId);
+      kbNotes.push({id:uid(),title:name,body:'',topic:noteTopic,linkedTask:null,date:fmtDate(todayStr()),dateStr:todayStr()});
+      saveEvents(); saveKB(); renderAll(); closeModal(); showToast('✓ 已轉存為知識'); return;
     } else {
       e.date=''; e.deadline=document.getElementById('modal-deadline').value||'';
       e.time=''; e.trip=false;
@@ -1417,13 +1445,27 @@ function renderKB(){
   const q=(document.getElementById('kb-search')?.value||'').toLowerCase();
   let list=[...kbNotes].reverse();
   if(kbFilter!=='all')list=list.filter(n=>n.topic===kbFilter);
-  if(q)list=list.filter(n=>(n.title+n.body).toLowerCase().includes(q));
+  if(q)list=list.filter(n=>(n.title+(n.body||'')).toLowerCase().includes(q));
   if(!list.length){el.innerHTML=`<div class="kb-empty">📝 還沒有知識記錄<br>語音輸入敘述性內容會自動存入這裡</div>`;return;}
   const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
   const tc={'annual':'kb-tag-annual','study':'kb-tag-study','other':'kb-tag-other'};
-  el.innerHTML=list.map(n=>`<div class="kb-card"><div class="kb-card-header"><div class="kb-card-title">${escHtml(n.title)}</div><button class="kb-card-del" onclick="delKB('${n.id}')">✕</button></div><div class="kb-card-body">${escHtml(n.body||'')}</div><div class="kb-card-footer"><span class="kb-tag ${tc[n.topic]||'kb-tag-other'}">${tl[n.topic]||'🌿 其他'}</span>${n.linkedTask?`<span class="kb-tag" style="background:var(--bg);color:var(--muted)">🔗 ${escHtml(n.linkedTask)}</span>`:''}<span class="kb-date">${n.date||''}</span></div></div>`).join('');
+  el.innerHTML=list.map(n=>`<div class="kb-card">
+    <div class="kb-card-header">
+      <div class="kb-card-title">${escHtml(n.title)}</div>
+      <div style="display:flex;gap:4px;">
+        <button class="kb-card-del" onclick="openEditModal('${n.id}')">✏️</button>
+        <button class="kb-card-del" onclick="delKB('${n.id}')">✕</button>
+      </div>
+    </div>
+    ${n.body?`<div class="kb-card-body">${escHtml(n.body)}</div>`:''}
+    <div class="kb-card-footer">
+      <span class="kb-tag ${tc[n.topic]||'kb-tag-other'}">${tl[n.topic]||'🌿 其他'}</span>
+      ${n.linkedTask?`<span class="kb-tag" style="background:var(--bg);color:var(--muted)">🔗 ${escHtml(n.linkedTask)}</span>`:''}
+      <span class="kb-date">${n.date||''}</span>
+    </div>
+  </div>`).join('');
 }
-function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); }
+function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); renderToday(); }
 
 // ═══════════ SYNC ═══════════
 function exportData(){
