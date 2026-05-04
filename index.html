@@ -119,12 +119,22 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .cal-cell.is-holiday .cal-num{color:var(--red);}
 .cal-cell.is-today.is-holiday .cal-num{color:#fff;}
 .cal-holiday-name{font-size:8px;color:var(--red);font-weight:800;line-height:1.2;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:1px;}
+.cal-solar-term{font-size:8px;color:#8a6a2a;font-weight:800;line-height:1.2;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:1px;}
 .cal-event-pill{display:block;width:100%;font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.5;}
 .cal-event-pill.schedule{background:var(--green-s);color:var(--green-d);}
+.cal-event-pill.schedule.multi-day{background:#d0e8d8;color:#3a6b4a;}
 .cal-event-pill.trip{background:var(--orange-s);color:#8a5c30;}
 .cal-event-pill.task-soon{background:var(--blue-s);color:var(--blue);}
 .cal-event-pill.task-year{background:var(--purple-s);color:var(--purple);}
 .cal-more{font-size:9px;font-weight:700;color:var(--muted);padding:0 4px;}
+.cal-today-btn{font-size:11px;font-weight:800;color:var(--green-d);background:var(--green-s);border:1.5px solid var(--green);border-radius:16px;padding:4px 12px;cursor:pointer;}
+.cal-today-btn:active{opacity:.8;}
+/* autocomplete */
+.autocomplete-list{position:absolute;left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:200;overflow:hidden;margin-top:2px;}
+.autocomplete-item{padding:10px 14px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;border-bottom:1px solid var(--border);}
+.autocomplete-item:last-child{border-bottom:none;}
+.autocomplete-item:active{background:var(--green-s);}
+.modal-name-wrap{position:relative;margin-bottom:12px;}
 
 .cal-day-panel{background:var(--surface);border-radius:16px;padding:14px;margin-top:12px;border:1.5px solid var(--border);box-shadow:0 2px 8px var(--shadow);}
 .cal-day-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;}
@@ -335,6 +345,9 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div class="cal-month" id="cal-month-label"></div>
     <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
   </div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+    <button class="cal-today-btn" onclick="goToToday()">回今天</button>
+  </div>
   <div class="cal-grid-header">
     <div class="cal-dow sun">日</div><div class="cal-dow">一</div><div class="cal-dow">二</div>
     <div class="cal-dow">三</div><div class="cal-dow">四</div><div class="cal-dow">五</div><div class="cal-dow sat">六</div>
@@ -463,15 +476,20 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     </div>
 
     <div class="field-label">內容</div>
-    <textarea class="field-input" id="modal-name" rows="2" placeholder="語音輸入後自動分類，或手動選類型填寫"></textarea>
+    <div class="modal-name-wrap">
+      <textarea class="field-input" id="modal-name" rows="2" placeholder="語音輸入後自動分類，或手動選類型填寫" oninput="onNameInput()" style="margin-bottom:0"></textarea>
+      <div class="autocomplete-list" id="autocomplete-list" style="display:none"></div>
+    </div>
 
     <!-- schedule fields -->
     <div id="schedule-fields">
-      <div class="field-label">日期與時間</div>
+      <div class="field-label">開始日期與時間</div>
       <div class="field-row">
         <input type="date" class="field-input" id="modal-date" min="2020-01-01" max="2099-12-31">
         <input type="time" class="field-input" id="modal-time">
       </div>
+      <div class="field-label">結束日期（多天行程選填）</div>
+      <input type="date" class="field-input" id="modal-end-date" min="2020-01-01" max="2099-12-31" style="margin-bottom:12px">
       <div class="trip-toggle-row">
         <span class="trip-toggle-label">📍 提醒（出差／外出看診）</span>
         <label class="toggle-switch">
@@ -599,9 +617,9 @@ function runDayChange(){
 // ═══════════ LUNAR CALENDAR ═══════════
 // Accurate lunar calendar using verified spring festival dates + month lengths
 const LUNAR_YEARS_DATA={
-  2025:{s:'2025-01-29',m:[30,29,30,29,30,30,29,30,29,30,29,30],l:0},
+  2025:{s:'2025-01-29',m:[30,29,30,29,30,30,29,29,30,29,30,29,29],l:6},
   2026:{s:'2026-02-17',m:[30,29,30,29,30,29,30,29,30,29,30,29],l:0},
-  2027:{s:'2027-02-06',m:[30,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2027:{s:'2027-02-06',m:[30,30,29,30,29,30,29,30,29,30,29,30,29],l:6},
   2028:{s:'2028-01-26',m:[29,30,29,30,29,30,30,29,30,29,30,29,30],l:6},
   2029:{s:'2029-02-13',m:[30,29,30,29,30,29,30,29,30,29,30,30],l:0},
   2030:{s:'2030-02-03',m:[29,30,29,30,29,30,29,30,29,30,29,30],l:0},
@@ -669,7 +687,6 @@ function getLunarText(dateStr){
   const target=new Date(dateStr);
   const year=target.getFullYear();
 
-  // Find which lunar year this belongs to
   let lyData=null, lunarYear=year;
   for(let y=year;y>=year-1;y--){
     if(LUNAR_YEARS_DATA[y]){
@@ -681,29 +698,27 @@ function getLunarText(dateStr){
 
   const spring=new Date(lyData.s);
   let dayOffset=Math.round((target-spring)/86400000);
-
-  // Walk through months
   const months=lyData.m;
-  const leapPos=lyData.l; // leap month position (1-based, 0=no leap)
-  let realMonth=0; // index into lunarMonthNames
+  const leapPos=lyData.l; // 1-based month number that has a leap, 0=none
+
+  // Walk through months array
+  // If leapPos=6, then index 0-5 = 正~六, index 6 = 閏六, index 7 = 七, etc.
+  let realMonthIdx=0; // index into lunarMonthNames (0=正,1=二...)
   let isLeap=false;
-  let actualMonthIndex=0; // index into months array
 
   for(let i=0;i<months.length;i++){
     if(dayOffset<months[i]){
-      // this is the month
-      // figure out real month number
-      // months array: if leapPos>0, month at index leapPos is the leap month
-      if(leapPos>0&&i===leapPos){
-        isLeap=true;
-        realMonth=leapPos-1; // same name as previous
-      } else if(leapPos>0&&i>leapPos){
-        realMonth=i-1;
-      } else {
-        realMonth=i;
-      }
+      // Found the month
       const day=dayOffset+1;
-      const monthLabel=`${isLeap?'閏':''}${lunarMonthNames[realMonth]}月`;
+      let monthLabel;
+      if(leapPos>0 && i===leapPos){
+        // This is the leap month
+        monthLabel=`閏${lunarMonthNames[leapPos-1]}月`;
+      } else {
+        // Real month index: if leap exists and i > leapPos, subtract 1
+        const mi=(leapPos>0 && i>leapPos) ? i-1 : i;
+        monthLabel=lunarMonthNames[mi]+'月';
+      }
       const result=day===1?monthLabel:lunarDayNames[day-1];
       lunarTextCache[dateStr]=result;
       return result;
@@ -735,7 +750,7 @@ function getQingming(y){
 // 除夕(Eve), 春節(New Year), 端午(Dragon Boat), 中秋(Mid-Autumn)
 const TW_LUNAR_FESTIVALS={
   2025:{eve:'2025-01-28',spring:'2025-01-29',dragon:'2025-05-31',autumn:'2025-10-06'},
-  2026:{eve:'2026-02-16',spring:'2026-02-17',dragon:'2026-06-20',autumn:'2026-09-25'},
+  2026:{eve:'2026-02-16',spring:'2026-02-17',dragon:'2026-06-19',autumn:'2026-09-25'},
   2027:{eve:'2027-02-05',spring:'2027-02-06',dragon:'2027-06-09',autumn:'2027-10-15'},
   2028:{eve:'2028-01-25',spring:'2028-01-26',dragon:'2028-05-28',autumn:'2028-10-03'},
   2029:{eve:'2029-02-12',spring:'2029-02-13',dragon:'2029-06-16',autumn:'2029-09-22'},
@@ -968,18 +983,30 @@ function renderCalendar(){
     const dayEvts=events.filter(e=>e.date===dateStr)
       .sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
 
-    // Build event pills
+    // Build event pills — include KB notes for this date
+    const allDayEvts=[...dayEvts];
+    // Add multi-day events starting before this date that include it
+    events.filter(e=>e.type==='schedule'&&e.endDate&&e.endDate>e.date&&e.date<dateStr&&e.endDate>=dateStr)
+      .forEach(e=>{ if(!allDayEvts.find(x=>x.id===e.id)) allDayEvts.push(e); });
+    const dayNotes=isOther?[]:kbNotes.filter(n=>n.dateStr===dateStr);
+    const allItems=[...allDayEvts,...dayNotes];
     const MAX=(holiday||solarTerm)?1:2;
     let pills='';
     if(holiday) pills+=`<span class="cal-holiday-name">${holiday}</span>`;
-    else if(solarTerm) pills+=`<span class="cal-holiday-name" style="color:var(--green-d)">${solarTerm}</span>`;
-    dayEvts.slice(0,MAX).forEach(e=>{
-      const pillClass=e.trip?'trip':e.type==='task-soon'?'task-soon':e.type==='task-year'?'task-year':'schedule';
-      const shortName=e.name.slice(0,4);
-      pills+=`<span class="cal-event-pill ${pillClass}">${escHtml(shortName)}</span>`;
+    else if(solarTerm) pills+=`<span class="cal-solar-term">🌿 ${solarTerm}</span>`;
+    allItems.slice(0,MAX).forEach(item=>{
+      if(item.type){
+        // event
+        const isMulti=!!(item.endDate&&item.endDate>item.date);
+        const pillClass=(item.trip?'trip':item.type==='task-soon'?'task-soon':item.type==='task-year'?'task-year':'schedule')+(isMulti?' multi-day':'');
+        pills+=`<span class="cal-event-pill ${pillClass}">${isMulti?'↔':''}${escHtml(item.name.slice(0,4))}</span>`;
+      } else {
+        // KB note
+        pills+=`<span class="cal-event-pill" style="background:#e8f0e4;color:#5a7a52">📝${escHtml(item.title.slice(0,3))}</span>`;
+      }
     });
-    if(dayEvts.length>MAX){
-      pills+=`<span class="cal-more">+${dayEvts.length-MAX}</span>`;
+    if(allItems.length>MAX){
+      pills+=`<span class="cal-more">+${allItems.length-MAX}</span>`;
     }
 
     cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''} ${isHoliday&&!isToday?'is-holiday':''}" onclick="selectDate('${dateStr}')">
@@ -990,6 +1017,13 @@ function renderCalendar(){
   }
   grid.innerHTML=cells;
   renderDayPanel();
+}
+
+function goToToday(){
+  const now=new Date();
+  calYear=now.getFullYear(); calMonth=now.getMonth();
+  selectedDate=todayStr();
+  renderCalendar();
 }
 
 function changeMonth(dir){
@@ -1009,19 +1043,38 @@ function renderDayPanel(){
   const title=document.getElementById('cal-day-title');
   const list=document.getElementById('cal-day-list');
   const dayEvts=events.filter(e=>e.date===selectedDate).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+  const dayNotes=kbNotes.filter(n=>n.dateStr===selectedDate);
   const holiday=getHoliday(selectedDate);
   const solarTerm=getSolarTerm(selectedDate);
   const lunar=getLunarText(selectedDate);
   const holidayTag=holiday?`<span style="font-size:11px;color:var(--red);font-weight:700;margin-left:6px;">🎌 ${holiday}</span>`:'';
-  const solarTermTag=solarTerm?`<span style="font-size:11px;color:var(--green-d);font-weight:700;margin-left:6px;">🌿 ${solarTerm}</span>`:'';
+  const solarTermTag=solarTerm?`<span style="font-size:11px;color:#8a6a2a;font-weight:700;margin-left:6px;">🌿 ${solarTerm}</span>`:'';
   const lunarTag=lunar?`<span style="font-size:11px;color:var(--muted);font-weight:600;margin-left:6px;">農曆${lunar}</span>`:'';
   title.innerHTML=`${fmtDate(selectedDate)}${selectedDate===todayStr()?' 今天':''}${lunarTag}${solarTermTag}${holidayTag}`;
   panel.style.display='block';
-  if(!dayEvts.length){
+
+  if(!dayEvts.length && !dayNotes.length){
     list.innerHTML=`<div class="cal-day-empty">這天沒有行程或任務<br><small>按右上角 🎙 新增</small></div>`;
     return;
   }
-  list.innerHTML=dayEvts.map(e=>eventCardHTML(e)).join('');
+
+  let html=dayEvts.map(e=>eventCardHTML(e)).join('');
+
+  if(dayNotes.length){
+    const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
+    html+=dayNotes.map(n=>`<div class="event-card" style="border-left:3px solid #5a7a52;">
+      <div class="event-body" style="padding-right:0">
+        <div class="event-name">${escHtml(n.title)}</div>
+        <div class="event-meta"><span class="etag" style="background:#e8f0e4;color:#5a7a52">📝 ${tl[n.topic]||'其他'}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
+        <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="openEditModal('${n.id}')">✏️</button>
+        <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="delKB('${n.id}');renderCalendar()">✕</button>
+      </div>
+    </div>`).join('');
+  }
+
+  list.innerHTML=html;
 }
 
 // ═══════════ EVENT CARD ═══════════
@@ -1031,6 +1084,7 @@ function eventCardHTML(e){
   let tags='';
   if(e.trip) tags+=`<span class="etag etag-trip">📍 出差行程</span>`;
   if(e.time) tags+=`<span class="etag etag-time">🕐 ${e.time}</span>`;
+  if(e.endDate&&e.endDate>e.date) tags+=`<span class="etag etag-time">↔ 至 ${fmtDate(e.endDate)}</span>`;
   if(e.carried) tags+=`<span class="etag etag-carried">🔁 順延</span>`;
   if(e.type==='task-soon'&&e.deadline) tags+=`<span class="etag etag-task">截止 ${fmtDate(e.deadline)}</span>`;
   if(e.type==='task-year') tags+=`<span class="etag etag-year">年度目標</span>`;
@@ -1189,10 +1243,13 @@ function openModal(dateStr){
   document.getElementById('modal-name').value='';
   document.getElementById('modal-date').value=dateStr||selectedDate||todayStr();
   document.getElementById('modal-time').value='';
+  document.getElementById('modal-end-date').value='';
   document.getElementById('modal-deadline').value='';
   document.getElementById('modal-trip').checked=false;
-  document.getElementById('voice-hint').textContent='點我語音輸入';
+  document.getElementById('voice-hint').textContent='語音輸入，自動判斷類型';
   document.getElementById('voice-area').classList.remove('active');
+  document.getElementById('autocomplete-list').style.display='none';
+  noteTopic='other';
   selType(document.querySelector('.type-btn[data-type="schedule"]'));
   document.getElementById('overlay').classList.add('visible');
 }
@@ -1224,6 +1281,7 @@ function openEditModal(id){
   document.getElementById('modal-name').value=e.name||'';
   document.getElementById('modal-date').value=e.date||todayStr();
   document.getElementById('modal-time').value=e.time||'';
+  document.getElementById('modal-end-date').value=e.endDate||'';
   document.getElementById('modal-deadline').value=e.deadline||'';
   document.getElementById('modal-trip').checked=!!e.trip;
   document.getElementById('voice-hint').textContent='點我語音輸入';
@@ -1232,7 +1290,36 @@ function openEditModal(id){
   document.getElementById('overlay').classList.add('visible');
 }
 
-function closeModal(){ document.getElementById('overlay').classList.remove('visible'); stopModalVoice(); editingId=null; }
+function closeModal(){
+  document.getElementById('overlay').classList.remove('visible');
+  document.getElementById('autocomplete-list').style.display='none';
+  stopModalVoice(); editingId=null;
+}
+
+// Autocomplete from past events
+function onNameInput(){
+  const q=document.getElementById('modal-name').value.trim();
+  const listEl=document.getElementById('autocomplete-list');
+  if(!q||q.length<1){ listEl.style.display='none'; return; }
+  // Get unique past event names matching input
+  const matches=[...new Set(
+    events.filter(e=>e.name&&e.name.includes(q)&&e.name!==q)
+      .map(e=>e.name)
+  )].slice(0,5);
+  if(!matches.length){ listEl.style.display='none'; return; }
+  listEl.innerHTML=matches.map(m=>
+    `<div class="autocomplete-item" onclick="selectAutocomplete('${escHtml(m)}')">${escHtml(m)}</div>`
+  ).join('');
+  listEl.style.display='block';
+}
+
+function selectAutocomplete(name){
+  document.getElementById('modal-name').value=name;
+  document.getElementById('autocomplete-list').style.display='none';
+  // Auto-classify
+  const type=smartClassify(name);
+  selType(document.querySelector(`.type-btn[data-type="${type}"]`));
+}
 function overlayClick(e){ if(e.target.id==='overlay') closeModal(); }
 
 let noteTopic='other';
@@ -1293,10 +1380,10 @@ function saveItem(){
     if(selectedType==='schedule'){
       e.date=document.getElementById('modal-date').value||todayStr();
       e.time=document.getElementById('modal-time').value||'';
+      e.endDate=document.getElementById('modal-end-date').value||'';
       e.trip=document.getElementById('modal-trip').checked;
       e.deadline='';
     } else if(selectedType==='note'){
-      // Changing event to note — remove from events, add to kb
       events=events.filter(x=>x.id!==editingId);
       kbNotes.push({id:uid(),title:name,body:'',topic:noteTopic,linkedTask:null,date:fmtDate(todayStr()),dateStr:todayStr()});
       saveEvents(); saveKB(); renderAll(); closeModal(); showToast('✓ 已轉存為知識'); return;
@@ -1315,6 +1402,7 @@ function saveItem(){
       if(selectedType==='schedule'){
         e.date=document.getElementById('modal-date').value||todayStr();
         e.time=document.getElementById('modal-time').value||'';
+        e.endDate=document.getElementById('modal-end-date').value||'';
         e.trip=document.getElementById('modal-trip').checked;
       } else {
         e.date=''; e.deadline=document.getElementById('modal-deadline').value||'';
