@@ -339,7 +339,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 </div>
 
 <!-- CALENDAR SECTION -->
-<div class="section visible" id="sec-cal">
+<div class="section visible" id="sec-cal" id="cal-swipe-area">
   <div class="cal-header">
     <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
     <div class="cal-month" id="cal-month-label"></div>
@@ -1610,6 +1610,26 @@ let toastTimer=null;
 function showToast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); if(toastTimer)clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2600); }
 function updateClock(){ const d=new Date(); document.getElementById('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
 function initDate(){ const d=new Date(),days=['日','一','二','三','四','五','六']; document.getElementById('header-date').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 週${days[d.getDay()]}`; }
+
+// ═══════════ SWIPE GESTURE (Calendar) ═══════════
+(function(){
+  let startX=0, startY=0, startTime=0;
+  const cal=document.getElementById('sec-cal');
+  cal.addEventListener('touchstart',e=>{
+    startX=e.touches[0].clientX;
+    startY=e.touches[0].clientY;
+    startTime=Date.now();
+  },{passive:true});
+  cal.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-startX;
+    const dy=e.changedTouches[0].clientY-startY;
+    const dt=Date.now()-startTime;
+    // Must be fast (<400ms), horizontal (dx > dy), and long enough (>50px)
+    if(dt<400 && Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5){
+      changeMonth(dx<0?1:-1);
+    }
+  },{passive:true});
+})();
 
 // ═══════════ BOOT ═══════════
 updateClock(); setInterval(updateClock,15000);
