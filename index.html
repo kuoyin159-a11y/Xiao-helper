@@ -8,8 +8,50 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="小幫手">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#f2f4f0">
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;小幫手&quot;,&quot;short_name&quot;:&quot;小幫手&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23f2f4f0&quot;,&quot;theme_color&quot;:&quot;%23f2f4f0&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%237a9e87'/%3E%3Cpolygon points='50,18 70,45 60,45 72,65 55,65 55,82 45,82 45,65 28,65 40,45 30,45' fill='%23ffffff'/%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;any&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+<meta name="theme-color" content="#7a9e87">
+<link rel="icon" type="image/png" sizes="192x192" id="favicon-link">
+<link rel="apple-touch-icon" id="apple-icon">
+<script>
+// Generate tree icon as canvas PNG and inject into manifest + link tags
+(function(){
+  const c=document.createElement('canvas');
+  c.width=192;c.height=192;
+  const ctx=c.getContext('2d');
+  // background circle
+  ctx.fillStyle='#7a9e87';
+  ctx.beginPath();ctx.arc(96,96,96,0,Math.PI*2);ctx.fill();
+  // trunk
+  ctx.fillStyle='#5c4033';
+  ctx.fillRect(82,130,28,45);
+  // tree layers
+  ctx.fillStyle='#ffffff';
+  // bottom layer
+  ctx.beginPath();ctx.moveTo(96,30);ctx.lineTo(148,95);ctx.lineTo(44,95);ctx.closePath();ctx.fill();
+  // middle layer
+  ctx.beginPath();ctx.moveTo(96,50);ctx.lineTo(142,108);ctx.lineTo(50,108);ctx.closePath();ctx.fill();
+  // top layer
+  ctx.beginPath();ctx.moveTo(96,68);ctx.lineTo(136,122);ctx.lineTo(56,122);ctx.closePath();ctx.fill();
+  // overlap fix - redraw trunk on top
+  ctx.fillStyle='#5c4033';
+  ctx.fillRect(82,122,28,48);
+
+  const png=c.toDataURL('image/png');
+  // set favicon
+  document.getElementById('favicon-link').href=png;
+  document.getElementById('apple-icon').href=png;
+  // inject manifest
+  const manifest={
+    name:'小幫手',short_name:'小幫手',display:'standalone',
+    background_color:'#7a9e87',theme_color:'#7a9e87',start_url:'.',
+    icons:[{src:png,sizes:'192x192',type:'image/png'},{src:png,sizes:'512x512',type:'image/png'}]
+  };
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const ml=document.createElement('link');
+  ml.rel='manifest';ml.href=url;
+  document.head.appendChild(ml);
+})();
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Nunito:wght@400;600;700;800&display=swap');
 :root {
