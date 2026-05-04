@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🌿 小幫手</title>
+<title>🌳 小幫手</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="小幫手">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#f2f4f0">
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;小幫手&quot;,&quot;short_name&quot;:&quot;小幫手&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23f2f4f0&quot;,&quot;theme_color&quot;:&quot;%23f2f4f0&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;any&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;小幫手&quot;,&quot;short_name&quot;:&quot;小幫手&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;%23f2f4f0&quot;,&quot;theme_color&quot;:&quot;%23f2f4f0&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%237a9e87'/%3E%3Cpolygon points='50,18 70,45 60,45 72,65 55,65 55,82 45,82 45,65 28,65 40,45 30,45' fill='%23ffffff'/%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;any&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Nunito:wght@400;600;700;800&display=swap');
 :root {
@@ -51,28 +51,34 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .sec-label::before{content:'';width:3px;height:12px;border-radius:2px;background:currentColor;flex-shrink:0;}
 
 /* ── CALENDAR ── */
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .cal-month{font-size:18px;font-weight:800;color:var(--text);}
 .cal-nav-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
 .cal-nav-btn:active{background:var(--green-s);}
-.cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+.cal-grid-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:2px;}
 .cal-dow{text-align:center;font-size:10px;font-weight:800;color:var(--muted);padding:4px 0;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-.cal-cell{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;position:relative;padding:2px;}
+.cal-dow.sun{color:var(--red);}
+.cal-dow.sat{color:var(--orange);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--border);border-left:1px solid var(--border);}
+.cal-cell{min-height:72px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;padding:4px 3px;display:flex;flex-direction:column;align-items:flex-start;background:var(--surface);position:relative;}
 .cal-cell:active{background:var(--green-s);}
+.cal-cell.other-month{background:var(--bg);}
 .cal-cell.other-month .cal-num{color:var(--border);}
-.cal-cell.is-today{background:var(--green);border-radius:10px;}
+.cal-cell.is-today .cal-num-wrap{background:var(--green);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
 .cal-cell.is-today .cal-num{color:#fff;font-weight:800;}
-.cal-cell.selected{background:var(--green-s);border:2px solid var(--green);}
-.cal-num{font-size:13px;font-weight:700;color:var(--text);line-height:1;}
-.cal-dots{display:flex;gap:2px;margin-top:2px;justify-content:center;}
-.cal-dot{width:5px;height:5px;border-radius:50%;}
-.cal-dot.schedule{background:var(--green);}
-.cal-dot.task-soon{background:var(--blue);}
-.cal-dot.task-year{background:var(--purple);}
-.cal-dot.trip{background:var(--orange);}
+.cal-cell.selected{background:var(--green-s);}
+.cal-num-wrap{width:22px;height:22px;display:flex;align-items:center;justify-content:center;margin-bottom:2px;}
+.cal-num{font-size:12px;font-weight:700;color:var(--text);line-height:1;}
+.cal-num.sun{color:var(--red);}
+.cal-num.sat{color:var(--orange);}
+.cal-event-pill{display:block;width:100%;font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.5;}
+.cal-event-pill.schedule{background:var(--green-s);color:var(--green-d);}
+.cal-event-pill.trip{background:var(--orange-s);color:#8a5c30;}
+.cal-event-pill.task-soon{background:var(--blue-s);color:var(--blue);}
+.cal-event-pill.task-year{background:var(--purple-s);color:var(--purple);}
+.cal-more{font-size:9px;font-weight:700;color:var(--muted);padding:0 4px;}
 
-.cal-day-panel{background:var(--surface);border-radius:16px;padding:14px;margin-top:14px;border:1.5px solid var(--border);box-shadow:0 2px 8px var(--shadow);}
+.cal-day-panel{background:var(--surface);border-radius:16px;padding:14px;margin-top:12px;border:1.5px solid var(--border);box-shadow:0 2px 8px var(--shadow);}
 .cal-day-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;}
 .cal-day-empty{text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:600;}
 
@@ -252,12 +258,12 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
 <div class="status-bar">
   <span id="clock">--:--</span>
-  <span>🌿 小幫手</span>
+  <span>🌳 小幫手</span>
 </div>
 
 <div class="header">
   <div>
-    <div class="header-title">🌿 小幫手</div>
+    <div class="header-title">🌳 小幫手</div>
     <div class="header-date" id="header-date"></div>
   </div>
   <button class="add-btn" onclick="openModal()">＋</button>
@@ -281,18 +287,10 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
   </div>
   <div class="cal-grid-header">
-    <div class="cal-dow">日</div><div class="cal-dow">一</div><div class="cal-dow">二</div>
-    <div class="cal-dow">三</div><div class="cal-dow">四</div><div class="cal-dow">五</div><div class="cal-dow">六</div>
+    <div class="cal-dow sun">日</div><div class="cal-dow">一</div><div class="cal-dow">二</div>
+    <div class="cal-dow">三</div><div class="cal-dow">四</div><div class="cal-dow">五</div><div class="cal-dow sat">六</div>
   </div>
   <div class="cal-grid" id="cal-grid"></div>
-
-  <!-- legend -->
-  <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 2px 0;margin-bottom:4px;">
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>行程</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0"></div>出差</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>近期任務</div>
-    <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);font-weight:700;"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0"></div>年度目標</div>
-  </div>
 
   <div class="cal-day-panel" id="cal-day-panel" style="display:none">
     <div class="cal-day-title" id="cal-day-title"></div>
@@ -561,18 +559,28 @@ function renderCalendar(){
     const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
     const isToday=dateStr===today;
     const isSel=dateStr===selectedDate;
-    const dayEvents=events.filter(e=>e.date===dateStr);
-    const hasSched=dayEvents.some(e=>e.type==='schedule'&&!e.trip);
-    const hasTrip=dayEvents.some(e=>e.type==='schedule'&&e.trip);
-    const hasSoon=dayEvents.some(e=>e.type==='task-soon');
-    const hasYear=dayEvents.some(e=>e.type==='task-year');
-    const dots=(hasSched?`<div class="cal-dot schedule"></div>`:'')+
-               (hasTrip?`<div class="cal-dot trip"></div>`:'')+
-               (hasSoon?`<div class="cal-dot task-soon"></div>`:'')+
-               (hasYear?`<div class="cal-dot task-year"></div>`:'');
+    const dow=i%7; // 0=Sun, 6=Sat
+    const numClass=dow===0?'cal-num sun':dow===6?'cal-num sat':'cal-num';
+
+    // Get events for this day (sorted by time)
+    const dayEvts=events.filter(e=>e.date===dateStr)
+      .sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+
+    // Build event pills (max 2, then +N more)
+    const MAX=2;
+    let pills='';
+    dayEvts.slice(0,MAX).forEach(e=>{
+      const pillClass=e.trip?'trip':e.type==='task-soon'?'task-soon':e.type==='task-year'?'task-year':'schedule';
+      const shortName=e.name.slice(0,4);
+      pills+=`<span class="cal-event-pill ${pillClass}">${escHtml(shortName)}</span>`;
+    });
+    if(dayEvts.length>MAX){
+      pills+=`<span class="cal-more">+${dayEvts.length-MAX}</span>`;
+    }
+
     cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''}" onclick="selectDate('${dateStr}')">
-      <div class="cal-num">${day}</div>
-      ${dots?`<div class="cal-dots">${dots}</div>`:''}
+      <div class="cal-num-wrap"><div class="${numClass}">${day}</div></div>
+      ${pills}
     </div>`;
   }
   grid.innerHTML=cells;
