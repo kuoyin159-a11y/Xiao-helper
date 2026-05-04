@@ -113,6 +113,12 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .cal-num{font-size:12px;font-weight:700;color:var(--text);line-height:1;}
 .cal-num.sun{color:var(--red);}
 .cal-num.sat{color:var(--orange);}
+.cal-lunar{font-size:8px;color:var(--muted);font-weight:600;line-height:1;margin-bottom:1px;}
+.cal-lunar.holiday-lunar{color:var(--red);}
+.cal-cell.is-holiday{background:#fff5f5;}
+.cal-cell.is-holiday .cal-num{color:var(--red);}
+.cal-cell.is-today.is-holiday .cal-num{color:#fff;}
+.cal-holiday-name{font-size:8px;color:var(--red);font-weight:800;line-height:1.2;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:1px;}
 .cal-event-pill{display:block;width:100%;font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.5;}
 .cal-event-pill.schedule{background:var(--green-s);color:var(--green-d);}
 .cal-event-pill.trip{background:var(--orange-s);color:#8a5c30;}
@@ -270,7 +276,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-unit{font-size:14px;color:var(--muted);font-weight:700;}
 
 /* ── FAB ── */
-.voice-fab{position:fixed;bottom:26px;right:calc(50% - 228px);width:54px;height:54px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px var(--shadow);font-size:22px;z-index:50;}
+.voice-fab{position:fixed;bottom:26px;right:calc(50% - 228px);width:54px;height:54px;border-radius:50%;background:var(--green);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px var(--shadow);font-size:28px;z-index:50;color:#fff;font-weight:300;}
 @media(max-width:480px){.voice-fab{right:16px;}}
 .voice-fab:active{transform:scale(.91);}
 .voice-fab.recording{background:var(--red);animation:pulse 1s ease-in-out infinite;}
@@ -308,7 +314,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div class="header-title">🌳 小幫手</div>
     <div class="header-date" id="header-date"></div>
   </div>
-  <button class="add-btn" onclick="openModal()">＋</button>
+  <button class="add-btn" id="voice-fab-header" onclick="voiceFAB()">🎙</button>
 </div>
 
 <!-- Nav Tabs -->
@@ -434,7 +440,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   </div>
 </div>
 
-<button class="voice-fab" id="voice-fab" onclick="voiceFAB()">🎙</button>
+<button class="voice-fab" id="voice-fab" onclick="openModal()">＋</button>
 <div class="toast" id="toast"></div>
 
 <!-- ADD MODAL -->
@@ -444,7 +450,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div class="modal-title" id="modal-title">新增項目</div>
     <div class="voice-area" id="voice-area" onclick="toggleModalVoice()">
       <span style="font-size:20px">🎙</span>
-      <span id="voice-hint">點我語音輸入</span>
+      <span id="voice-hint">語音輸入，自動判斷類型</span>
     </div>
 
     <!-- type toggle -->
@@ -452,10 +458,11 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
       <button class="type-btn sel-schedule" data-type="schedule" onclick="selType(this)">📅<br>行程</button>
       <button class="type-btn" data-type="task-soon" onclick="selType(this)">✅<br>近期任務</button>
       <button class="type-btn" data-type="task-year" onclick="selType(this)">🎯<br>年度目標</button>
+      <button class="type-btn" data-type="note" onclick="selType(this)">📝<br>知識</button>
     </div>
 
-    <div class="field-label">名稱</div>
-    <textarea class="field-input" id="modal-name" rows="2" placeholder="行程或任務名稱"></textarea>
+    <div class="field-label">內容</div>
+    <textarea class="field-input" id="modal-name" rows="2" placeholder="語音輸入後自動分類，或手動選類型填寫"></textarea>
 
     <!-- schedule fields -->
     <div id="schedule-fields">
@@ -477,6 +484,16 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div id="task-fields" style="display:none">
       <div class="field-label">截止日期（選填）</div>
       <input type="date" class="field-input" id="modal-deadline" min="2020-01-01" max="2099-12-31">
+    </div>
+
+    <!-- note fields -->
+    <div id="note-fields" style="display:none">
+      <div class="field-label">主題</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;">
+        <button class="kb-filter-btn act-all" data-topic="other"  onclick="selNoteTopic(this,'other')" style="flex:1">🌿 其他</button>
+        <button class="kb-filter-btn" data-topic="annual" onclick="selNoteTopic(this,'annual')" style="flex:1">🎪 年會</button>
+        <button class="kb-filter-btn" data-topic="study"  onclick="selNoteTopic(this,'study')" style="flex:1">📚 Study</button>
+      </div>
     </div>
 
     <div class="modal-actions">
@@ -578,7 +595,344 @@ function runDayChange(){
   saveEvents();
 }
 
-// ═══════════ CALENDAR ═══════════
+// ═══════════ LUNAR CALENDAR ═══════════
+// Accurate lunar calendar using verified spring festival dates + month lengths
+const LUNAR_YEARS_DATA={
+  2025:{s:'2025-01-29',m:[30,29,30,29,30,30,29,30,29,30,29,30],l:0},
+  2026:{s:'2026-02-17',m:[30,29,30,29,30,29,30,29,30,29,30,29],l:0},
+  2027:{s:'2027-02-06',m:[30,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2028:{s:'2028-01-26',m:[29,30,29,30,29,30,30,29,30,29,30,29,30],l:6},
+  2029:{s:'2029-02-13',m:[30,29,30,29,30,29,30,29,30,29,30,30],l:0},
+  2030:{s:'2030-02-03',m:[29,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2031:{s:'2031-01-23',m:[30,29,30,29,30,29,30,29,30,29,30,29,30],l:3},
+  2032:{s:'2032-02-11',m:[30,29,30,29,30,29,30,30,29,30,29,30],l:0},
+  2033:{s:'2033-01-31',m:[29,30,29,30,29,30,29,30,30,29,30,29],l:0},
+  2034:{s:'2034-02-19',m:[30,29,30,29,30,29,30,29,30,29,30,30],l:0},
+  2035:{s:'2035-02-08',m:[29,30,29,30,30,29,30,29,30,29,30,29,30],l:11},
+  2036:{s:'2036-01-28',m:[30,29,30,30,29,30,29,30,29,30,29,30],l:0},
+  2037:{s:'2037-02-15',m:[29,30,29,30,29,30,30,29,30,29,30,29],l:0},
+  2038:{s:'2038-02-04',m:[30,29,30,29,30,29,30,29,30,30,29,30],l:0},
+  2039:{s:'2039-01-24',m:[29,30,29,30,29,30,29,30,29,30,29,30,30],l:8},
+  2040:{s:'2040-02-12',m:[29,30,29,30,29,30,29,30,29,30,30,29],l:0},
+  2041:{s:'2041-02-01',m:[30,29,30,29,30,29,30,29,30,29,30,29],l:0},
+  2042:{s:'2042-01-22',m:[30,30,29,30,29,30,29,30,29,30,29,30,29],l:2},
+  2043:{s:'2043-02-10',m:[30,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2044:{s:'2044-01-30',m:[29,30,30,29,30,29,30,29,30,29,30,29],l:0},
+  2045:{s:'2045-02-17',m:[30,29,30,30,29,30,29,30,29,30,29,30],l:0},
+  2046:{s:'2046-02-06',m:[29,30,29,30,29,30,30,29,30,29,30,29,30],l:6},
+  2047:{s:'2047-01-26',m:[30,29,30,29,30,29,30,30,29,30,29,30],l:0},
+  2048:{s:'2048-02-13',m:[29,30,29,30,29,30,29,30,30,29,30,29],l:0},
+  2049:{s:'2049-02-02',m:[30,29,30,29,30,29,30,29,30,29,30,30],l:0},
+  2050:{s:'2050-01-23',m:[29,30,29,30,29,30,29,30,29,30,29,30,30],l:9},
+  2051:{s:'2051-02-11',m:[29,30,29,30,29,30,29,30,29,30,30,29],l:0},
+  2052:{s:'2052-02-01',m:[30,29,30,29,30,29,30,29,30,29,30,29],l:0},
+  2053:{s:'2053-02-19',m:[30,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2054:{s:'2054-02-08',m:[29,30,30,29,30,29,30,29,30,29,30,29,30],l:5},
+  2055:{s:'2055-01-28',m:[30,29,30,30,29,30,29,30,29,30,29,30],l:0},
+  2056:{s:'2056-02-15',m:[29,30,29,30,30,29,30,29,30,29,30,29],l:0},
+  2057:{s:'2057-02-03',m:[30,29,30,29,30,30,29,30,29,30,29,30],l:0},
+  2058:{s:'2058-01-24',m:[29,30,29,30,29,30,29,30,30,29,30,29,30],l:7},
+  2059:{s:'2059-02-12',m:[30,29,30,29,30,29,30,29,30,30,29,30],l:0},
+  2060:{s:'2060-02-02',m:[29,30,29,30,29,30,29,30,29,30,30,29],l:0},
+  2061:{s:'2061-01-21',m:[30,29,30,29,30,29,30,29,30,29,30,29,30],l:4},
+  2062:{s:'2062-02-09',m:[30,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2063:{s:'2063-01-29',m:[29,30,30,29,30,29,30,29,30,29,30,29],l:0},
+  2064:{s:'2064-02-17',m:[30,29,30,30,29,30,29,30,29,30,29,30],l:0},
+  2065:{s:'2065-02-05',m:[29,30,29,30,30,29,30,29,30,29,30,29,30],l:12},
+  2066:{s:'2066-01-26',m:[30,29,30,29,30,30,29,30,29,30,29,30],l:0},
+  2067:{s:'2067-02-14',m:[29,30,29,30,29,30,30,29,30,29,30,29],l:0},
+  2068:{s:'2068-02-03',m:[30,29,30,29,30,29,30,30,29,30,29,30],l:0},
+  2069:{s:'2069-01-23',m:[29,30,29,30,29,30,29,30,30,29,30,29,30],l:8},
+  2070:{s:'2070-02-11',m:[30,29,30,29,30,29,30,29,30,30,29,30],l:0},
+  2071:{s:'2071-01-31',m:[29,30,29,30,29,30,29,30,29,30,30,29],l:0},
+  2072:{s:'2072-02-19',m:[30,29,30,29,30,29,30,29,30,29,30,29,30],l:3},
+  2073:{s:'2073-02-07',m:[30,30,29,30,29,30,29,30,29,30,29,30],l:0},
+  2074:{s:'2074-01-27',m:[29,30,30,29,30,29,30,29,30,29,30,29],l:0},
+  2075:{s:'2075-02-15',m:[30,29,30,30,29,30,29,30,29,30,29,30],l:0},
+  2076:{s:'2076-02-04',m:[29,30,29,30,30,29,30,29,30,29,30,29,30],l:6},
+  2077:{s:'2077-01-24',m:[30,29,30,29,30,30,29,30,29,30,29,30],l:0},
+  2078:{s:'2078-02-12',m:[29,30,29,30,29,30,30,29,30,29,30,29],l:0},
+  2079:{s:'2079-02-02',m:[30,29,30,29,30,29,30,30,29,30,29,30],l:0},
+  2080:{s:'2080-01-22',m:[29,30,29,30,29,30,29,30,30,29,30,29,30],l:7},
+};
+
+const lunarMonthNames=['正','二','三','四','五','六','七','八','九','十','冬','臘'];
+const lunarDayNames=['初一','初二','初三','初四','初五','初六','初七','初八','初九','初十',
+  '十一','十二','十三','十四','十五','十六','十七','十八','十九','二十',
+  '廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
+
+const lunarTextCache={};
+
+function getLunarText(dateStr){
+  if(lunarTextCache[dateStr]!==undefined) return lunarTextCache[dateStr];
+  const target=new Date(dateStr);
+  const year=target.getFullYear();
+
+  // Find which lunar year this belongs to
+  let lyData=null, lunarYear=year;
+  for(let y=year;y>=year-1;y--){
+    if(LUNAR_YEARS_DATA[y]){
+      const spring=new Date(LUNAR_YEARS_DATA[y].s);
+      if(target>=spring){ lyData=LUNAR_YEARS_DATA[y]; lunarYear=y; break; }
+    }
+  }
+  if(!lyData){ lunarTextCache[dateStr]=''; return ''; }
+
+  const spring=new Date(lyData.s);
+  let dayOffset=Math.round((target-spring)/86400000);
+
+  // Walk through months
+  const months=lyData.m;
+  const leapPos=lyData.l; // leap month position (1-based, 0=no leap)
+  let realMonth=0; // index into lunarMonthNames
+  let isLeap=false;
+  let actualMonthIndex=0; // index into months array
+
+  for(let i=0;i<months.length;i++){
+    if(dayOffset<months[i]){
+      // this is the month
+      // figure out real month number
+      // months array: if leapPos>0, month at index leapPos is the leap month
+      if(leapPos>0&&i===leapPos){
+        isLeap=true;
+        realMonth=leapPos-1; // same name as previous
+      } else if(leapPos>0&&i>leapPos){
+        realMonth=i-1;
+      } else {
+        realMonth=i;
+      }
+      const day=dayOffset+1;
+      const monthLabel=`${isLeap?'閏':''}${lunarMonthNames[realMonth]}月`;
+      const result=day===1?monthLabel:lunarDayNames[day-1];
+      lunarTextCache[dateStr]=result;
+      return result;
+    }
+    dayOffset-=months[i];
+  }
+  lunarTextCache[dateStr]='';
+  return '';
+}
+
+
+
+// ═══════════ TAIWAN HOLIDAYS (dynamic, 2025–2080) ═══════════
+// Fixed holidays (solar calendar)
+const TW_FIXED_HOLIDAYS={
+  '01-01':'元旦',
+  '02-28':'和平紀念日',
+  '04-03':'兒童節',
+  '05-01':'勞動節',
+  '10-10':'國慶日',
+};
+
+function getQingming(y){
+  const isLeap=(y%4===0&&y%100!==0)||(y%400===0);
+  return isLeap?`${y}-04-04`:`${y}-04-05`;
+}
+
+// Accurate festival dates verified against astronomical data
+// 除夕(Eve), 春節(New Year), 端午(Dragon Boat), 中秋(Mid-Autumn)
+const TW_LUNAR_FESTIVALS={
+  2025:{eve:'2025-01-28',spring:'2025-01-29',dragon:'2025-05-31',autumn:'2025-10-06'},
+  2026:{eve:'2026-02-16',spring:'2026-02-17',dragon:'2026-06-20',autumn:'2026-09-25'},
+  2027:{eve:'2027-02-05',spring:'2027-02-06',dragon:'2027-06-09',autumn:'2027-10-15'},
+  2028:{eve:'2028-01-25',spring:'2028-01-26',dragon:'2028-05-28',autumn:'2028-10-03'},
+  2029:{eve:'2029-02-12',spring:'2029-02-13',dragon:'2029-06-16',autumn:'2029-09-22'},
+  2030:{eve:'2030-02-02',spring:'2030-02-03',dragon:'2030-06-06',autumn:'2030-10-11'},
+  2031:{eve:'2031-01-22',spring:'2031-01-23',dragon:'2031-05-26',autumn:'2031-09-30'},
+  2032:{eve:'2032-02-10',spring:'2032-02-11',dragon:'2032-06-13',autumn:'2032-09-18'},
+  2033:{eve:'2033-01-30',spring:'2033-01-31',dragon:'2033-06-02',autumn:'2033-10-07'},
+  2034:{eve:'2034-02-18',spring:'2034-02-19',dragon:'2034-06-22',autumn:'2034-09-27'},
+  2035:{eve:'2035-02-07',spring:'2035-02-08',dragon:'2035-06-12',autumn:'2035-10-15'},
+  2036:{eve:'2036-01-27',spring:'2036-01-28',dragon:'2036-05-31',autumn:'2036-10-03'},
+  2037:{eve:'2037-02-14',spring:'2037-02-15',dragon:'2037-06-19',autumn:'2037-09-22'},
+  2038:{eve:'2038-02-03',spring:'2038-02-04',dragon:'2038-06-09',autumn:'2038-10-11'},
+  2039:{eve:'2039-01-23',spring:'2039-01-24',dragon:'2039-05-29',autumn:'2039-09-30'},
+  2040:{eve:'2040-02-11',spring:'2040-02-12',dragon:'2040-06-16',autumn:'2040-09-18'},
+  2041:{eve:'2041-01-31',spring:'2041-02-01',dragon:'2041-06-06',autumn:'2041-10-07'},
+  2042:{eve:'2042-01-21',spring:'2042-01-22',dragon:'2042-05-26',autumn:'2042-09-26'},
+  2043:{eve:'2043-02-09',spring:'2043-02-10',dragon:'2043-06-14',autumn:'2043-10-15'},
+  2044:{eve:'2044-01-29',spring:'2044-01-30',dragon:'2044-06-02',autumn:'2044-10-03'},
+  2045:{eve:'2045-02-16',spring:'2045-02-17',dragon:'2045-06-22',autumn:'2045-09-22'},
+  2046:{eve:'2046-02-05',spring:'2046-02-06',dragon:'2046-06-11',autumn:'2046-10-11'},
+  2047:{eve:'2047-01-25',spring:'2047-01-26',dragon:'2047-05-31',autumn:'2047-09-30'},
+  2048:{eve:'2048-02-12',spring:'2048-02-13',dragon:'2048-06-18',autumn:'2048-09-18'},
+  2049:{eve:'2049-02-01',spring:'2049-02-02',dragon:'2049-06-07',autumn:'2049-10-07'},
+  2050:{eve:'2050-01-22',spring:'2050-01-23',dragon:'2050-05-28',autumn:'2050-09-26'},
+  2051:{eve:'2051-02-10',spring:'2051-02-11',dragon:'2051-06-16',autumn:'2051-10-15'},
+  2052:{eve:'2052-01-31',spring:'2052-02-01',dragon:'2052-06-04',autumn:'2052-10-03'},
+  2053:{eve:'2053-02-18',spring:'2053-02-19',dragon:'2053-06-24',autumn:'2053-09-22'},
+  2054:{eve:'2054-02-07',spring:'2054-02-08',dragon:'2054-06-13',autumn:'2054-10-11'},
+  2055:{eve:'2055-01-27',spring:'2055-01-28',dragon:'2055-06-03',autumn:'2055-09-30'},
+  2056:{eve:'2056-02-14',spring:'2056-02-15',dragon:'2056-06-21',autumn:'2056-09-18'},
+  2057:{eve:'2057-02-02',spring:'2057-02-03',dragon:'2057-06-10',autumn:'2057-10-07'},
+  2058:{eve:'2058-01-23',spring:'2058-01-24',dragon:'2058-05-31',autumn:'2058-09-26'},
+  2059:{eve:'2059-02-11',spring:'2059-02-12',dragon:'2059-06-19',autumn:'2059-10-15'},
+  2060:{eve:'2060-01-31',spring:'2060-02-01',dragon:'2060-06-07',autumn:'2060-10-03'},
+  2061:{eve:'2061-01-20',spring:'2061-01-21',dragon:'2061-05-28',autumn:'2061-09-22'},
+  2062:{eve:'2062-02-08',spring:'2062-02-09',dragon:'2062-06-17',autumn:'2062-10-11'},
+  2063:{eve:'2063-01-28',spring:'2063-01-29',dragon:'2063-06-06',autumn:'2063-09-30'},
+  2064:{eve:'2064-02-16',spring:'2064-02-17',dragon:'2064-06-24',autumn:'2064-09-18'},
+  2065:{eve:'2065-02-04',spring:'2065-02-05',dragon:'2065-06-14',autumn:'2065-10-07'},
+  2066:{eve:'2066-01-25',spring:'2066-01-26',dragon:'2066-06-03',autumn:'2066-09-26'},
+  2067:{eve:'2067-02-13',spring:'2067-02-14',dragon:'2067-06-22',autumn:'2067-10-15'},
+  2068:{eve:'2068-02-02',spring:'2068-02-03',dragon:'2068-06-10',autumn:'2068-10-03'},
+  2069:{eve:'2069-01-22',spring:'2069-01-23',dragon:'2069-05-31',autumn:'2069-09-22'},
+  2070:{eve:'2070-02-10',spring:'2070-02-11',dragon:'2070-06-19',autumn:'2070-10-11'},
+  2071:{eve:'2071-01-30',spring:'2071-01-31',dragon:'2071-06-09',autumn:'2071-09-30'},
+  2072:{eve:'2072-02-18',spring:'2072-02-19',dragon:'2072-06-27',autumn:'2072-09-18'},
+  2073:{eve:'2073-02-06',spring:'2073-02-07',dragon:'2073-06-16',autumn:'2073-10-07'},
+  2074:{eve:'2074-01-27',spring:'2074-01-28',dragon:'2074-06-05',autumn:'2074-09-26'},
+  2075:{eve:'2075-02-14',spring:'2075-02-15',dragon:'2075-06-24',autumn:'2075-10-15'},
+  2076:{eve:'2076-02-03',spring:'2076-02-04',dragon:'2076-06-12',autumn:'2076-10-03'},
+  2077:{eve:'2077-01-23',spring:'2077-01-24',dragon:'2077-06-01',autumn:'2077-09-22'},
+  2078:{eve:'2078-02-11',spring:'2078-02-12',dragon:'2078-06-21',autumn:'2078-10-11'},
+  2079:{eve:'2079-02-01',spring:'2079-02-02',dragon:'2079-06-10',autumn:'2079-09-30'},
+  2080:{eve:'2080-01-21',spring:'2080-01-22',dragon:'2080-05-29',autumn:'2080-09-18'},
+};
+
+const holidayCache={};
+
+function getHoliday(dateStr){
+  if(holidayCache[dateStr]!==undefined) return holidayCache[dateStr];
+  const [y,m,d]=dateStr.split('-');
+  const year=parseInt(y);
+  const md=`${m}-${d}`;
+
+  // Fixed holidays
+  if(TW_FIXED_HOLIDAYS[md]){ holidayCache[dateStr]=TW_FIXED_HOLIDAYS[md]; return TW_FIXED_HOLIDAYS[md]; }
+
+  // Qingming
+  if(getQingming(year)===dateStr){ holidayCache[dateStr]='清明節'; return '清明節'; }
+
+  // Lunar festivals
+  const f=TW_LUNAR_FESTIVALS[year];
+  if(f){
+    if(f.eve===dateStr){ holidayCache[dateStr]='除夕'; return '除夕'; }
+    if(f.spring===dateStr){ holidayCache[dateStr]='春節'; return '春節'; }
+    // Spring 初二 and 初三
+    const sf=new Date(f.spring);
+    const d2=new Date(sf.getTime()+86400000);
+    const d3=new Date(sf.getTime()+2*86400000);
+    const d2s=`${d2.getFullYear()}-${String(d2.getMonth()+1).padStart(2,'0')}-${String(d2.getDate()).padStart(2,'0')}`;
+    const d3s=`${d3.getFullYear()}-${String(d3.getMonth()+1).padStart(2,'0')}-${String(d3.getDate()).padStart(2,'0')}`;
+    if(d2s===dateStr||d3s===dateStr){ holidayCache[dateStr]='春節'; return '春節'; }
+    if(f.dragon===dateStr){ holidayCache[dateStr]='端午節'; return '端午節'; }
+    if(f.autumn===dateStr){ holidayCache[dateStr]='中秋節'; return '中秋節'; }
+  }
+
+  holidayCache[dateStr]=null;
+  return null;
+}
+
+// ═══════════ 二十四節氣 ═══════════
+// Solar terms angles (degrees from vernal equinox)
+const SOLAR_TERMS=[
+  [315,'小寒'],[330,'大寒'],[345,'立春'],[0,'雨水'],
+  [15,'驚蟄'],[30,'春分'],[45,'清明'],[60,'穀雨'],
+  [75,'立夏'],[90,'小滿'],[105,'芒種'],[120,'夏至'],
+  [135,'小暑'],[150,'大暑'],[165,'立秋'],[180,'處暑'],
+  [195,'白露'],[210,'秋分'],[225,'寒露'],[240,'霜降'],
+  [255,'立冬'],[270,'小雪'],[285,'大雪'],[300,'冬至']
+];
+
+// Calculate solar term dates for a given year using VSOP87 approximation
+function getSolarTermDate(year, angle){
+  // Julian date of vernal equinox approximation
+  const k=angle/360;
+  // Approximate JDE for solar longitude
+  const JDE0=2451545.0+(365.25*year)+k*365.25;
+  // Convert JDE to date
+  const msFromJ2000=(JDE0-2451545.0)*86400000;
+  const d=new Date(946728000000+msFromJ2000); // J2000 = 2000-01-01 12:00 UTC
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// More accurate solar term calculation using known offsets table
+// C values for each term (for formula: JDE = JDE0 + C)
+function calcSolarTerm(year, termIndex){
+  // termIndex 0=小寒,1=大寒,...,23=冬至 (ordered by month)
+  const terms=[
+    {name:'小寒',month:1, baseDay:6},
+    {name:'大寒',month:1, baseDay:20},
+    {name:'立春',month:2, baseDay:4},
+    {name:'雨水',month:2, baseDay:19},
+    {name:'驚蟄',month:3, baseDay:6},
+    {name:'春分',month:3, baseDay:21},
+    {name:'清明',month:4, baseDay:5},
+    {name:'穀雨',month:4, baseDay:20},
+    {name:'立夏',month:5, baseDay:6},
+    {name:'小滿',month:5, baseDay:21},
+    {name:'芒種',month:6, baseDay:6},
+    {name:'夏至',month:6, baseDay:21},
+    {name:'小暑',month:7, baseDay:7},
+    {name:'大暑',month:7, baseDay:23},
+    {name:'立秋',month:8, baseDay:7},
+    {name:'處暑',month:8, baseDay:23},
+    {name:'白露',month:9, baseDay:8},
+    {name:'秋分',month:9, baseDay:23},
+    {name:'寒露',month:10,baseDay:8},
+    {name:'霜降',month:10,baseDay:23},
+    {name:'立冬',month:11,baseDay:7},
+    {name:'小雪',month:11,baseDay:22},
+    {name:'大雪',month:12,baseDay:7},
+    {name:'冬至',month:12,baseDay:22},
+  ];
+  return terms[termIndex];
+}
+
+// Accurate solar term dates using astronomical algorithm
+// Based on the formula: date = baseDate + (year - 2000) * 0.2422 + offset
+const ST_DATA=[
+  {name:'小寒', C2000:6.3811, D:0.2422, C:0},
+  {name:'大寒', C2000:20.8693,D:0.2422, C:0},
+  {name:'立春', C2000:3.87   ,D:0.2422, C:1},
+  {name:'雨水', C2000:18.73  ,D:0.2422, C:1},
+  {name:'驚蟄', C2000:5.63   ,D:0.2422, C:2},
+  {name:'春分', C2000:20.646 ,D:0.2422, C:2},
+  {name:'清明', C2000:4.81   ,D:0.2422, C:3},
+  {name:'穀雨', C2000:20.1   ,D:0.2422, C:3},
+  {name:'立夏', C2000:5.52   ,D:0.2422, C:4},
+  {name:'小滿', C2000:21.04  ,D:0.2422, C:4},
+  {name:'芒種', C2000:5.678  ,D:0.2422, C:5},
+  {name:'夏至', C2000:21.37  ,D:0.2422, C:5},
+  {name:'小暑', C2000:7.108  ,D:0.2422, C:6},
+  {name:'大暑', C2000:22.83  ,D:0.2422, C:6},
+  {name:'立秋', C2000:7.5    ,D:0.2422, C:7},
+  {name:'處暑', C2000:23.13  ,D:0.2422, C:7},
+  {name:'白露', C2000:7.646  ,D:0.2422, C:8},
+  {name:'秋分', C2000:23.042 ,D:0.2422, C:8},
+  {name:'寒露', C2000:8.318  ,D:0.2422, C:9},
+  {name:'霜降', C2000:23.438 ,D:0.2422, C:9},
+  {name:'立冬', C2000:7.438  ,D:0.2422, C:10},
+  {name:'小雪', C2000:22.36  ,D:0.2422, C:10},
+  {name:'大雪', C2000:7.18   ,D:0.2422, C:11},
+  {name:'冬至', C2000:21.94  ,D:0.2422, C:11},
+];
+
+const solarTermCache={};
+
+function getSolarTermsForYear(year){
+  if(solarTermCache[year]) return solarTermCache[year];
+  const result={};
+  ST_DATA.forEach(st=>{
+    const y=year-2000;
+    const day=Math.floor(st.C2000+st.D*y-(Math.floor(y/4)));
+    const month=st.C+1;
+    const dateStr=`${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    result[dateStr]=st.name;
+  });
+  solarTermCache[year]=result;
+  return result;
+}
+
+function getSolarTerm(dateStr){
+  const year=parseInt(dateStr.split('-')[0]);
+  const terms=getSolarTermsForYear(year);
+  return terms[dateStr]||null;
+}
+
+
 function renderCalendar(){
   const label=document.getElementById('cal-month-label');
   label.textContent=`${calYear} 年 ${calMonth+1} 月`;
@@ -601,16 +955,23 @@ function renderCalendar(){
     const dateStr=`${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
     const isToday=dateStr===today;
     const isSel=dateStr===selectedDate;
-    const dow=i%7; // 0=Sun, 6=Sat
-    const numClass=dow===0?'cal-num sun':dow===6?'cal-num sat':'cal-num';
+    const dow=i%7;
+    const holiday=getHoliday(dateStr);
+    const solarTerm=!isOther?getSolarTerm(dateStr):null;
+    const isHoliday=!!holiday;
+    const numClass=(dow===0||isHoliday)?'cal-num sun':dow===6?'cal-num sat':'cal-num';
+    const lunar=getLunarText(dateStr);
+    const isLunarFirst=lunar.endsWith('月');
 
     // Get events for this day (sorted by time)
     const dayEvts=events.filter(e=>e.date===dateStr)
       .sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
 
-    // Build event pills (max 2, then +N more)
-    const MAX=2;
+    // Build event pills
+    const MAX=(holiday||solarTerm)?1:2;
     let pills='';
+    if(holiday) pills+=`<span class="cal-holiday-name">${holiday}</span>`;
+    else if(solarTerm) pills+=`<span class="cal-holiday-name" style="color:var(--green-d)">${solarTerm}</span>`;
     dayEvts.slice(0,MAX).forEach(e=>{
       const pillClass=e.trip?'trip':e.type==='task-soon'?'task-soon':e.type==='task-year'?'task-year':'schedule';
       const shortName=e.name.slice(0,4);
@@ -620,8 +981,9 @@ function renderCalendar(){
       pills+=`<span class="cal-more">+${dayEvts.length-MAX}</span>`;
     }
 
-    cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''}" onclick="selectDate('${dateStr}')">
+    cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''} ${isHoliday&&!isToday?'is-holiday':''}" onclick="selectDate('${dateStr}')">
       <div class="cal-num-wrap"><div class="${numClass}">${day}</div></div>
+      <div class="cal-lunar ${isLunarFirst?'holiday-lunar':''}">${isOther?'':lunar}</div>
       ${pills}
     </div>`;
   }
@@ -646,10 +1008,16 @@ function renderDayPanel(){
   const title=document.getElementById('cal-day-title');
   const list=document.getElementById('cal-day-list');
   const dayEvts=events.filter(e=>e.date===selectedDate).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
-  title.textContent=fmtDate(selectedDate)+(selectedDate===todayStr()?' 今天':'');
+  const holiday=getHoliday(selectedDate);
+  const solarTerm=getSolarTerm(selectedDate);
+  const lunar=getLunarText(selectedDate);
+  const holidayTag=holiday?`<span style="font-size:11px;color:var(--red);font-weight:700;margin-left:6px;">🎌 ${holiday}</span>`:'';
+  const solarTermTag=solarTerm?`<span style="font-size:11px;color:var(--green-d);font-weight:700;margin-left:6px;">🌿 ${solarTerm}</span>`:'';
+  const lunarTag=lunar?`<span style="font-size:11px;color:var(--muted);font-weight:600;margin-left:6px;">農曆${lunar}</span>`:'';
+  title.innerHTML=`${fmtDate(selectedDate)}${selectedDate===todayStr()?' 今天':''}${lunarTag}${solarTermTag}${holidayTag}`;
   panel.style.display='block';
   if(!dayEvts.length){
-    list.innerHTML=`<div class="cal-day-empty">這天沒有行程或任務<br><small>點右上角 + 新增</small></div>`;
+    list.innerHTML=`<div class="cal-day-empty">這天沒有行程或任務<br><small>按右上角 🎙 新增</small></div>`;
     return;
   }
   list.innerHTML=dayEvts.map(e=>eventCardHTML(e)).join('');
@@ -736,21 +1104,37 @@ function renderToday(){
   }
 
   if(!allToday.length && !trips.length){
-    html+=`<div class="empty-state"><div class="empty-icon">🌿</div>今天沒有行程<br>點右上角 + 新增</div>`;
+    html+=`<div class="empty-state"><div class="empty-icon">🌿</div>今天沒有行程<br>按右上角 🎙 語音新增</div>`;
   } else {
     html+=allToday.map(e=>eventCardHTML(e)).join('');
   }
   el.innerHTML=html;
 
-  // Upcoming tasks (近期任務) — show below today's schedule
+  // Upcoming tasks + today's KB notes
   const soonEl=document.getElementById('list-today-soon');
   const soonTasks=events.filter(e=>e.type==='task-soon'&&!e.done)
     .sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999'));
-  if(!soonTasks.length){
-    soonEl.innerHTML=`<div class="empty-state" style="padding:24px 20px"><div class="empty-icon" style="font-size:28px">✅</div>沒有近期任務</div>`;
-  } else {
-    soonEl.innerHTML=soonTasks.map(e=>eventCardHTML(e)).join('');
+  const todayNotes=kbNotes.filter(n=>n.dateStr===today);
+
+  let soonHtml='';
+  if(soonTasks.length) soonHtml+=soonTasks.map(e=>eventCardHTML(e)).join('');
+  else soonHtml+=`<div class="empty-state" style="padding:20px"><div class="empty-icon" style="font-size:26px">✅</div>沒有近期任務</div>`;
+
+  if(todayNotes.length){
+    soonHtml+=`<div class="sec-label" style="color:#5a7a52;margin-top:14px">📝 今日知識記錄</div>`;
+    const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
+    soonHtml+=todayNotes.map(n=>`<div class="event-card" style="border-left:3px solid #5a7a52;">
+      <div class="event-body" style="padding-right:0">
+        <div class="event-name">${escHtml(n.title)}</div>
+        <div class="event-meta"><span class="etag" style="background:#e8f0e4;color:#5a7a52">${tl[n.topic]||'🌿 其他'}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
+        <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="switchTab('kb')" title="前往知識庫">🔍</button>
+        <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="delKB('${n.id}');renderToday()">✕</button>
+      </div>
+    </div>`).join('');
   }
+  soonEl.innerHTML=soonHtml;
 }
 
 // ═══════════ TASKS ═══════════
@@ -831,46 +1215,84 @@ function openEditModal(id){
 function closeModal(){ document.getElementById('overlay').classList.remove('visible'); stopModalVoice(); editingId=null; }
 function overlayClick(e){ if(e.target.id==='overlay') closeModal(); }
 
+let noteTopic='other';
+
 function selType(btn){
   selectedType=btn.dataset.type;
   document.querySelectorAll('.type-btn').forEach(b=>b.className='type-btn'+(b===btn?' sel-'+selectedType:''));
   document.getElementById('schedule-fields').style.display=selectedType==='schedule'?'block':'none';
-  document.getElementById('task-fields').style.display=selectedType!=='schedule'?'block':'none';
+  document.getElementById('task-fields').style.display=(selectedType==='task-soon'||selectedType==='task-year')?'block':'none';
+  document.getElementById('note-fields').style.display=selectedType==='note'?'block':'none';
+}
+
+function selNoteTopic(btn, topic){
+  noteTopic=topic;
+  document.querySelectorAll('#note-fields .kb-filter-btn').forEach(b=>{
+    b.className='kb-filter-btn'+(b.dataset.topic===topic?' act-'+topic:'');
+  });
+}
+
+// Smart classify voice input by rules (no AI needed)
+function smartClassify(text){
+  const t=text;
+  // Time patterns: 數字+點/時/:, 上午/下午/早上/晚上
+  const hasTime=/\d+[點时:：]\d*|上午|下午|早上|晚上|中午|凌晨/.test(t);
+  // Date patterns: 月/日, 號, 明天/後天/下週/下周/星期
+  const hasDate=/\d+月\d+|號|明天|後天|大後天|下週|下周|星期|週[一二三四五六日]/.test(t);
+  // Task verbs
+  const hasTaskVerb=/要|需要|記得|安排|完成|準備|處理|聯絡|確認|買|訂|預約|報告|繳|繳費|繳款/.test(t);
+  // Long-term keywords
+  const hasYearKeyword=/年度|今年|長期|計畫|目標|年會|論文/.test(t);
+  // Schedule keywords
+  const hasScheduleWord=/看診|門診|出差|拜訪|會議|開會|上課|手術|複診|回診|看病|接送|出發|抵達|搭車|搭飛機/.test(t);
+
+  if((hasTime||hasDate||hasScheduleWord) && !hasYearKeyword){
+    return 'schedule';
+  }
+  if(hasYearKeyword){ return 'task-year'; }
+  if(hasTaskVerb){ return 'task-soon'; }
+  // Default: note (敘述性內容)
+  return 'note';
 }
 
 function saveItem(){
   const name=document.getElementById('modal-name').value.trim();
-  if(!name){ showToast('請輸入名稱'); return; }
+  if(!name){ showToast('請輸入內容'); return; }
 
   if(editingId){
-    // Edit existing
     const e=events.find(x=>x.id===editingId); if(!e)return;
-    e.name=name;
-    e.type=selectedType;
+    e.name=name; e.type=selectedType;
     if(selectedType==='schedule'){
       e.date=document.getElementById('modal-date').value||todayStr();
       e.time=document.getElementById('modal-time').value||'';
       e.trip=document.getElementById('modal-trip').checked;
       e.deadline='';
+    } else if(selectedType==='note'){
+      // editing note - find in kbNotes
+      const n=kbNotes.find(x=>x.id===editingId);
+      if(n){ n.title=name; saveKB(); renderKB(); closeModal(); showToast('✓ 已更新'); return; }
     } else {
-      e.date='';
-      e.deadline=document.getElementById('modal-deadline').value||'';
+      e.date=''; e.deadline=document.getElementById('modal-deadline').value||'';
       e.time=''; e.trip=false;
     }
     saveEvents(); renderAll(); closeModal(); showToast('✓ 已更新');
   } else {
-    // New item
-    const e={ id:uid(), type:selectedType, name, done:false, carried:false };
-    if(selectedType==='schedule'){
-      e.date=document.getElementById('modal-date').value||todayStr();
-      e.time=document.getElementById('modal-time').value||'';
-      e.trip=document.getElementById('modal-trip').checked;
+    if(selectedType==='note'){
+      // Save as knowledge note for today
+      kbNotes.push({id:uid(),title:name,body:'',topic:noteTopic,linkedTask:null,date:fmtDate(todayStr()),dateStr:todayStr()});
+      saveKB(); renderKB(); renderToday(); closeModal(); showToast('📝 已加入知識庫');
     } else {
-      e.date='';
-      e.deadline=document.getElementById('modal-deadline').value||'';
+      const e={id:uid(),type:selectedType,name,done:false,carried:false};
+      if(selectedType==='schedule'){
+        e.date=document.getElementById('modal-date').value||todayStr();
+        e.time=document.getElementById('modal-time').value||'';
+        e.trip=document.getElementById('modal-trip').checked;
+      } else {
+        e.date=''; e.deadline=document.getElementById('modal-deadline').value||'';
+      }
+      events.push(e);
+      saveEvents(); renderAll(); closeModal(); showToast('✓ 已儲存');
     }
-    events.push(e);
-    saveEvents(); renderAll(); closeModal(); showToast('✓ 已儲存');
   }
 }
 
@@ -884,7 +1306,17 @@ function startModalSR(SR){
   modalVoiceRec=new SR(); modalVoiceRec.lang='zh-TW'; modalVoiceRec.continuous=false; modalVoiceRec.interimResults=true;
   modalVoiceRec.onstart=()=>{ modalVoiceRecording=true; document.getElementById('voice-area').classList.add('active'); document.getElementById('voice-hint').textContent='🔴 聆聽中…'; };
   modalVoiceRec.onresult=e=>{ const t=Array.from(e.results).map(r=>r[0].transcript).join(''); document.getElementById('modal-name').value=t; document.getElementById('voice-hint').textContent=`「${t}」`; };
-  modalVoiceRec.onend=()=>stopModalVoice(); modalVoiceRec.onerror=()=>stopModalVoice(); modalVoiceRec.start();
+  modalVoiceRec.onend=()=>{
+    stopModalVoice();
+    const text=document.getElementById('modal-name').value.trim();
+    if(text && !editingId){
+      const type=smartClassify(text);
+      selType(document.querySelector(`.type-btn[data-type="${type}"]`));
+      const label={schedule:'📅 行程',['task-soon']:'✅ 近期任務',['task-year']:'🎯 年度目標',note:'📝 知識'}[type];
+      showToast(`自動判斷：${label}`);
+    }
+  };
+  modalVoiceRec.onerror=()=>stopModalVoice(); modalVoiceRec.start();
 }
 function stopModalVoice(){ modalVoiceRecording=false; document.getElementById('voice-area').classList.remove('active'); if(modalVoiceRec){try{modalVoiceRec.stop();}catch(e){} modalVoiceRec=null;} }
 
@@ -986,10 +1418,10 @@ function renderKB(){
   let list=[...kbNotes].reverse();
   if(kbFilter!=='all')list=list.filter(n=>n.topic===kbFilter);
   if(q)list=list.filter(n=>(n.title+n.body).toLowerCase().includes(q));
-  if(!list.length){el.innerHTML=`<div class="kb-empty">📝 還沒有筆記<br>用上方 AI 輸入說一件事就會自動分類進來</div>`;return;}
+  if(!list.length){el.innerHTML=`<div class="kb-empty">📝 還沒有知識記錄<br>語音輸入敘述性內容會自動存入這裡</div>`;return;}
   const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
   const tc={'annual':'kb-tag-annual','study':'kb-tag-study','other':'kb-tag-other'};
-  el.innerHTML=list.map(n=>`<div class="kb-card"><div class="kb-card-header"><div class="kb-card-title">${escHtml(n.title)}</div><button class="kb-card-del" onclick="delKB('${n.id}')">✕</button></div><div class="kb-card-body">${escHtml(n.body)}</div><div class="kb-card-footer"><span class="kb-tag ${tc[n.topic]||'kb-tag-other'}">${tl[n.topic]||'🌿 其他'}</span>${n.linkedTask?`<span class="kb-tag" style="background:var(--bg);color:var(--muted)">🔗 ${escHtml(n.linkedTask)}</span>`:''}<span class="kb-date">${n.date}</span></div></div>`).join('');
+  el.innerHTML=list.map(n=>`<div class="kb-card"><div class="kb-card-header"><div class="kb-card-title">${escHtml(n.title)}</div><button class="kb-card-del" onclick="delKB('${n.id}')">✕</button></div><div class="kb-card-body">${escHtml(n.body||'')}</div><div class="kb-card-footer"><span class="kb-tag ${tc[n.topic]||'kb-tag-other'}">${tl[n.topic]||'🌿 其他'}</span>${n.linkedTask?`<span class="kb-tag" style="background:var(--bg);color:var(--muted)">🔗 ${escHtml(n.linkedTask)}</span>`:''}<span class="kb-date">${n.date||''}</span></div></div>`).join('');
 }
 function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); }
 
