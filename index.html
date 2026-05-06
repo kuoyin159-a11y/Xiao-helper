@@ -1635,9 +1635,23 @@ function initDate(){ const d=new Date(),days=['日','一','二','三','四','五
   },{passive:true});
 })();
 
+// ═══════════ MIDNIGHT DATE CHECK ═══════════
+function scheduleMidnightUpdate(){
+  const now=new Date();
+  const tomorrow=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+  const msUntilMidnight=tomorrow-now+1000; // +1sec buffer
+  setTimeout(()=>{
+    initDate();
+    runDayChange();
+    renderAll();
+    scheduleMidnightUpdate(); // reschedule for next midnight
+  },msUntilMidnight);
+}
+
 // ═══════════ BOOT ═══════════
 updateClock(); setInterval(updateClock,15000);
 initDate(); runDayChange(); renderAll();
+scheduleMidnightUpdate();
 setInterval(()=>{ runDayChange(); renderAll(); },60000);
 </script>
 </body>
