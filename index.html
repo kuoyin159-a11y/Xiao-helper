@@ -1639,12 +1639,17 @@ function initDate(){ const d=new Date(),days=['日','一','二','三','四','五
 function scheduleMidnightUpdate(){
   const now=new Date();
   const tomorrow=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
-  const msUntilMidnight=tomorrow-now+1000; // +1sec buffer
+  const msUntilMidnight=tomorrow-now+1000;
   setTimeout(()=>{
+    // Reset calendar to today
+    const d=new Date();
+    calYear=d.getFullYear();
+    calMonth=d.getMonth();
+    selectedDate=todayStr();
     initDate();
     runDayChange();
     renderAll();
-    scheduleMidnightUpdate(); // reschedule for next midnight
+    scheduleMidnightUpdate();
   },msUntilMidnight);
 }
 
@@ -1652,7 +1657,19 @@ function scheduleMidnightUpdate(){
 updateClock(); setInterval(updateClock,15000);
 initDate(); runDayChange(); renderAll();
 scheduleMidnightUpdate();
-setInterval(()=>{ runDayChange(); renderAll(); },60000);
+setInterval(()=>{
+  const prev=selectedDate;
+  runDayChange();
+  // If date has changed, reset calendar view to today
+  if(prev!==todayStr()){
+    const d=new Date();
+    calYear=d.getFullYear();
+    calMonth=d.getMonth();
+    selectedDate=todayStr();
+    initDate();
+  }
+  renderAll();
+},60000);
 </script>
 </body>
 </html>
