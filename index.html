@@ -141,23 +141,23 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .cal-day-empty{text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:600;}
 
 /* ── EVENT / TASK CARDS ── */
-.event-card{background:var(--bg);border-radius:12px;padding:12px 12px 12px 14px;margin-bottom:8px;border:1.5px solid var(--border);display:flex;align-items:flex-start;gap:10px;position:relative;overflow:hidden;}
+.event-card{background:var(--bg);border-radius:14px;padding:14px 14px 14px 16px;margin-bottom:10px;border:1.5px solid var(--border);display:flex;align-items:flex-start;gap:12px;position:relative;overflow:hidden;}
 .event-card.type-schedule::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green);}
 .event-card.type-task-soon::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);}
 .event-card.type-task-year::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--purple);}
 .event-card.type-trip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange);}
 .event-card.is-done{opacity:.55;}
-.event-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;background:var(--surface);}
+.event-check{width:26px;height:26px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;background:var(--surface);}
 .event-check.checked-schedule{background:var(--green);border-color:var(--green);}
 .event-check.checked-task{background:var(--blue);border-color:var(--blue);}
 .event-check.checked-year{background:var(--purple);border-color:var(--purple);}
 .event-check.checked-trip{background:var(--orange);border-color:var(--orange);}
-.event-check.checked-schedule::after,.event-check.checked-task::after,.event-check.checked-year::after,.event-check.checked-trip::after{content:'✓';font-size:12px;color:#fff;font-weight:800;}
-.event-body{flex:1;min-width:0;padding-right:20px;}
-.event-name{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:4px;}
+.event-check.checked-schedule::after,.event-check.checked-task::after,.event-check.checked-year::after,.event-check.checked-trip::after{content:'✓';font-size:14px;color:#fff;font-weight:800;}
+.event-body{flex:1;min-width:0;padding-right:22px;}
+.event-name{font-size:16px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:5px;}
 .event-name.done{text-decoration:line-through;color:var(--muted);}
 .event-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;}
-.etag{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;}
+.etag{padding:3px 10px;border-radius:8px;font-size:12px;font-weight:700;}
 .etag-schedule{background:var(--green-s);color:var(--green-d);}
 .etag-task{background:var(--blue-s);color:var(--blue);}
 .etag-year{background:var(--purple-s);color:var(--purple);}
@@ -1445,7 +1445,11 @@ function renderWeight(){
     area.innerHTML=`<div class="wt-reminder"><div class="wt-icon">⚖️</div><div class="wt-reminder-body"><div class="wt-reminder-title">本週還沒量體重</div><div class="wt-reminder-sub">每週量一次追蹤健康趨勢 💪</div></div><button class="wt-log-btn" onclick="openWtModal()">記錄</button></div>`;
   } else {
     const latest=weightLog.filter(w=>getWeekKey(w.date)===getWeekKey(todayStr())).slice(-1)[0];
-    area.innerHTML=`<div class="wt-reminder" style="background:linear-gradient(135deg,#eaf4ec,#d8eedd);border-color:#8fc49a;"><div class="wt-icon">✅</div><div class="wt-reminder-body"><div class="wt-reminder-title" style="color:#3a7a48">本週已記錄！</div><div class="wt-reminder-sub" style="color:#4a9058">本週：<strong>${latest.value} kg</strong></div></div><button class="wt-log-btn" style="background:#5a9a68" onclick="openWtModal()">更新</button></div>`;
+    const [,m,d]=latest.date.split('-');
+    const dayName=['日','一','二','三','四','五','六'][new Date(latest.date).getDay()];
+    const nextDate=new Date(latest.date); nextDate.setDate(nextDate.getDate()+7);
+    const nextLabel=`下次建議：${nextDate.getMonth()+1}/${nextDate.getDate()}`;
+    area.innerHTML=`<div class="wt-reminder" style="background:linear-gradient(135deg,#eaf4ec,#d8eedd);border-color:#8fc49a;"><div class="wt-icon">✅</div><div class="wt-reminder-body"><div class="wt-reminder-title" style="color:#3a7a48">本週已記錄！</div><div class="wt-reminder-sub" style="color:#4a9058"><strong>${latest.value} kg</strong>　${parseInt(m)}/${parseInt(d)}（週${dayName}）<br>${nextLabel}</div></div><button class="wt-log-btn" style="background:#5a9a68" onclick="openWtModal()">更新</button></div>`;
   }
   renderGoalBar(); renderWeightList();
 }
