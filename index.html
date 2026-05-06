@@ -574,8 +574,14 @@ let modalVoiceRecording=false, modalVoiceRec=null;
 let nextId=100;
 
 // ═══════════ HELPERS ═══════════
-function todayStr(){ return new Date().toISOString().split('T')[0]; }
-function offsetDate(n){ const d=new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
+function todayStr(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function offsetDate(n){
+  const d=new Date(); d.setDate(d.getDate()+n);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function saveEvents(){ localStorage.setItem(EVENTS_KEY,JSON.stringify(events)); }
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
@@ -1483,7 +1489,7 @@ function renderGoalBar(){
 
 function setPeriod(btn){ chartMonths=parseInt(btn.dataset.months); document.querySelectorAll('.wt-period-btn').forEach(b=>b.classList.toggle('active',b===btn)); renderWeightList(); }
 
-function filterByPeriod(log){ if(!chartMonths)return[...log]; const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-chartMonths); const cutStr=cutoff.toISOString().split('T')[0]; return log.filter(w=>w.date>=cutStr); }
+function filterByPeriod(log){ if(!chartMonths)return[...log]; const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-chartMonths); const d=cutoff; const cutStr=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; return log.filter(w=>w.date>=cutStr); }
 
 function renderWeightList(){
   const listEl=document.getElementById('wt-list'); const chartEl=document.getElementById('wt-chart-area');
