@@ -311,6 +311,38 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .sync-btn-import{background:var(--surface);color:var(--text);border:2px solid var(--border);}
 .sync-btn:active{opacity:.85;}
 .sync-last{font-size:11px;color:var(--muted);font-weight:600;text-align:center;margin-top:4px;}
+
+/* search */
+.search-bar{
+  display:none; margin:0 16px 12px;
+  background:var(--surface); border:2px solid var(--green);
+  border-radius:16px; padding:10px 14px;
+  box-shadow:0 2px 10px var(--shadow);
+}
+.search-bar.visible{display:flex;gap:8px;align-items:center;}
+.search-input{
+  flex:1; background:var(--bg); border:1.5px solid var(--border);
+  border-radius:10px; padding:9px 12px; color:var(--text);
+  font-family:'Nunito','Noto Sans TC',sans-serif; font-size:14px; font-weight:600;
+  outline:none;
+}
+.search-input:focus{border-color:var(--green);}
+.search-input::placeholder{color:var(--muted);}
+.search-close{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.search-results{margin:0 16px 12px;display:none;}
+.search-results.visible{display:block;}
+.search-result-item{
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:14px; padding:12px 14px; margin-bottom:8px;
+  cursor:pointer; display:flex; align-items:center; gap:10px;
+}
+.search-result-item:active{background:var(--green-s);}
+.search-result-icon{font-size:18px;flex-shrink:0;}
+.search-result-body{flex:1;}
+.search-result-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.search-result-meta{font-size:11px;color:var(--muted);font-weight:600;}
+.search-result-arrow{font-size:14px;color:var(--muted);}
+.search-empty{text-align:center;padding:24px;color:var(--muted);font-size:13px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -325,8 +357,18 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div class="header-title">🌳 小幫手</div>
     <div class="header-date" id="header-date"></div>
   </div>
-  <button class="add-btn" id="voice-fab-header" onclick="voiceFAB()">🎙</button>
+  <div style="display:flex;gap:8px;">
+    <button class="add-btn" style="background:var(--surface);border:1.5px solid var(--border);color:var(--text);box-shadow:none;font-size:20px;" onclick="toggleSearch()">🔍</button>
+    <button class="add-btn" id="voice-fab-header" onclick="voiceFAB()">🎙</button>
+  </div>
 </div>
+
+<!-- Search bar -->
+<div class="search-bar" id="search-bar">
+  <input class="search-input" id="search-input" placeholder="搜尋行程、任務、知識…" oninput="doSearch()">
+  <button class="search-close" onclick="closeSearch()">✕</button>
+</div>
+<div class="search-results" id="search-results"></div>
 
 <!-- Nav Tabs -->
 <div class="nav-tabs">
@@ -1620,6 +1662,88 @@ let toastTimer=null;
 function showToast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); if(toastTimer)clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2600); }
 function updateClock(){ const d=new Date(); document.getElementById('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
 function initDate(){ const d=new Date(),days=['日','一','二','三','四','五','六']; document.getElementById('header-date').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 週${days[d.getDay()]}`; }
+
+// ═══════════ SEARCH ═══════════
+function toggleSearch(){
+  const bar=document.getElementById('search-bar');
+  const isVisible=bar.classList.contains('visible');
+  if(isVisible){ closeSearch(); }
+  else{
+    bar.classList.add('visible');
+    document.getElementById('search-input').value='';
+    document.getElementById('search-results').classList.remove('visible');
+    setTimeout(()=>document.getElementById('search-input').focus(),100);
+  }
+}
+
+function closeSearch(){
+  document.getElementById('search-bar').classList.remove('visible');
+  document.getElementById('search-results').classList.remove('visible');
+  document.getElementById('search-input').value='';
+}
+
+function doSearch(){
+  const q=document.getElementById('search-input').value.trim();
+  const resultsEl=document.getElementById('search-results');
+  if(!q){ resultsEl.classList.remove('visible'); return; }
+  resultsEl.classList.add('visible');
+
+  const ql=q.toLowerCase();
+  const results=[];
+
+  // Search events
+  events.forEach(e=>{
+    if(e.name&&e.name.toLowerCase().includes(ql)){
+      const icon=e.trip?'📍':e.type==='task-soon'?'✅':e.type==='task-year'?'🎯':'📅';
+      const dateLabel=e.date?fmtDate(e.date):e.deadline?`截止 ${fmtDate(e.deadline)}`:'';
+      results.push({icon,name:e.name,meta:dateLabel,date:e.date||e.deadline||'',type:'event',id:e.id});
+    }
+  });
+
+  // Search KB notes
+  kbNotes.forEach(n=>{
+    if((n.title&&n.title.toLowerCase().includes(ql))||(n.body&&n.body.toLowerCase().includes(ql))){
+      const tl={'annual':'年會','study':'Study','other':'其他'};
+      results.push({icon:'📝',name:n.title,meta:`知識庫・${tl[n.topic]||'其他'}・${n.date||''}`,date:n.dateStr||'',type:'note',id:n.id});
+    }
+  });
+
+  if(!results.length){
+    resultsEl.innerHTML=`<div class="search-empty">找不到「${escHtml(q)}」相關的內容</div>`;
+    return;
+  }
+
+  resultsEl.innerHTML=results.map(r=>`
+    <div class="search-result-item" onclick="jumpToResult('${r.type}','${r.id}','${r.date}')">
+      <div class="search-result-icon">${r.icon}</div>
+      <div class="search-result-body">
+        <div class="search-result-name">${escHtml(r.name)}</div>
+        <div class="search-result-meta">${escHtml(r.meta)}</div>
+      </div>
+      <div class="search-result-arrow">›</div>
+    </div>`).join('');
+}
+
+function jumpToResult(type, id, date){
+  closeSearch();
+  if(type==='note'){
+    switchTab('kb');
+    // Highlight in KB
+    setTimeout(()=>{
+      const el=document.querySelector(`[onclick*="delKB('${id}')"]`);
+      if(el) el.closest('.kb-card').scrollIntoView({behavior:'smooth',block:'center'});
+    },200);
+  } else if(date){
+    // Jump to calendar date
+    const [y,m]=date.split('-');
+    calYear=parseInt(y); calMonth=parseInt(m)-1;
+    selectedDate=date;
+    switchTab('cal');
+    renderCalendar();
+  } else {
+    switchTab('tasks');
+  }
+}
 
 // ═══════════ SWIPE GESTURE (Calendar) ═══════════
 (function(){
