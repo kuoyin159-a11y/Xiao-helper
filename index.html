@@ -285,6 +285,35 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .run-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .run-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
 
+
+
+/* ── PERIOD ── */
+.nav-tab.active-period{background:var(--red-s);border-color:var(--red);color:var(--red);}
+.period-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.period-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+.period-date{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:12px;font-weight:700;outline:none;color-scheme:light;-webkit-appearance:none;}
+.period-date:focus{border-color:var(--red);}
+.period-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--red);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(181,116,106,.16);}
+.period-save-btn:active{opacity:.85;}
+.period-settings-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.period-setting-box{background:var(--red-s);border:1.5px solid #d8a09a;border-radius:12px;padding:10px;}
+.period-setting-label{font-size:11px;color:var(--red);font-weight:800;margin-bottom:6px;}
+.period-number{width:100%;background:var(--surface);border:1.5px solid #d8a09a;border-radius:10px;padding:9px 10px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:18px;font-weight:800;text-align:center;outline:none;}
+.period-number:focus{border-color:var(--red);}
+.period-next{background:linear-gradient(135deg,var(--red-s),#f6e9e7);border:1.5px solid #d8a09a;border-radius:14px;padding:13px;margin-bottom:12px;}
+.period-next-title{font-size:13px;font-weight:800;color:var(--red);margin-bottom:4px;}
+.period-next-main{font-size:18px;font-weight:800;color:var(--text);margin-bottom:3px;}
+.period-next-sub{font-size:11px;color:var(--muted);font-weight:700;line-height:1.6;}
+.period-entry{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
+.period-entry-date{font-size:12px;color:var(--muted);font-weight:700;flex:1;line-height:1.5;}
+.period-entry-val{font-size:13px;font-weight:800;color:var(--red);white-space:nowrap;}
+.period-entry-tag{font-size:10px;font-weight:800;padding:2px 7px;border-radius:7px;background:var(--red-s);color:var(--red);white-space:nowrap;}
+.period-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
+.period-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
+.period-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
+.cal-event-pill.period-actual{background:var(--red-s);color:var(--red);}
+.cal-event-pill.period-predict{background:var(--purple-s);color:var(--purple);}
+
 /* ── KB ── */
 .kb-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:600;outline:none;margin-bottom:10px;}
 .kb-search:focus{border-color:#5a7a52;}
@@ -409,6 +438,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <button class="nav-tab"             id="tab-tasks"  onclick="switchTab('tasks')">✅<br>任務</button>
   <button class="nav-tab"             id="tab-weight" onclick="switchTab('weight')">⚖️<br>體重</button>
   <button class="nav-tab"             id="tab-run"    onclick="switchTab('run')">🏃‍♀️<br>跑步</button>
+  <button class="nav-tab"             id="tab-period" onclick="switchTab('period')">🌙<br>生理期</button>
   <button class="nav-tab"             id="tab-kb"     onclick="switchTab('kb')">📝<br>知識庫</button>
   <button class="nav-tab"             id="tab-sync"   onclick="switchTab('sync')">🔄<br>同步</button>
 </div>
@@ -522,6 +552,41 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div id="run-list"></div>
 </div>
 
+
+
+<!-- PERIOD SECTION -->
+<div class="section" id="sec-period">
+  <div class="sec-label" style="color:var(--red)">生理期記錄</div>
+
+  <div class="period-card">
+    <div class="field-label">這次生理期日期</div>
+    <div class="period-input-row">
+      <input type="date" class="period-date" id="period-start-input" min="2020-01-01" max="2099-12-31">
+      <input type="date" class="period-date" id="period-end-input" min="2020-01-01" max="2099-12-31">
+    </div>
+    <button class="period-save-btn" onclick="savePeriodFromInput()">儲存生理期</button>
+  </div>
+
+  <div class="period-card">
+    <div class="field-label">預測設定</div>
+    <div class="period-settings-row">
+      <div class="period-setting-box">
+        <div class="period-setting-label">週期天數</div>
+        <input type="number" class="period-number" id="period-cycle-input" min="15" max="60" step="1">
+      </div>
+      <div class="period-setting-box">
+        <div class="period-setting-label">經期長度</div>
+        <input type="number" class="period-number" id="period-length-input" min="1" max="14" step="1">
+      </div>
+    </div>
+    <button class="period-save-btn" onclick="savePeriodSettings()">更新預測設定</button>
+  </div>
+
+  <div id="period-next-area"></div>
+  <div class="wt-hist-label" style="color:var(--red)">歷史記錄</div>
+  <div id="period-list"></div>
+</div>
+
 <!-- KB SECTION -->
 <div class="section" id="sec-kb">
   <div class="sec-label" style="color:#5a7a52">知識庫・訣竅備忘</div>
@@ -541,7 +606,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
   <div class="sync-card">
     <div class="sync-card-title">📤 匯出資料</div>
-    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、跑步、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
+    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、跑步、生理期、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
     <button class="sync-btn sync-btn-export" onclick="exportData()">匯出到檔案</button>
     <div class="sync-last" id="export-last"></div>
   </div>
@@ -652,7 +717,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
 <script>
 // ═══════════ STORAGE KEYS ═══════════
-const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', RUN_KEY='run_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
+const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', RUN_KEY='run_v1', PERIOD_KEY='period_v1', PERIOD_SETTINGS_KEY='period_settings_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
 
 // ═══════════ STATE ═══════════
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)||'[]');
@@ -672,6 +737,8 @@ if(!events.length){
 let weightLog=JSON.parse(localStorage.getItem(WT_KEY)||'[]');
 let weightGoal=parseFloat(localStorage.getItem(WT_GOAL_KEY)||'0')||0;
 let runLog=JSON.parse(localStorage.getItem(RUN_KEY)||'[]');
+let periodLog=JSON.parse(localStorage.getItem(PERIOD_KEY)||'[]');
+let periodSettings=JSON.parse(localStorage.getItem(PERIOD_SETTINGS_KEY)||'{"cycle":28,"length":5}');
 let kbNotes=JSON.parse(localStorage.getItem(KB_KEY)||'[]');
 let chartMonths=1;
 let runView='daily';
@@ -700,6 +767,8 @@ function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&l
 function saveEvents(){ localStorage.setItem(EVENTS_KEY,JSON.stringify(events)); }
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
 function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
+function savePeriod(){ localStorage.setItem(PERIOD_KEY,JSON.stringify(periodLog)); }
+function savePeriodSettingsStore(){ localStorage.setItem(PERIOD_SETTINGS_KEY,JSON.stringify(periodSettings)); }
 function saveGoal(){ localStorage.setItem(WT_GOAL_KEY,String(weightGoal)); }
 function saveKB(){ localStorage.setItem(KB_KEY,JSON.stringify(kbNotes)); }
 function uid(){ return 'id'+(Date.now())+(Math.random()*1000|0); }
@@ -1110,11 +1179,13 @@ function renderCalendar(){
     events.filter(e=>e.type==='schedule'&&e.endDate&&e.endDate>e.date&&e.date<dateStr&&e.endDate>=dateStr)
       .forEach(e=>{ if(!allDayEvts.find(x=>x.id===e.id)) allDayEvts.push(e); });
     const dayNotes=isOther?[]:kbNotes.filter(n=>n.dateStr===dateStr);
+    const menstrualInfo=isOther?null:getPeriodInfo(dateStr);
     const allItems=[...allDayEvts,...dayNotes];
     const MAX=(holiday||solarTerm)?1:2;
     let pills='';
     if(holiday) pills+=`<span class="cal-holiday-name">${holiday}</span>`;
     else if(solarTerm) pills+=`<span class="cal-solar-term">🌿 ${solarTerm}</span>`;
+    if(menstrualInfo) pills+=`<span class="cal-event-pill ${menstrualInfo.kind==='actual'?'period-actual':'period-predict'}">${menstrualInfo.kind==='actual'?'🌙':'♡'}${menstrualInfo.kind==='actual'?'生理':'預測'}</span>`;
     allItems.slice(0,MAX).forEach(item=>{
       if(item.type){
         // event
@@ -1165,6 +1236,7 @@ function renderDayPanel(){
   const list=document.getElementById('cal-day-list');
   const dayEvts=events.filter(e=>e.date===selectedDate).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
   const dayNotes=kbNotes.filter(n=>n.dateStr===selectedDate);
+  const menstrualInfo=getPeriodInfo(selectedDate);
   const holiday=getHoliday(selectedDate);
   const solarTerm=getSolarTerm(selectedDate);
   const lunar=getLunarText(selectedDate);
@@ -1174,12 +1246,22 @@ function renderDayPanel(){
   title.innerHTML=`${fmtDate(selectedDate)}${selectedDate===todayStr()?' 今天':''}${lunarTag}${solarTermTag}${holidayTag}`;
   panel.style.display='block';
 
-  if(!dayEvts.length && !dayNotes.length){
-    list.innerHTML=`<div class="cal-day-empty">這天沒有行程或任務<br><small>按右上角 🎙 新增</small></div>`;
+  if(!dayEvts.length && !dayNotes.length && !menstrualInfo){
+    list.innerHTML=`<div class="cal-day-empty">這天沒有行程、任務或生理期預測<br><small>按右上角 🎙 新增</small></div>`;
     return;
   }
 
   let html=dayEvts.map(e=>eventCardHTML(e)).join('');
+
+  if(menstrualInfo){
+    const actual=menstrualInfo.kind==='actual';
+    html+=`<div class="event-card" style="border-left:3px solid ${actual?'var(--red)':'var(--purple)'};">
+      <div class="event-body" style="padding-right:0">
+        <div class="event-name">${actual?'🌙 生理期':'♡ 生理期預測'}第 ${menstrualInfo.day} 天</div>
+        <div class="event-meta"><span class="etag" style="background:${actual?'var(--red-s)':'var(--purple-s)'};color:${actual?'var(--red)':'var(--purple)'}">${fmtDate(menstrualInfo.start)} ～ ${fmtDate(menstrualInfo.end)}</span></div>
+      </div>
+    </div>`;
+  }
 
   if(dayNotes.length){
     const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
@@ -1330,6 +1412,7 @@ function renderAll(){
   renderTasks();
   renderWeight();
   renderRun();
+  renderPeriod();
   renderKB();
   updateBadges();
 }
@@ -1348,7 +1431,7 @@ function updateBadges(){
 // ═══════════ SWITCH TAB ═══════════
 function switchTab(tab){
   currentTab=tab;
-  ['cal','today','tasks','weight','run','kb','sync'].forEach(c=>{
+  ['cal','today','tasks','weight','run','period','kb','sync'].forEach(c=>{
     const el=document.getElementById('tab-'+c);
     const badge=el?.querySelector('.tab-badge');
     if(el){el.className='nav-tab'+(c===tab?' active-'+c:'');if(badge)el.appendChild(badge);}
@@ -1793,10 +1876,126 @@ function renderKB(){
 }
 function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); renderToday(); }
 
+
+
+// ═══════════ PERIOD ═══════════
+function parseDateLocal(dateStr){
+  const [y,m,d]=dateStr.split('-').map(Number);
+  return new Date(y,m-1,d);
+}
+function addDays(dateStr,n){
+  const d=parseDateLocal(dateStr); d.setDate(d.getDate()+n);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function daysBetween(a,b){ return Math.round((parseDateLocal(b)-parseDateLocal(a))/86400000); }
+function normalizePeriodSettings(){
+  periodSettings.cycle=parseInt(periodSettings.cycle)||28;
+  periodSettings.length=parseInt(periodSettings.length)||5;
+  if(periodSettings.cycle<15) periodSettings.cycle=15;
+  if(periodSettings.cycle>60) periodSettings.cycle=60;
+  if(periodSettings.length<1) periodSettings.length=1;
+  if(periodSettings.length>14) periodSettings.length=14;
+}
+function getPeriodEnd(p){ return p.end || addDays(p.start,(parseInt(periodSettings.length)||5)-1); }
+function sortedPeriods(){ return [...periodLog].filter(p=>p.start).sort((a,b)=>b.start.localeCompare(a.start)); }
+function getLatestPeriodStart(){
+  const sorted=sortedPeriods();
+  return sorted.length?sorted[0].start:null;
+}
+function getPeriodInfo(dateStr){
+  normalizePeriodSettings();
+  // Actual recorded period takes priority
+  for(const p of periodLog){
+    if(!p.start) continue;
+    const end=getPeriodEnd(p);
+    if(p.start<=dateStr && end>=dateStr){
+      return {kind:'actual',start:p.start,end,day:daysBetween(p.start,dateStr)+1};
+    }
+  }
+  const base=getLatestPeriodStart();
+  if(!base) return null;
+  let start=base;
+  const cycle=periodSettings.cycle;
+  const len=periodSettings.length;
+  // Move forward to the predicted cycle that may contain this date.
+  while(addDays(start,len-1)<dateStr){ start=addDays(start,cycle); }
+  const end=addDays(start,len-1);
+  if(start<=dateStr && end>=dateStr && end>=todayStr()){
+    return {kind:'predicted',start,end,day:daysBetween(start,dateStr)+1};
+  }
+  return null;
+}
+function getNextPeriodPrediction(){
+  normalizePeriodSettings();
+  const base=getLatestPeriodStart();
+  if(!base) return null;
+  let start=base;
+  while(addDays(start,periodSettings.length-1)<todayStr()){ start=addDays(start,periodSettings.cycle); }
+  return {start,end:addDays(start,periodSettings.length-1)};
+}
+function renderPeriod(){
+  normalizePeriodSettings();
+  const startInp=document.getElementById('period-start-input');
+  const endInp=document.getElementById('period-end-input');
+  if(startInp && !startInp.value) startInp.value=todayStr();
+  if(document.getElementById('period-cycle-input')) document.getElementById('period-cycle-input').value=periodSettings.cycle;
+  if(document.getElementById('period-length-input')) document.getElementById('period-length-input').value=periodSettings.length;
+
+  const next=getNextPeriodPrediction();
+  const nextArea=document.getElementById('period-next-area');
+  if(nextArea){
+    if(next){
+      const days=daysBetween(todayStr(),next.start);
+      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">${fmtDate(next.start)} ～ ${fmtDate(next.end)}</div><div class="period-next-sub">約 ${days} 天後開始。預測依據：週期 ${periodSettings.cycle} 天、經期 ${periodSettings.length} 天。</div></div>`;
+    } else {
+      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">尚未有足夠資料</div><div class="period-next-sub">先記錄至少一次生理期開始日，就能自動推算下一次。</div></div>`;
+    }
+  }
+
+  const list=document.getElementById('period-list');
+  if(!list) return;
+  const rows=sortedPeriods();
+  if(!rows.length){
+    list.innerHTML=`<div class="period-empty">🌙 尚未有生理期紀錄<br>先輸入開始日與結束日，之後就能自動預測。</div>`;
+    return;
+  }
+  list.innerHTML=rows.map(p=>{
+    const end=getPeriodEnd(p);
+    const len=daysBetween(p.start,end)+1;
+    return `<div class="period-entry"><div class="period-entry-date">${fmtDate(p.start)} ～ ${fmtDate(end)}</div><div class="period-entry-val">${len} 天</div><span class="period-entry-tag">週期 ${periodSettings.cycle}</span><button class="period-del" onclick="delPeriod('${p.id}')">✕</button></div>`;
+  }).join('');
+}
+function savePeriodFromInput(){
+  const start=document.getElementById('period-start-input').value||todayStr();
+  let end=document.getElementById('period-end-input').value||addDays(start,periodSettings.length-1);
+  if(end<start){ showToast('⚠️ 結束日不能早於開始日'); return; }
+  periodLog.push({id:uid(),start,end});
+  savePeriod();
+  document.getElementById('period-start-input').value=todayStr();
+  document.getElementById('period-end-input').value='';
+  renderAll();
+  showToast('✓ 已儲存生理期紀錄');
+}
+function savePeriodSettings(){
+  const cycle=parseInt(document.getElementById('period-cycle-input').value);
+  const len=parseInt(document.getElementById('period-length-input').value);
+  if(!cycle || cycle<15 || cycle>60){ showToast('⚠️ 週期請填 15–60 天'); return; }
+  if(!len || len<1 || len>14){ showToast('⚠️ 經期長度請填 1–14 天'); return; }
+  periodSettings={cycle,length:len};
+  savePeriodSettingsStore();
+  renderAll();
+  showToast('✓ 已更新預測設定');
+}
+function delPeriod(id){
+  periodLog=periodLog.filter(p=>p.id!==id);
+  savePeriod();
+  renderAll();
+}
+
 // ═══════════ SYNC ═══════════
 function exportData(){
   const data={
-    events, weightLog, weightGoal, runLog, kbNotes,
+    events, weightLog, weightGoal, runLog, periodLog, periodSettings, kbNotes,
     exportedAt: new Date().toISOString(),
     version: 1
   };
@@ -1820,7 +2019,7 @@ function importData(event){
   reader.onload=e=>{
     try{
       const data=JSON.parse(e.target.result);
-      if(!data.events&&!data.weightLog&&!data.runLog&&!data.kbNotes){
+      if(!data.events&&!data.weightLog&&!data.runLog&&!data.periodLog&&!data.kbNotes){
         showToast('⚠️ 檔案格式錯誤'); return;
       }
       if(!confirm('匯入後會覆蓋這台的現有資料，確定嗎？')){return;}
@@ -1828,6 +2027,8 @@ function importData(event){
       if(data.weightLog) { weightLog=data.weightLog; saveWt(); }
       if(data.weightGoal){ weightGoal=data.weightGoal; saveGoal(); }
       if(data.runLog)    { runLog=data.runLog;     saveRun(); }
+      if(data.periodLog) { periodLog=data.periodLog; savePeriod(); }
+      if(data.periodSettings){ periodSettings=data.periodSettings; savePeriodSettingsStore(); }
       if(data.kbNotes)   { kbNotes=data.kbNotes;   saveKB(); }
       renderAll();
       const d=new Date();
