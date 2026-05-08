@@ -253,6 +253,38 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .wt-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;}
 
+
+
+/* ── RUNNING ── */
+.nav-tab.active-run{background:#e2eaf3;border-color:var(--blue);color:var(--blue);}
+.run-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.run-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+.run-number{flex:1;background:var(--blue-s);border:1.5px solid var(--blue);border-radius:12px;padding:12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:22px;font-weight:800;outline:none;text-align:center;}
+.run-number:focus{border-color:var(--blue);}
+.run-date{width:132px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:12px;font-weight:700;outline:none;color-scheme:light;-webkit-appearance:none;}
+.run-date:focus{border-color:var(--blue);}
+.run-unit{font-size:14px;color:var(--muted);font-weight:700;}
+.run-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--blue);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(123,155,186,.16);}
+.run-save-btn:active{opacity:.85;}
+.run-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
+.run-summary-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px;text-align:center;}
+.run-summary-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px;}
+.run-summary-val{font-size:21px;font-weight:800;color:var(--blue);}
+.run-summary-sub{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px;}
+.run-view-row{display:flex;gap:6px;margin-bottom:12px;}
+.run-view-btn{flex:1;padding:7px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;text-align:center;}
+.run-view-btn.active{background:var(--blue-s);border-color:var(--blue);color:var(--blue);}
+.run-chart{margin-bottom:12px;background:var(--surface);border-radius:14px;padding:14px 12px 10px;border:1.5px solid var(--border);}
+.run-chart-title{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;}
+.run-chart-title span{color:var(--blue);}
+.run-entry{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
+.run-entry-date{font-size:11px;color:var(--muted);font-weight:700;flex:1;}
+.run-entry-val{font-size:17px;font-weight:800;color:var(--blue);}
+.run-entry-diff{font-size:10px;font-weight:700;padding:2px 7px;border-radius:7px;background:var(--blue-s);color:var(--blue);}
+.run-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
+.run-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
+.run-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
+
 /* ── KB ── */
 .kb-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:600;outline:none;margin-bottom:10px;}
 .kb-search:focus{border-color:#5a7a52;}
@@ -376,6 +408,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <button class="nav-tab"             id="tab-today"  onclick="switchTab('today')">📌<br>今日</button>
   <button class="nav-tab"             id="tab-tasks"  onclick="switchTab('tasks')">✅<br>任務</button>
   <button class="nav-tab"             id="tab-weight" onclick="switchTab('weight')">⚖️<br>體重</button>
+  <button class="nav-tab"             id="tab-run"    onclick="switchTab('run')">🏃‍♀️<br>跑步</button>
   <button class="nav-tab"             id="tab-kb"     onclick="switchTab('kb')">📝<br>知識庫</button>
   <button class="nav-tab"             id="tab-sync"   onclick="switchTab('sync')">🔄<br>同步</button>
 </div>
@@ -452,6 +485,43 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div id="wt-list"></div>
 </div>
 
+<!-- RUNNING SECTION -->
+<div class="section" id="sec-run">
+  <div class="sec-label" style="color:var(--blue)">跑步紀錄</div>
+  <div class="run-card">
+    <div class="field-label">日期與公里數</div>
+    <div class="run-input-row">
+      <input type="date" class="run-date" id="run-date-input" min="2020-01-01" max="2099-12-31">
+      <input type="number" class="run-number" id="run-km-input" placeholder="0.0" step="0.1" min="0" max="200">
+      <span class="run-unit">km</span>
+    </div>
+    <button class="run-save-btn" onclick="saveRunFromInput()">儲存今天跑量</button>
+  </div>
+
+  <div class="run-summary-grid">
+    <div class="run-summary-card">
+      <div class="run-summary-label">本月跑量</div>
+      <div class="run-summary-val" id="run-month-total">0 km</div>
+      <div class="run-summary-sub" id="run-month-sub">—</div>
+    </div>
+    <div class="run-summary-card">
+      <div class="run-summary-label">今年跑量</div>
+      <div class="run-summary-val" id="run-year-total">0 km</div>
+      <div class="run-summary-sub" id="run-year-sub">—</div>
+    </div>
+  </div>
+
+  <div class="run-view-row">
+    <button class="run-view-btn active" data-view="daily" onclick="setRunView(this)">每日紀錄</button>
+    <button class="run-view-btn" data-view="month" onclick="setRunView(this)">月跑量趨勢</button>
+    <button class="run-view-btn" data-view="year" onclick="setRunView(this)">年跑量趨勢</button>
+  </div>
+  <div class="wt-hist-label" style="color:var(--blue)">趨勢圖</div>
+  <div id="run-chart-area"></div>
+  <div class="wt-hist-label" style="color:var(--blue)">歷史紀錄</div>
+  <div id="run-list"></div>
+</div>
+
 <!-- KB SECTION -->
 <div class="section" id="sec-kb">
   <div class="sec-label" style="color:#5a7a52">知識庫・訣竅備忘</div>
@@ -471,7 +541,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
   <div class="sync-card">
     <div class="sync-card-title">📤 匯出資料</div>
-    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
+    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、跑步、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
     <button class="sync-btn sync-btn-export" onclick="exportData()">匯出到檔案</button>
     <div class="sync-last" id="export-last"></div>
   </div>
@@ -582,7 +652,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
 <script>
 // ═══════════ STORAGE KEYS ═══════════
-const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
+const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', RUN_KEY='run_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
 
 // ═══════════ STATE ═══════════
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)||'[]');
@@ -601,8 +671,10 @@ if(!events.length){
 
 let weightLog=JSON.parse(localStorage.getItem(WT_KEY)||'[]');
 let weightGoal=parseFloat(localStorage.getItem(WT_GOAL_KEY)||'0')||0;
+let runLog=JSON.parse(localStorage.getItem(RUN_KEY)||'[]');
 let kbNotes=JSON.parse(localStorage.getItem(KB_KEY)||'[]');
 let chartMonths=1;
+let runView='daily';
 let kbFilter='all';
 
 let currentTab='cal';
@@ -627,6 +699,7 @@ function offsetDate(n){
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function saveEvents(){ localStorage.setItem(EVENTS_KEY,JSON.stringify(events)); }
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
+function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
 function saveGoal(){ localStorage.setItem(WT_GOAL_KEY,String(weightGoal)); }
 function saveKB(){ localStorage.setItem(KB_KEY,JSON.stringify(kbNotes)); }
 function uid(){ return 'id'+(Date.now())+(Math.random()*1000|0); }
@@ -1256,6 +1329,7 @@ function renderAll(){
   renderToday();
   renderTasks();
   renderWeight();
+  renderRun();
   renderKB();
   updateBadges();
 }
@@ -1274,7 +1348,7 @@ function updateBadges(){
 // ═══════════ SWITCH TAB ═══════════
 function switchTab(tab){
   currentTab=tab;
-  ['cal','today','tasks','weight','kb','sync'].forEach(c=>{
+  ['cal','today','tasks','weight','run','kb','sync'].forEach(c=>{
     const el=document.getElementById('tab-'+c);
     const badge=el?.querySelector('.tab-badge');
     if(el){el.className='nav-tab'+(c===tab?' active-'+c:'');if(badge)el.appendChild(badge);}
@@ -1579,6 +1653,117 @@ function wtOverlayClick(e){ if(e.target.id==='wt-overlay') closeWtModal(); }
 function saveWeightFromModal(){ const v=parseFloat(document.getElementById('wt-quick-input').value); if(!v||v<20||v>300){showToast('請輸入正確體重');return;} weightLog.push({id:uid(),date:todayStr(),value:v}); saveWt(); renderWeight(); updateBadges(); closeWtModal(); showToast(`記錄成功：${v} kg ✓`); }
 function delWeight(id){ weightLog=weightLog.filter(w=>w.id!==id); saveWt(); renderWeight(); }
 
+
+// ═══════════ RUNNING ═══════════
+function runDateParts(dateStr){
+  const d=new Date(dateStr);
+  return {year:d.getFullYear(), month:d.getMonth()+1, day:d.getDate(), dow:['日','一','二','三','四','五','六'][d.getDay()]};
+}
+function runMonthKey(dateStr){ return (dateStr||'').slice(0,7); }
+function runYearKey(dateStr){ return (dateStr||'').slice(0,4); }
+function sumRun(list){ return list.reduce((s,r)=>s+(parseFloat(r.km)||0),0); }
+function fmtKm(v){ const n=Math.round((v||0)*10)/10; return Number.isInteger(n)?String(n):n.toFixed(1); }
+function groupRunBy(period){
+  const map={};
+  runLog.forEach(r=>{
+    const key=period==='year'?runYearKey(r.date):runMonthKey(r.date);
+    if(!key)return;
+    map[key]=(map[key]||0)+(parseFloat(r.km)||0);
+  });
+  return Object.keys(map).sort().map(key=>({date:key, km:Math.round(map[key]*10)/10}));
+}
+function setRunView(btn){
+  runView=btn.dataset.view;
+  document.querySelectorAll('.run-view-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  renderRunList();
+}
+function renderRun(){
+  const dateInp=document.getElementById('run-date-input');
+  if(dateInp && !dateInp.value) dateInp.value=todayStr();
+  const today=todayStr();
+  const month=today.slice(0,7), year=today.slice(0,4);
+  const monthTotal=sumRun(runLog.filter(r=>runMonthKey(r.date)===month));
+  const yearTotal=sumRun(runLog.filter(r=>runYearKey(r.date)===year));
+  const thisMonthCount=runLog.filter(r=>runMonthKey(r.date)===month).length;
+  const thisYearCount=runLog.filter(r=>runYearKey(r.date)===year).length;
+  document.getElementById('run-month-total').textContent=`${fmtKm(monthTotal)} km`;
+  document.getElementById('run-year-total').textContent=`${fmtKm(yearTotal)} km`;
+  document.getElementById('run-month-sub').textContent=thisMonthCount?`${thisMonthCount} 筆紀錄`:'本月尚未記錄';
+  document.getElementById('run-year-sub').textContent=thisYearCount?`${thisYearCount} 筆紀錄`:'今年尚未記錄';
+  renderRunList();
+}
+function renderRunList(){
+  const listEl=document.getElementById('run-list');
+  const chartEl=document.getElementById('run-chart-area');
+  if(!listEl||!chartEl)return;
+  if(!runLog.length){
+    listEl.innerHTML=`<div class="run-empty">🏃‍♀️ 還沒有跑步紀錄<br>輸入今天跑了幾公里，就可以開始累積月跑量和年跑量。</div>`;
+    chartEl.innerHTML='';
+    return;
+  }
+  const daily=[...runLog].sort((a,b)=>a.date.localeCompare(b.date));
+  const data=runView==='daily'?daily:groupRunBy(runView==='year'?'year':'month');
+  renderRunChart(data);
+  if(runView==='daily'){
+    const rev=[...daily].reverse();
+    listEl.innerHTML=rev.map((r,i)=>{
+      const prev=rev[i+1];
+      let diff='';
+      if(prev){
+        const dv=(r.km-prev.km).toFixed(1);
+        const sym=dv>0?'▲':dv<0?'▼':'→';
+        diff=`<span class="run-entry-diff">${sym} ${Math.abs(dv)}</span>`;
+      }
+      const {month,day,dow}=runDateParts(r.date);
+      return `<div class="run-entry"><div class="run-entry-date">${month}/${day}（週${dow}）</div><div class="run-entry-val">${fmtKm(r.km)} km</div>${diff}<button class="run-del" onclick="delRun('${r.id}')">✕</button></div>`;
+    }).join('');
+  } else {
+    const rev=[...data].reverse();
+    listEl.innerHTML=rev.map(r=>{
+      const label=runView==='year'?`${r.date} 年`:`${parseInt(r.date.slice(5,7))} 月・${r.date.slice(0,4)}`;
+      return `<div class="run-entry"><div class="run-entry-date">${label}</div><div class="run-entry-val">${fmtKm(r.km)} km</div></div>`;
+    }).join('')||`<div class="run-empty">沒有可顯示的紀錄</div>`;
+  }
+}
+function renderRunChart(data){
+  const chartEl=document.getElementById('run-chart-area');
+  if(data.length<2){
+    chartEl.innerHTML=`<div class="run-chart"><div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:700;">記錄更多才能顯示趨勢圖</div></div>`;
+    return;
+  }
+  const vals=data.map(r=>parseFloat(r.km)||0);
+  const rawMax=Math.max(...vals), rawMin=Math.min(...vals,0);
+  const pv=(rawMax-rawMin)||1;
+  const mn=Math.max(0,rawMin-pv*.12), mx=rawMax+pv*.25;
+  const W=320,H=120,padL=36,padR=10,padT=12,padB=26,cW=W-padL-padR,cH=H-padT-padB;
+  const toX=i=>padL+(i/(data.length-1))*cW;
+  const toY=v=>padT+cH-((v-mn)/(mx-mn))*cH;
+  const pts=data.map((r,i)=>({x:toX(i),y:toY(r.km),v:r.km,date:r.date}));
+  const path=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
+  const area=`${path} L${pts[pts.length-1].x},${padT+cH} L${pts[0].x},${padT+cH} Z`;
+  const ySteps=[mn,(mn+mx)/2,mx];
+  const yLabels=ySteps.map(v=>`<text x="${padL-4}" y="${toY(v)+3}" text-anchor="end" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${fmtKm(v)}</text>`).join('');
+  const idxs=[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i&&data.length>1);
+  const xLabels=idxs.map(i=>{
+    const d=data[i].date;
+    const label=runView==='daily'?`${parseInt(d.slice(5,7))}/${parseInt(d.slice(8,10))}`:(runView==='month'?`${parseInt(d.slice(5,7))}月`:d);
+    return `<text x="${toX(i)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${label}</text>`;
+  }).join('');
+  const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#7b9bba" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${fmtKm(p.v)}km</title></circle>`).join('');
+  const periodLabel=runView==='daily'?'每日跑步公里數':runView==='month'?'月跑量趨勢':'年跑量趨勢';
+  const minV=fmtKm(Math.min(...vals)), maxV=fmtKm(Math.max(...vals));
+  chartEl.innerHTML=`<div class="run-chart"><div class="run-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} km</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7b9bba" stop-opacity=".22"/><stop offset="100%" stop-color="#7b9bba" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}<path d="${area}" fill="url(#rg1)"/><path d="${path}" fill="none" stroke="#7b9bba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
+}
+function saveRunFromInput(){
+  const d=document.getElementById('run-date-input').value||todayStr();
+  const km=parseFloat(document.getElementById('run-km-input').value);
+  if(!km||km<=0||km>200){showToast('請輸入正確公里數');return;}
+  runLog.push({id:uid(),date:d,km:Math.round(km*10)/10});
+  document.getElementById('run-km-input').value='';
+  saveRun(); renderRun(); showToast(`已記錄：${fmtKm(km)} km ✓`);
+}
+function delRun(id){ runLog=runLog.filter(r=>r.id!==id); saveRun(); renderRun(); }
+
 // ═══════════ KB ═══════════
 function setKBFilter(btn){ kbFilter=btn.dataset.topic; document.querySelectorAll('.kb-filter-btn').forEach(b=>{b.className='kb-filter-btn'+(b===btn?' act-'+kbFilter:'');}); renderKB(); }
 function renderKB(){
@@ -1611,7 +1796,7 @@ function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); 
 // ═══════════ SYNC ═══════════
 function exportData(){
   const data={
-    events, weightLog, weightGoal, kbNotes,
+    events, weightLog, weightGoal, runLog, kbNotes,
     exportedAt: new Date().toISOString(),
     version: 1
   };
@@ -1635,13 +1820,14 @@ function importData(event){
   reader.onload=e=>{
     try{
       const data=JSON.parse(e.target.result);
-      if(!data.events&&!data.weightLog&&!data.kbNotes){
+      if(!data.events&&!data.weightLog&&!data.runLog&&!data.kbNotes){
         showToast('⚠️ 檔案格式錯誤'); return;
       }
       if(!confirm('匯入後會覆蓋這台的現有資料，確定嗎？')){return;}
       if(data.events)    { events=data.events;     saveEvents(); }
       if(data.weightLog) { weightLog=data.weightLog; saveWt(); }
       if(data.weightGoal){ weightGoal=data.weightGoal; saveGoal(); }
+      if(data.runLog)    { runLog=data.runLog;     saveRun(); }
       if(data.kbNotes)   { kbNotes=data.kbNotes;   saveKB(); }
       renderAll();
       const d=new Date();
