@@ -295,6 +295,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .period-date:focus{border-color:var(--red);}
 .period-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--red);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(181,116,106,.16);}
 .period-save-btn:active{opacity:.85;}
+.period-help{font-size:11px;color:var(--muted);font-weight:700;line-height:1.6;margin:-2px 2px 12px;}
 .period-settings-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .period-setting-box{background:var(--red-s);border:1.5px solid #d8a09a;border-radius:12px;padding:10px;}
 .period-setting-label{font-size:11px;color:var(--red);font-weight:800;margin-bottom:6px;}
@@ -559,12 +560,12 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div class="sec-label" style="color:var(--red)">生理期記錄</div>
 
   <div class="period-card">
-    <div class="field-label">這次生理期日期</div>
+    <div class="field-label">這次生理期開始日期</div>
     <div class="period-input-row">
       <input type="date" class="period-date" id="period-start-input" min="2020-01-01" max="2099-12-31">
-      <input type="date" class="period-date" id="period-end-input" min="2020-01-01" max="2099-12-31">
     </div>
-    <button class="period-save-btn" onclick="savePeriodFromInput()">儲存生理期</button>
+    <div class="period-help">結束日會依下方「經期長度」自動推算；若經期長度改變，歷史紀錄與預測也會跟著更新。</div>
+    <button class="period-save-btn" onclick="savePeriodFromInput()">儲存生理期開始日</button>
   </div>
 
   <div class="period-card">
@@ -1936,7 +1937,6 @@ function getNextPeriodPrediction(){
 function renderPeriod(){
   normalizePeriodSettings();
   const startInp=document.getElementById('period-start-input');
-  const endInp=document.getElementById('period-end-input');
   if(startInp && !startInp.value) startInp.value=todayStr();
   if(document.getElementById('period-cycle-input')) document.getElementById('period-cycle-input').value=periodSettings.cycle;
   if(document.getElementById('period-length-input')) document.getElementById('period-length-input').value=periodSettings.length;
@@ -1956,7 +1956,7 @@ function renderPeriod(){
   if(!list) return;
   const rows=sortedPeriods();
   if(!rows.length){
-    list.innerHTML=`<div class="period-empty">🌙 尚未有生理期紀錄<br>先輸入開始日與結束日，之後就能自動預測。</div>`;
+    list.innerHTML=`<div class="period-empty">🌙 尚未有生理期紀錄<br>先輸入開始日，之後就能自動預測。</div>`;
     return;
   }
   list.innerHTML=rows.map(p=>{
@@ -1966,15 +1966,14 @@ function renderPeriod(){
   }).join('');
 }
 function savePeriodFromInput(){
+  normalizePeriodSettings();
   const start=document.getElementById('period-start-input').value||todayStr();
-  let end=document.getElementById('period-end-input').value||addDays(start,periodSettings.length-1);
-  if(end<start){ showToast('⚠️ 結束日不能早於開始日'); return; }
-  periodLog.push({id:uid(),start,end});
+  // 只儲存開始日；結束日由「經期長度」即時計算，方便之後調整設定。
+  periodLog.push({id:uid(),start});
   savePeriod();
   document.getElementById('period-start-input').value=todayStr();
-  document.getElementById('period-end-input').value='';
   renderAll();
-  showToast('✓ 已儲存生理期紀錄');
+  showToast('✓ 已儲存生理期開始日');
 }
 function savePeriodSettings(){
   const cycle=parseInt(document.getElementById('period-cycle-input').value);
