@@ -141,23 +141,23 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .cal-day-empty{text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:600;}
 
 /* ── EVENT / TASK CARDS ── */
-.event-card{background:var(--bg);border-radius:14px;padding:14px 14px 14px 16px;margin-bottom:10px;border:1.5px solid var(--border);display:flex;align-items:flex-start;gap:12px;position:relative;overflow:hidden;}
+.event-card{background:var(--bg);border-radius:12px;padding:12px 12px 12px 14px;margin-bottom:8px;border:1.5px solid var(--border);display:flex;align-items:flex-start;gap:10px;position:relative;overflow:hidden;}
 .event-card.type-schedule::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green);}
 .event-card.type-task-soon::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);}
 .event-card.type-task-year::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--purple);}
 .event-card.type-trip::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange);}
 .event-card.is-done{opacity:.55;}
-.event-check{width:26px;height:26px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:2px;background:var(--surface);}
+.event-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;background:var(--surface);}
 .event-check.checked-schedule{background:var(--green);border-color:var(--green);}
 .event-check.checked-task{background:var(--blue);border-color:var(--blue);}
 .event-check.checked-year{background:var(--purple);border-color:var(--purple);}
 .event-check.checked-trip{background:var(--orange);border-color:var(--orange);}
-.event-check.checked-schedule::after,.event-check.checked-task::after,.event-check.checked-year::after,.event-check.checked-trip::after{content:'✓';font-size:14px;color:#fff;font-weight:800;}
-.event-body{flex:1;min-width:0;padding-right:22px;}
-.event-name{font-size:16px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:5px;}
+.event-check.checked-schedule::after,.event-check.checked-task::after,.event-check.checked-year::after,.event-check.checked-trip::after{content:'✓';font-size:12px;color:#fff;font-weight:800;}
+.event-body{flex:1;min-width:0;padding-right:20px;}
+.event-name{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:4px;}
 .event-name.done{text-decoration:line-through;color:var(--muted);}
 .event-meta{display:flex;gap:5px;flex-wrap:wrap;align-items:center;}
-.etag{padding:3px 10px;border-radius:8px;font-size:12px;font-weight:700;}
+.etag{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;}
 .etag-schedule{background:var(--green-s);color:var(--green-d);}
 .etag-task{background:var(--blue-s);color:var(--blue);}
 .etag-year{background:var(--purple-s);color:var(--purple);}
@@ -253,71 +253,13 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .wt-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;}
 
-
-
-/* ── RUNNING ── */
-.nav-tab.active-run{background:#e2eaf3;border-color:var(--blue);color:var(--blue);}
-.run-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
-.run-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
-.run-number{flex:1;background:var(--blue-s);border:1.5px solid var(--blue);border-radius:12px;padding:12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:22px;font-weight:800;outline:none;text-align:center;}
-.run-number:focus{border-color:var(--blue);}
-.run-date{width:132px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:12px;font-weight:700;outline:none;color-scheme:light;-webkit-appearance:none;}
-.run-date:focus{border-color:var(--blue);}
-.run-unit{font-size:14px;color:var(--muted);font-weight:700;}
-.run-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--blue);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(123,155,186,.16);}
-.run-save-btn:active{opacity:.85;}
-.run-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
-.run-summary-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px;text-align:center;}
-.run-summary-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px;}
-.run-summary-val{font-size:21px;font-weight:800;color:var(--blue);}
-.run-summary-sub{font-size:10px;color:var(--muted);font-weight:700;margin-top:2px;}
-.run-view-row{display:flex;gap:6px;margin-bottom:12px;}
-.run-view-btn{flex:1;padding:7px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;text-align:center;}
-.run-view-btn.active{background:var(--blue-s);border-color:var(--blue);color:var(--blue);}
-.run-chart{margin-bottom:12px;background:var(--surface);border-radius:14px;padding:14px 12px 10px;border:1.5px solid var(--border);}
-.run-chart-title{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;}
-.run-chart-title span{color:var(--blue);}
-.run-entry{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
-.run-entry-date{font-size:11px;color:var(--muted);font-weight:700;flex:1;}
-.run-entry-val{font-size:17px;font-weight:800;color:var(--blue);}
-.run-entry-diff{font-size:10px;font-weight:700;padding:2px 7px;border-radius:7px;background:var(--blue-s);color:var(--blue);}
-.run-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
-.run-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
-.run-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
-
-
-
-/* ── PERIOD ── */
-.nav-tab.active-period{background:var(--red-s);border-color:var(--red);color:var(--red);}
-.period-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
-.period-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
-.period-date{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:12px;font-weight:700;outline:none;color-scheme:light;-webkit-appearance:none;}
-.period-date:focus{border-color:var(--red);}
-.period-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--red);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(181,116,106,.16);}
-.period-save-btn:active{opacity:.85;}
-.period-help{font-size:11px;color:var(--muted);font-weight:700;line-height:1.6;margin:-2px 2px 12px;}
-.period-settings-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.period-setting-box{background:var(--red-s);border:1.5px solid #d8a09a;border-radius:12px;padding:10px;}
-.period-setting-label{font-size:11px;color:var(--red);font-weight:800;margin-bottom:6px;}
-.period-number{width:100%;background:var(--surface);border:1.5px solid #d8a09a;border-radius:10px;padding:9px 10px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:18px;font-weight:800;text-align:center;outline:none;}
-.period-number:focus{border-color:var(--red);}
-.period-next{background:linear-gradient(135deg,var(--red-s),#f6e9e7);border:1.5px solid #d8a09a;border-radius:14px;padding:13px;margin-bottom:12px;}
-.period-next-title{font-size:13px;font-weight:800;color:var(--red);margin-bottom:4px;}
-.period-next-main{font-size:18px;font-weight:800;color:var(--text);margin-bottom:3px;}
-.period-next-sub{font-size:11px;color:var(--muted);font-weight:700;line-height:1.6;}
-.period-entry{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
-.period-entry-date{font-size:12px;color:var(--muted);font-weight:700;flex:1;line-height:1.5;}
-.period-entry-val{font-size:13px;font-weight:800;color:var(--red);white-space:nowrap;}
-.period-entry-tag{font-size:10px;font-weight:800;padding:2px 7px;border-radius:7px;background:var(--red-s);color:var(--red);white-space:nowrap;}
-.period-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
-.period-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
-.period-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
-.cal-event-pill.period-actual{background:var(--red-s);color:var(--red);}
-.cal-event-pill.period-predict{background:var(--purple-s);color:var(--purple);}
-
 /* ── KB ── */
 .kb-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:600;outline:none;margin-bottom:10px;}
 .kb-search:focus{border-color:#5a7a52;}
+.kb-top-row{display:flex;gap:8px;align-items:stretch;margin-bottom:10px;}
+.kb-top-row .kb-search{flex:1;min-width:0;margin-bottom:0;}
+.kb-add-btn{padding:0 13px;border-radius:12px;border:none;background:#5a7a52;color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;box-shadow:0 3px 10px var(--shadow);}
+.kb-add-btn:active{transform:scale(.96);opacity:.9;}
 .kb-filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
 .kb-filter-btn{padding:5px 12px;border-radius:16px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:700;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;}
 .kb-filter-btn.act-all{background:var(--bg);border-color:var(--text);color:var(--text);}
@@ -373,38 +315,6 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .sync-btn-import{background:var(--surface);color:var(--text);border:2px solid var(--border);}
 .sync-btn:active{opacity:.85;}
 .sync-last{font-size:11px;color:var(--muted);font-weight:600;text-align:center;margin-top:4px;}
-
-/* search */
-.search-bar{
-  display:none; margin:0 16px 12px;
-  background:var(--surface); border:2px solid var(--green);
-  border-radius:16px; padding:10px 14px;
-  box-shadow:0 2px 10px var(--shadow);
-}
-.search-bar.visible{display:flex;gap:8px;align-items:center;}
-.search-input{
-  flex:1; background:var(--bg); border:1.5px solid var(--border);
-  border-radius:10px; padding:9px 12px; color:var(--text);
-  font-family:'Nunito','Noto Sans TC',sans-serif; font-size:14px; font-weight:600;
-  outline:none;
-}
-.search-input:focus{border-color:var(--green);}
-.search-input::placeholder{color:var(--muted);}
-.search-close{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.search-results{margin:0 16px 12px;display:none;}
-.search-results.visible{display:block;}
-.search-result-item{
-  background:var(--surface); border:1.5px solid var(--border);
-  border-radius:14px; padding:12px 14px; margin-bottom:8px;
-  cursor:pointer; display:flex; align-items:center; gap:10px;
-}
-.search-result-item:active{background:var(--green-s);}
-.search-result-icon{font-size:18px;flex-shrink:0;}
-.search-result-body{flex:1;}
-.search-result-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.search-result-meta{font-size:11px;color:var(--muted);font-weight:600;}
-.search-result-arrow{font-size:14px;color:var(--muted);}
-.search-empty{text-align:center;padding:24px;color:var(--muted);font-size:13px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -419,18 +329,8 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div class="header-title">🌳 小幫手</div>
     <div class="header-date" id="header-date"></div>
   </div>
-  <div style="display:flex;gap:8px;">
-    <button class="add-btn" style="background:var(--surface);border:1.5px solid var(--border);color:var(--text);box-shadow:none;font-size:20px;" onclick="toggleSearch()">🔍</button>
-    <button class="add-btn" id="voice-fab-header" onclick="voiceFAB()">🎙</button>
-  </div>
+  <button class="add-btn" id="voice-fab-header" onclick="voiceFAB()">🎙</button>
 </div>
-
-<!-- Search bar -->
-<div class="search-bar" id="search-bar">
-  <input class="search-input" id="search-input" placeholder="搜尋行程、任務、知識…" oninput="doSearch()">
-  <button class="search-close" onclick="closeSearch()">✕</button>
-</div>
-<div class="search-results" id="search-results"></div>
 
 <!-- Nav Tabs -->
 <div class="nav-tabs">
@@ -438,8 +338,6 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <button class="nav-tab"             id="tab-today"  onclick="switchTab('today')">📌<br>今日</button>
   <button class="nav-tab"             id="tab-tasks"  onclick="switchTab('tasks')">✅<br>任務</button>
   <button class="nav-tab"             id="tab-weight" onclick="switchTab('weight')">⚖️<br>體重</button>
-  <button class="nav-tab"             id="tab-run"    onclick="switchTab('run')">🏃‍♀️<br>跑步</button>
-  <button class="nav-tab"             id="tab-period" onclick="switchTab('period')">🌙<br>生理期</button>
   <button class="nav-tab"             id="tab-kb"     onclick="switchTab('kb')">📝<br>知識庫</button>
   <button class="nav-tab"             id="tab-sync"   onclick="switchTab('sync')">🔄<br>同步</button>
 </div>
@@ -516,82 +414,13 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div id="wt-list"></div>
 </div>
 
-<!-- RUNNING SECTION -->
-<div class="section" id="sec-run">
-  <div class="sec-label" style="color:var(--blue)">跑步紀錄</div>
-  <div class="run-card">
-    <div class="field-label">日期與公里數</div>
-    <div class="run-input-row">
-      <input type="date" class="run-date" id="run-date-input" min="2020-01-01" max="2099-12-31">
-      <input type="number" class="run-number" id="run-km-input" placeholder="0.0" step="0.1" min="0" max="200">
-      <span class="run-unit">km</span>
-    </div>
-    <button class="run-save-btn" onclick="saveRunFromInput()">儲存今天跑量</button>
-  </div>
-
-  <div class="run-summary-grid">
-    <div class="run-summary-card">
-      <div class="run-summary-label">本月跑量</div>
-      <div class="run-summary-val" id="run-month-total">0 km</div>
-      <div class="run-summary-sub" id="run-month-sub">—</div>
-    </div>
-    <div class="run-summary-card">
-      <div class="run-summary-label">今年跑量</div>
-      <div class="run-summary-val" id="run-year-total">0 km</div>
-      <div class="run-summary-sub" id="run-year-sub">—</div>
-    </div>
-  </div>
-
-  <div class="run-view-row">
-    <button class="run-view-btn active" data-view="daily" onclick="setRunView(this)">每日紀錄</button>
-    <button class="run-view-btn" data-view="month" onclick="setRunView(this)">月跑量趨勢</button>
-    <button class="run-view-btn" data-view="year" onclick="setRunView(this)">年跑量趨勢</button>
-  </div>
-  <div class="wt-hist-label" style="color:var(--blue)">趨勢圖</div>
-  <div id="run-chart-area"></div>
-  <div class="wt-hist-label" style="color:var(--blue)">歷史紀錄</div>
-  <div id="run-list"></div>
-</div>
-
-
-
-<!-- PERIOD SECTION -->
-<div class="section" id="sec-period">
-  <div class="sec-label" style="color:var(--red)">生理期記錄</div>
-
-  <div class="period-card">
-    <div class="field-label">這次生理期開始日期</div>
-    <div class="period-input-row">
-      <input type="date" class="period-date" id="period-start-input" min="2020-01-01" max="2099-12-31">
-    </div>
-    <div class="period-help">結束日會依下方「經期長度」自動推算；若經期長度改變，歷史紀錄與預測也會跟著更新。</div>
-    <button class="period-save-btn" onclick="savePeriodFromInput()">儲存生理期開始日</button>
-  </div>
-
-  <div class="period-card">
-    <div class="field-label">預測設定</div>
-    <div class="period-settings-row">
-      <div class="period-setting-box">
-        <div class="period-setting-label">週期天數</div>
-        <input type="number" class="period-number" id="period-cycle-input" min="15" max="60" step="1">
-      </div>
-      <div class="period-setting-box">
-        <div class="period-setting-label">經期長度</div>
-        <input type="number" class="period-number" id="period-length-input" min="1" max="14" step="1">
-      </div>
-    </div>
-    <button class="period-save-btn" onclick="savePeriodSettings()">更新預測設定</button>
-  </div>
-
-  <div id="period-next-area"></div>
-  <div class="wt-hist-label" style="color:var(--red)">歷史記錄</div>
-  <div id="period-list"></div>
-</div>
-
 <!-- KB SECTION -->
 <div class="section" id="sec-kb">
   <div class="sec-label" style="color:#5a7a52">知識庫・訣竅備忘</div>
-  <input class="kb-search" id="kb-search" placeholder="搜尋關鍵字…" oninput="renderKB()">
+  <div class="kb-top-row">
+    <input class="kb-search" id="kb-search" placeholder="搜尋關鍵字…" oninput="renderKB()">
+    <button class="kb-add-btn" onclick="openKBAddModal()">＋ 新增</button>
+  </div>
   <div class="kb-filter-row">
     <button class="kb-filter-btn act-all" data-topic="all" onclick="setKBFilter(this)">全部</button>
     <button class="kb-filter-btn" data-topic="annual" onclick="setKBFilter(this)">🎪 年會</button>
@@ -607,7 +436,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
   <div class="sync-card">
     <div class="sync-card-title">📤 匯出資料</div>
-    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、跑步、生理期、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
+    <div class="sync-card-desc">把這台的所有資料（行程、任務、體重、知識庫）存成一個檔案，再傳到另一台裝置匯入。</div>
     <button class="sync-btn sync-btn-export" onclick="exportData()">匯出到檔案</button>
     <div class="sync-last" id="export-last"></div>
   </div>
@@ -718,7 +547,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
 <script>
 // ═══════════ STORAGE KEYS ═══════════
-const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', RUN_KEY='run_v1', PERIOD_KEY='period_v1', PERIOD_SETTINGS_KEY='period_settings_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
+const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
 
 // ═══════════ STATE ═══════════
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)||'[]');
@@ -737,12 +566,8 @@ if(!events.length){
 
 let weightLog=JSON.parse(localStorage.getItem(WT_KEY)||'[]');
 let weightGoal=parseFloat(localStorage.getItem(WT_GOAL_KEY)||'0')||0;
-let runLog=JSON.parse(localStorage.getItem(RUN_KEY)||'[]');
-let periodLog=JSON.parse(localStorage.getItem(PERIOD_KEY)||'[]');
-let periodSettings=JSON.parse(localStorage.getItem(PERIOD_SETTINGS_KEY)||'{"cycle":28,"length":5}');
 let kbNotes=JSON.parse(localStorage.getItem(KB_KEY)||'[]');
 let chartMonths=1;
-let runView='daily';
 let kbFilter='all';
 
 let currentTab='cal';
@@ -756,20 +581,11 @@ let modalVoiceRecording=false, modalVoiceRec=null;
 let nextId=100;
 
 // ═══════════ HELPERS ═══════════
-function todayStr(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function offsetDate(n){
-  const d=new Date(); d.setDate(d.getDate()+n);
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function offsetDate(n){ const d=new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function saveEvents(){ localStorage.setItem(EVENTS_KEY,JSON.stringify(events)); }
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
-function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
-function savePeriod(){ localStorage.setItem(PERIOD_KEY,JSON.stringify(periodLog)); }
-function savePeriodSettingsStore(){ localStorage.setItem(PERIOD_SETTINGS_KEY,JSON.stringify(periodSettings)); }
 function saveGoal(){ localStorage.setItem(WT_GOAL_KEY,String(weightGoal)); }
 function saveKB(){ localStorage.setItem(KB_KEY,JSON.stringify(kbNotes)); }
 function uid(){ return 'id'+(Date.now())+(Math.random()*1000|0); }
@@ -1180,13 +996,11 @@ function renderCalendar(){
     events.filter(e=>e.type==='schedule'&&e.endDate&&e.endDate>e.date&&e.date<dateStr&&e.endDate>=dateStr)
       .forEach(e=>{ if(!allDayEvts.find(x=>x.id===e.id)) allDayEvts.push(e); });
     const dayNotes=isOther?[]:kbNotes.filter(n=>n.dateStr===dateStr);
-    const menstrualInfo=isOther?null:getPeriodInfo(dateStr);
     const allItems=[...allDayEvts,...dayNotes];
     const MAX=(holiday||solarTerm)?1:2;
     let pills='';
     if(holiday) pills+=`<span class="cal-holiday-name">${holiday}</span>`;
     else if(solarTerm) pills+=`<span class="cal-solar-term">🌿 ${solarTerm}</span>`;
-    if(menstrualInfo) pills+=`<span class="cal-event-pill ${menstrualInfo.kind==='actual'?'period-actual':'period-predict'}">${menstrualInfo.kind==='actual'?'🌙':'♡'}${menstrualInfo.kind==='actual'?'生理':'預測'}</span>`;
     allItems.slice(0,MAX).forEach(item=>{
       if(item.type){
         // event
@@ -1237,7 +1051,6 @@ function renderDayPanel(){
   const list=document.getElementById('cal-day-list');
   const dayEvts=events.filter(e=>e.date===selectedDate).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
   const dayNotes=kbNotes.filter(n=>n.dateStr===selectedDate);
-  const menstrualInfo=getPeriodInfo(selectedDate);
   const holiday=getHoliday(selectedDate);
   const solarTerm=getSolarTerm(selectedDate);
   const lunar=getLunarText(selectedDate);
@@ -1247,22 +1060,12 @@ function renderDayPanel(){
   title.innerHTML=`${fmtDate(selectedDate)}${selectedDate===todayStr()?' 今天':''}${lunarTag}${solarTermTag}${holidayTag}`;
   panel.style.display='block';
 
-  if(!dayEvts.length && !dayNotes.length && !menstrualInfo){
-    list.innerHTML=`<div class="cal-day-empty">這天沒有行程、任務或生理期預測<br><small>按右上角 🎙 新增</small></div>`;
+  if(!dayEvts.length && !dayNotes.length){
+    list.innerHTML=`<div class="cal-day-empty">這天沒有行程或任務<br><small>按右上角 🎙 新增</small></div>`;
     return;
   }
 
   let html=dayEvts.map(e=>eventCardHTML(e)).join('');
-
-  if(menstrualInfo){
-    const actual=menstrualInfo.kind==='actual';
-    html+=`<div class="event-card" style="border-left:3px solid ${actual?'var(--red)':'var(--purple)'};">
-      <div class="event-body" style="padding-right:0">
-        <div class="event-name">${actual?'🌙 生理期':'♡ 生理期預測'}第 ${menstrualInfo.day} 天</div>
-        <div class="event-meta"><span class="etag" style="background:${actual?'var(--red-s)':'var(--purple-s)'};color:${actual?'var(--red)':'var(--purple)'}">${fmtDate(menstrualInfo.start)} ～ ${fmtDate(menstrualInfo.end)}</span></div>
-      </div>
-    </div>`;
-  }
 
   if(dayNotes.length){
     const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
@@ -1412,8 +1215,6 @@ function renderAll(){
   renderToday();
   renderTasks();
   renderWeight();
-  renderRun();
-  renderPeriod();
   renderKB();
   updateBadges();
 }
@@ -1432,7 +1233,7 @@ function updateBadges(){
 // ═══════════ SWITCH TAB ═══════════
 function switchTab(tab){
   currentTab=tab;
-  ['cal','today','tasks','weight','run','period','kb','sync'].forEach(c=>{
+  ['cal','today','tasks','weight','kb','sync'].forEach(c=>{
     const el=document.getElementById('tab-'+c);
     const badge=el?.querySelector('.tab-badge');
     if(el){el.className='nav-tab'+(c===tab?' active-'+c:'');if(badge)el.appendChild(badge);}
@@ -1458,6 +1259,17 @@ function openModal(dateStr){
   noteTopic='other';
   selType(document.querySelector('.type-btn[data-type="schedule"]'));
   document.getElementById('overlay').classList.add('visible');
+}
+
+function openKBAddModal(){
+  openModal(todayStr());
+  document.getElementById('modal-title').textContent='新增知識';
+  document.getElementById('voice-hint').textContent='語音輸入或手動輸入知識內容';
+  selType(document.querySelector('.type-btn[data-type="note"]'));
+  const topic=(kbFilter&&kbFilter!=='all')?kbFilter:'other';
+  const topicBtn=document.querySelector(`#note-fields .kb-filter-btn[data-topic="${topic}"]`);
+  if(topicBtn) selNoteTopic(topicBtn,topic);
+  setTimeout(()=>document.getElementById('modal-name').focus(),80);
 }
 
 function openEditModal(id){
@@ -1651,11 +1463,7 @@ function renderWeight(){
     area.innerHTML=`<div class="wt-reminder"><div class="wt-icon">⚖️</div><div class="wt-reminder-body"><div class="wt-reminder-title">本週還沒量體重</div><div class="wt-reminder-sub">每週量一次追蹤健康趨勢 💪</div></div><button class="wt-log-btn" onclick="openWtModal()">記錄</button></div>`;
   } else {
     const latest=weightLog.filter(w=>getWeekKey(w.date)===getWeekKey(todayStr())).slice(-1)[0];
-    const [,m,d]=latest.date.split('-');
-    const dayName=['日','一','二','三','四','五','六'][new Date(latest.date).getDay()];
-    const nextDate=new Date(latest.date); nextDate.setDate(nextDate.getDate()+7);
-    const nextLabel=`下次建議：${nextDate.getMonth()+1}/${nextDate.getDate()}`;
-    area.innerHTML=`<div class="wt-reminder" style="background:linear-gradient(135deg,#eaf4ec,#d8eedd);border-color:#8fc49a;"><div class="wt-icon">✅</div><div class="wt-reminder-body"><div class="wt-reminder-title" style="color:#3a7a48">本週已記錄！</div><div class="wt-reminder-sub" style="color:#4a9058"><strong>${latest.value} kg</strong>　${parseInt(m)}/${parseInt(d)}（週${dayName}）<br>${nextLabel}</div></div><button class="wt-log-btn" style="background:#5a9a68" onclick="openWtModal()">更新</button></div>`;
+    area.innerHTML=`<div class="wt-reminder" style="background:linear-gradient(135deg,#eaf4ec,#d8eedd);border-color:#8fc49a;"><div class="wt-icon">✅</div><div class="wt-reminder-body"><div class="wt-reminder-title" style="color:#3a7a48">本週已記錄！</div><div class="wt-reminder-sub" style="color:#4a9058">本週：<strong>${latest.value} kg</strong></div></div><button class="wt-log-btn" style="background:#5a9a68" onclick="openWtModal()">更新</button></div>`;
   }
   renderGoalBar(); renderWeightList();
 }
@@ -1689,7 +1497,7 @@ function renderGoalBar(){
 
 function setPeriod(btn){ chartMonths=parseInt(btn.dataset.months); document.querySelectorAll('.wt-period-btn').forEach(b=>b.classList.toggle('active',b===btn)); renderWeightList(); }
 
-function filterByPeriod(log){ if(!chartMonths)return[...log]; const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-chartMonths); const d=cutoff; const cutStr=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; return log.filter(w=>w.date>=cutStr); }
+function filterByPeriod(log){ if(!chartMonths)return[...log]; const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-chartMonths); const cutStr=cutoff.toISOString().split('T')[0]; return log.filter(w=>w.date>=cutStr); }
 
 function renderWeightList(){
   const listEl=document.getElementById('wt-list'); const chartEl=document.getElementById('wt-chart-area');
@@ -1737,117 +1545,6 @@ function wtOverlayClick(e){ if(e.target.id==='wt-overlay') closeWtModal(); }
 function saveWeightFromModal(){ const v=parseFloat(document.getElementById('wt-quick-input').value); if(!v||v<20||v>300){showToast('請輸入正確體重');return;} weightLog.push({id:uid(),date:todayStr(),value:v}); saveWt(); renderWeight(); updateBadges(); closeWtModal(); showToast(`記錄成功：${v} kg ✓`); }
 function delWeight(id){ weightLog=weightLog.filter(w=>w.id!==id); saveWt(); renderWeight(); }
 
-
-// ═══════════ RUNNING ═══════════
-function runDateParts(dateStr){
-  const d=new Date(dateStr);
-  return {year:d.getFullYear(), month:d.getMonth()+1, day:d.getDate(), dow:['日','一','二','三','四','五','六'][d.getDay()]};
-}
-function runMonthKey(dateStr){ return (dateStr||'').slice(0,7); }
-function runYearKey(dateStr){ return (dateStr||'').slice(0,4); }
-function sumRun(list){ return list.reduce((s,r)=>s+(parseFloat(r.km)||0),0); }
-function fmtKm(v){ const n=Math.round((v||0)*10)/10; return Number.isInteger(n)?String(n):n.toFixed(1); }
-function groupRunBy(period){
-  const map={};
-  runLog.forEach(r=>{
-    const key=period==='year'?runYearKey(r.date):runMonthKey(r.date);
-    if(!key)return;
-    map[key]=(map[key]||0)+(parseFloat(r.km)||0);
-  });
-  return Object.keys(map).sort().map(key=>({date:key, km:Math.round(map[key]*10)/10}));
-}
-function setRunView(btn){
-  runView=btn.dataset.view;
-  document.querySelectorAll('.run-view-btn').forEach(b=>b.classList.toggle('active',b===btn));
-  renderRunList();
-}
-function renderRun(){
-  const dateInp=document.getElementById('run-date-input');
-  if(dateInp && !dateInp.value) dateInp.value=todayStr();
-  const today=todayStr();
-  const month=today.slice(0,7), year=today.slice(0,4);
-  const monthTotal=sumRun(runLog.filter(r=>runMonthKey(r.date)===month));
-  const yearTotal=sumRun(runLog.filter(r=>runYearKey(r.date)===year));
-  const thisMonthCount=runLog.filter(r=>runMonthKey(r.date)===month).length;
-  const thisYearCount=runLog.filter(r=>runYearKey(r.date)===year).length;
-  document.getElementById('run-month-total').textContent=`${fmtKm(monthTotal)} km`;
-  document.getElementById('run-year-total').textContent=`${fmtKm(yearTotal)} km`;
-  document.getElementById('run-month-sub').textContent=thisMonthCount?`${thisMonthCount} 筆紀錄`:'本月尚未記錄';
-  document.getElementById('run-year-sub').textContent=thisYearCount?`${thisYearCount} 筆紀錄`:'今年尚未記錄';
-  renderRunList();
-}
-function renderRunList(){
-  const listEl=document.getElementById('run-list');
-  const chartEl=document.getElementById('run-chart-area');
-  if(!listEl||!chartEl)return;
-  if(!runLog.length){
-    listEl.innerHTML=`<div class="run-empty">🏃‍♀️ 還沒有跑步紀錄<br>輸入今天跑了幾公里，就可以開始累積月跑量和年跑量。</div>`;
-    chartEl.innerHTML='';
-    return;
-  }
-  const daily=[...runLog].sort((a,b)=>a.date.localeCompare(b.date));
-  const data=runView==='daily'?daily:groupRunBy(runView==='year'?'year':'month');
-  renderRunChart(data);
-  if(runView==='daily'){
-    const rev=[...daily].reverse();
-    listEl.innerHTML=rev.map((r,i)=>{
-      const prev=rev[i+1];
-      let diff='';
-      if(prev){
-        const dv=(r.km-prev.km).toFixed(1);
-        const sym=dv>0?'▲':dv<0?'▼':'→';
-        diff=`<span class="run-entry-diff">${sym} ${Math.abs(dv)}</span>`;
-      }
-      const {month,day,dow}=runDateParts(r.date);
-      return `<div class="run-entry"><div class="run-entry-date">${month}/${day}（週${dow}）</div><div class="run-entry-val">${fmtKm(r.km)} km</div>${diff}<button class="run-del" onclick="delRun('${r.id}')">✕</button></div>`;
-    }).join('');
-  } else {
-    const rev=[...data].reverse();
-    listEl.innerHTML=rev.map(r=>{
-      const label=runView==='year'?`${r.date} 年`:`${parseInt(r.date.slice(5,7))} 月・${r.date.slice(0,4)}`;
-      return `<div class="run-entry"><div class="run-entry-date">${label}</div><div class="run-entry-val">${fmtKm(r.km)} km</div></div>`;
-    }).join('')||`<div class="run-empty">沒有可顯示的紀錄</div>`;
-  }
-}
-function renderRunChart(data){
-  const chartEl=document.getElementById('run-chart-area');
-  if(data.length<2){
-    chartEl.innerHTML=`<div class="run-chart"><div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:700;">記錄更多才能顯示趨勢圖</div></div>`;
-    return;
-  }
-  const vals=data.map(r=>parseFloat(r.km)||0);
-  const rawMax=Math.max(...vals), rawMin=Math.min(...vals,0);
-  const pv=(rawMax-rawMin)||1;
-  const mn=Math.max(0,rawMin-pv*.12), mx=rawMax+pv*.25;
-  const W=320,H=120,padL=36,padR=10,padT=12,padB=26,cW=W-padL-padR,cH=H-padT-padB;
-  const toX=i=>padL+(i/(data.length-1))*cW;
-  const toY=v=>padT+cH-((v-mn)/(mx-mn))*cH;
-  const pts=data.map((r,i)=>({x:toX(i),y:toY(r.km),v:r.km,date:r.date}));
-  const path=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
-  const area=`${path} L${pts[pts.length-1].x},${padT+cH} L${pts[0].x},${padT+cH} Z`;
-  const ySteps=[mn,(mn+mx)/2,mx];
-  const yLabels=ySteps.map(v=>`<text x="${padL-4}" y="${toY(v)+3}" text-anchor="end" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${fmtKm(v)}</text>`).join('');
-  const idxs=[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i&&data.length>1);
-  const xLabels=idxs.map(i=>{
-    const d=data[i].date;
-    const label=runView==='daily'?`${parseInt(d.slice(5,7))}/${parseInt(d.slice(8,10))}`:(runView==='month'?`${parseInt(d.slice(5,7))}月`:d);
-    return `<text x="${toX(i)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${label}</text>`;
-  }).join('');
-  const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#7b9bba" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${fmtKm(p.v)}km</title></circle>`).join('');
-  const periodLabel=runView==='daily'?'每日跑步公里數':runView==='month'?'月跑量趨勢':'年跑量趨勢';
-  const minV=fmtKm(Math.min(...vals)), maxV=fmtKm(Math.max(...vals));
-  chartEl.innerHTML=`<div class="run-chart"><div class="run-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} km</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7b9bba" stop-opacity=".22"/><stop offset="100%" stop-color="#7b9bba" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}<path d="${area}" fill="url(#rg1)"/><path d="${path}" fill="none" stroke="#7b9bba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
-}
-function saveRunFromInput(){
-  const d=document.getElementById('run-date-input').value||todayStr();
-  const km=parseFloat(document.getElementById('run-km-input').value);
-  if(!km||km<=0||km>200){showToast('請輸入正確公里數');return;}
-  runLog.push({id:uid(),date:d,km:Math.round(km*10)/10});
-  document.getElementById('run-km-input').value='';
-  saveRun(); renderRun(); showToast(`已記錄：${fmtKm(km)} km ✓`);
-}
-function delRun(id){ runLog=runLog.filter(r=>r.id!==id); saveRun(); renderRun(); }
-
 // ═══════════ KB ═══════════
 function setKBFilter(btn){ kbFilter=btn.dataset.topic; document.querySelectorAll('.kb-filter-btn').forEach(b=>{b.className='kb-filter-btn'+(b===btn?' act-'+kbFilter:'');}); renderKB(); }
 function renderKB(){
@@ -1877,124 +1574,10 @@ function renderKB(){
 }
 function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); renderToday(); }
 
-
-
-// ═══════════ PERIOD ═══════════
-function parseDateLocal(dateStr){
-  const [y,m,d]=dateStr.split('-').map(Number);
-  return new Date(y,m-1,d);
-}
-function addDays(dateStr,n){
-  const d=parseDateLocal(dateStr); d.setDate(d.getDate()+n);
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function daysBetween(a,b){ return Math.round((parseDateLocal(b)-parseDateLocal(a))/86400000); }
-function normalizePeriodSettings(){
-  periodSettings.cycle=parseInt(periodSettings.cycle)||28;
-  periodSettings.length=parseInt(periodSettings.length)||5;
-  if(periodSettings.cycle<15) periodSettings.cycle=15;
-  if(periodSettings.cycle>60) periodSettings.cycle=60;
-  if(periodSettings.length<1) periodSettings.length=1;
-  if(periodSettings.length>14) periodSettings.length=14;
-}
-function getPeriodEnd(p){ return p.end || addDays(p.start,(parseInt(periodSettings.length)||5)-1); }
-function sortedPeriods(){ return [...periodLog].filter(p=>p.start).sort((a,b)=>b.start.localeCompare(a.start)); }
-function getLatestPeriodStart(){
-  const sorted=sortedPeriods();
-  return sorted.length?sorted[0].start:null;
-}
-function getPeriodInfo(dateStr){
-  normalizePeriodSettings();
-  // Actual recorded period takes priority
-  for(const p of periodLog){
-    if(!p.start) continue;
-    const end=getPeriodEnd(p);
-    if(p.start<=dateStr && end>=dateStr){
-      return {kind:'actual',start:p.start,end,day:daysBetween(p.start,dateStr)+1};
-    }
-  }
-  const base=getLatestPeriodStart();
-  if(!base) return null;
-  let start=base;
-  const cycle=periodSettings.cycle;
-  const len=periodSettings.length;
-  // Move forward to the predicted cycle that may contain this date.
-  while(addDays(start,len-1)<dateStr){ start=addDays(start,cycle); }
-  const end=addDays(start,len-1);
-  if(start<=dateStr && end>=dateStr && end>=todayStr()){
-    return {kind:'predicted',start,end,day:daysBetween(start,dateStr)+1};
-  }
-  return null;
-}
-function getNextPeriodPrediction(){
-  normalizePeriodSettings();
-  const base=getLatestPeriodStart();
-  if(!base) return null;
-  let start=base;
-  while(addDays(start,periodSettings.length-1)<todayStr()){ start=addDays(start,periodSettings.cycle); }
-  return {start,end:addDays(start,periodSettings.length-1)};
-}
-function renderPeriod(){
-  normalizePeriodSettings();
-  const startInp=document.getElementById('period-start-input');
-  if(startInp && !startInp.value) startInp.value=todayStr();
-  if(document.getElementById('period-cycle-input')) document.getElementById('period-cycle-input').value=periodSettings.cycle;
-  if(document.getElementById('period-length-input')) document.getElementById('period-length-input').value=periodSettings.length;
-
-  const next=getNextPeriodPrediction();
-  const nextArea=document.getElementById('period-next-area');
-  if(nextArea){
-    if(next){
-      const days=daysBetween(todayStr(),next.start);
-      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">${fmtDate(next.start)} ～ ${fmtDate(next.end)}</div><div class="period-next-sub">約 ${days} 天後開始。預測依據：週期 ${periodSettings.cycle} 天、經期 ${periodSettings.length} 天。</div></div>`;
-    } else {
-      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">尚未有足夠資料</div><div class="period-next-sub">先記錄至少一次生理期開始日，就能自動推算下一次。</div></div>`;
-    }
-  }
-
-  const list=document.getElementById('period-list');
-  if(!list) return;
-  const rows=sortedPeriods();
-  if(!rows.length){
-    list.innerHTML=`<div class="period-empty">🌙 尚未有生理期紀錄<br>先輸入開始日，之後就能自動預測。</div>`;
-    return;
-  }
-  list.innerHTML=rows.map(p=>{
-    const end=getPeriodEnd(p);
-    const len=daysBetween(p.start,end)+1;
-    return `<div class="period-entry"><div class="period-entry-date">${fmtDate(p.start)} ～ ${fmtDate(end)}</div><div class="period-entry-val">${len} 天</div><span class="period-entry-tag">週期 ${periodSettings.cycle}</span><button class="period-del" onclick="delPeriod('${p.id}')">✕</button></div>`;
-  }).join('');
-}
-function savePeriodFromInput(){
-  normalizePeriodSettings();
-  const start=document.getElementById('period-start-input').value||todayStr();
-  // 只儲存開始日；結束日由「經期長度」即時計算，方便之後調整設定。
-  periodLog.push({id:uid(),start});
-  savePeriod();
-  document.getElementById('period-start-input').value=todayStr();
-  renderAll();
-  showToast('✓ 已儲存生理期開始日');
-}
-function savePeriodSettings(){
-  const cycle=parseInt(document.getElementById('period-cycle-input').value);
-  const len=parseInt(document.getElementById('period-length-input').value);
-  if(!cycle || cycle<15 || cycle>60){ showToast('⚠️ 週期請填 15–60 天'); return; }
-  if(!len || len<1 || len>14){ showToast('⚠️ 經期長度請填 1–14 天'); return; }
-  periodSettings={cycle,length:len};
-  savePeriodSettingsStore();
-  renderAll();
-  showToast('✓ 已更新預測設定');
-}
-function delPeriod(id){
-  periodLog=periodLog.filter(p=>p.id!==id);
-  savePeriod();
-  renderAll();
-}
-
 // ═══════════ SYNC ═══════════
 function exportData(){
   const data={
-    events, weightLog, weightGoal, runLog, periodLog, periodSettings, kbNotes,
+    events, weightLog, weightGoal, kbNotes,
     exportedAt: new Date().toISOString(),
     version: 1
   };
@@ -2018,16 +1601,13 @@ function importData(event){
   reader.onload=e=>{
     try{
       const data=JSON.parse(e.target.result);
-      if(!data.events&&!data.weightLog&&!data.runLog&&!data.periodLog&&!data.kbNotes){
+      if(!data.events&&!data.weightLog&&!data.kbNotes){
         showToast('⚠️ 檔案格式錯誤'); return;
       }
       if(!confirm('匯入後會覆蓋這台的現有資料，確定嗎？')){return;}
       if(data.events)    { events=data.events;     saveEvents(); }
       if(data.weightLog) { weightLog=data.weightLog; saveWt(); }
       if(data.weightGoal){ weightGoal=data.weightGoal; saveGoal(); }
-      if(data.runLog)    { runLog=data.runLog;     saveRun(); }
-      if(data.periodLog) { periodLog=data.periodLog; savePeriod(); }
-      if(data.periodSettings){ periodSettings=data.periodSettings; savePeriodSettingsStore(); }
       if(data.kbNotes)   { kbNotes=data.kbNotes;   saveKB(); }
       renderAll();
       const d=new Date();
@@ -2049,88 +1629,6 @@ function showToast(msg){ const el=document.getElementById('toast'); el.textConte
 function updateClock(){ const d=new Date(); document.getElementById('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
 function initDate(){ const d=new Date(),days=['日','一','二','三','四','五','六']; document.getElementById('header-date').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 週${days[d.getDay()]}`; }
 
-// ═══════════ SEARCH ═══════════
-function toggleSearch(){
-  const bar=document.getElementById('search-bar');
-  const isVisible=bar.classList.contains('visible');
-  if(isVisible){ closeSearch(); }
-  else{
-    bar.classList.add('visible');
-    document.getElementById('search-input').value='';
-    document.getElementById('search-results').classList.remove('visible');
-    setTimeout(()=>document.getElementById('search-input').focus(),100);
-  }
-}
-
-function closeSearch(){
-  document.getElementById('search-bar').classList.remove('visible');
-  document.getElementById('search-results').classList.remove('visible');
-  document.getElementById('search-input').value='';
-}
-
-function doSearch(){
-  const q=document.getElementById('search-input').value.trim();
-  const resultsEl=document.getElementById('search-results');
-  if(!q){ resultsEl.classList.remove('visible'); return; }
-  resultsEl.classList.add('visible');
-
-  const ql=q.toLowerCase();
-  const results=[];
-
-  // Search events
-  events.forEach(e=>{
-    if(e.name&&e.name.toLowerCase().includes(ql)){
-      const icon=e.trip?'📍':e.type==='task-soon'?'✅':e.type==='task-year'?'🎯':'📅';
-      const dateLabel=e.date?fmtDate(e.date):e.deadline?`截止 ${fmtDate(e.deadline)}`:'';
-      results.push({icon,name:e.name,meta:dateLabel,date:e.date||e.deadline||'',type:'event',id:e.id});
-    }
-  });
-
-  // Search KB notes
-  kbNotes.forEach(n=>{
-    if((n.title&&n.title.toLowerCase().includes(ql))||(n.body&&n.body.toLowerCase().includes(ql))){
-      const tl={'annual':'年會','study':'Study','other':'其他'};
-      results.push({icon:'📝',name:n.title,meta:`知識庫・${tl[n.topic]||'其他'}・${n.date||''}`,date:n.dateStr||'',type:'note',id:n.id});
-    }
-  });
-
-  if(!results.length){
-    resultsEl.innerHTML=`<div class="search-empty">找不到「${escHtml(q)}」相關的內容</div>`;
-    return;
-  }
-
-  resultsEl.innerHTML=results.map(r=>`
-    <div class="search-result-item" onclick="jumpToResult('${r.type}','${r.id}','${r.date}')">
-      <div class="search-result-icon">${r.icon}</div>
-      <div class="search-result-body">
-        <div class="search-result-name">${escHtml(r.name)}</div>
-        <div class="search-result-meta">${escHtml(r.meta)}</div>
-      </div>
-      <div class="search-result-arrow">›</div>
-    </div>`).join('');
-}
-
-function jumpToResult(type, id, date){
-  closeSearch();
-  if(type==='note'){
-    switchTab('kb');
-    // Highlight in KB
-    setTimeout(()=>{
-      const el=document.querySelector(`[onclick*="delKB('${id}')"]`);
-      if(el) el.closest('.kb-card').scrollIntoView({behavior:'smooth',block:'center'});
-    },200);
-  } else if(date){
-    // Jump to calendar date
-    const [y,m]=date.split('-');
-    calYear=parseInt(y); calMonth=parseInt(m)-1;
-    selectedDate=date;
-    switchTab('cal');
-    renderCalendar();
-  } else {
-    switchTab('tasks');
-  }
-}
-
 // ═══════════ SWIPE GESTURE (Calendar) ═══════════
 (function(){
   let startX=0, startY=0, startTime=0;
@@ -2151,41 +1649,10 @@ function jumpToResult(type, id, date){
   },{passive:true});
 })();
 
-// ═══════════ MIDNIGHT DATE CHECK ═══════════
-function scheduleMidnightUpdate(){
-  const now=new Date();
-  const tomorrow=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
-  const msUntilMidnight=tomorrow-now+1000;
-  setTimeout(()=>{
-    // Reset calendar to today
-    const d=new Date();
-    calYear=d.getFullYear();
-    calMonth=d.getMonth();
-    selectedDate=todayStr();
-    initDate();
-    runDayChange();
-    renderAll();
-    scheduleMidnightUpdate();
-  },msUntilMidnight);
-}
-
 // ═══════════ BOOT ═══════════
 updateClock(); setInterval(updateClock,15000);
 initDate(); runDayChange(); renderAll();
-scheduleMidnightUpdate();
-setInterval(()=>{
-  const prev=selectedDate;
-  runDayChange();
-  // If date has changed, reset calendar view to today
-  if(prev!==todayStr()){
-    const d=new Date();
-    calYear=d.getFullYear();
-    calMonth=d.getMonth();
-    selectedDate=todayStr();
-    initDate();
-  }
-  renderAll();
-},60000);
+setInterval(()=>{ runDayChange(); renderAll(); },60000);
 </script>
 </body>
 </html>
