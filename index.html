@@ -83,6 +83,8 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .nav-tab.active-today  {background:var(--green-s);border-color:var(--green);color:var(--green-d);}
 .nav-tab.active-tasks  {background:var(--blue-s);border-color:var(--blue);color:var(--blue);}
 .nav-tab.active-weight {background:var(--orange-s);border-color:var(--orange);color:var(--orange);}
+.nav-tab.active-run    {background:var(--blue-s);border-color:var(--blue);color:var(--blue);}
+.nav-tab.active-period {background:var(--red-s);border-color:var(--red);color:var(--red);}
 .nav-tab.active-kb     {background:#e8f0e4;border-color:#5a7a52;color:#5a7a52;}
 .tab-badge{position:absolute;top:-5px;right:-5px;width:15px;height:15px;border-radius:50%;background:var(--red);font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;}
 
@@ -118,6 +120,8 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito','Noto Sans TC',
 .cal-cell.is-holiday{background:#fff5f5;}
 .cal-cell.is-holiday .cal-num{color:var(--red);}
 .cal-cell.is-today.is-holiday .cal-num{color:#fff;}
+.cal-cell.is-period{background:#fff6f5;}
+.cal-cell.is-period .cal-lunar{color:var(--red);}
 .cal-holiday-name{font-size:8px;color:var(--red);font-weight:800;line-height:1.2;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:1px;}
 .cal-solar-term{font-size:8px;color:#8a6a2a;font-weight:800;line-height:1.2;width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-bottom:1px;}
 .cal-event-pill{display:block;width:100%;font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.5;}
@@ -253,6 +257,39 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .wt-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;}
 
+/* running + period */
+.run-card,.period-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+.run-input-row,.period-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
+.run-number,.period-number{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:15px;font-weight:800;outline:none;text-align:center;min-width:0;}
+.run-number:focus,.period-number:focus{border-color:var(--blue);}
+.run-save-btn,.period-save-btn{width:100%;padding:12px;border-radius:12px;border:none;color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;}
+.run-save-btn{background:var(--blue);}
+.period-save-btn{background:var(--red);}
+.run-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
+.run-stat{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px;}
+.run-stat-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px;}
+.run-stat-val{font-size:22px;font-weight:800;color:var(--blue);}
+.run-stat-sub{font-size:10px;font-weight:700;color:var(--muted);margin-top:2px;}
+.run-period-row{display:flex;gap:6px;margin-bottom:12px;}
+.run-period-btn{flex:1;padding:7px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;text-align:center;}
+.run-period-btn.active{background:var(--blue-s);border-color:var(--blue);color:var(--blue);}
+.run-chart,.period-next{margin-bottom:12px;background:var(--surface);border-radius:14px;padding:14px 12px 10px;border:1.5px solid var(--border);}
+.run-chart-title{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;}
+.run-chart-title span{color:var(--blue);}
+.run-entry,.period-entry{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
+.run-entry-date,.period-entry-date{font-size:11px;color:var(--muted);font-weight:700;flex:1;}
+.run-entry-val{font-size:17px;font-weight:800;color:var(--blue);}
+.period-entry-val{font-size:15px;font-weight:800;color:var(--red);}
+.run-entry-diff,.period-entry-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:7px;background:var(--bg);color:var(--muted);}
+.run-del,.period-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
+.run-del:active,.period-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
+.run-empty,.period-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
+.period-settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px;}
+.period-field-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px;}
+.period-next-title{font-size:12px;font-weight:800;color:var(--red);margin-bottom:4px;}
+.period-next-main{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.period-next-sub{font-size:11px;font-weight:600;color:var(--muted);line-height:1.5;}
+
 /* ── KB ── */
 .kb-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:600;outline:none;margin-bottom:10px;}
 .kb-search:focus{border-color:#5a7a52;}
@@ -338,6 +375,8 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <button class="nav-tab"             id="tab-today"  onclick="switchTab('today')">📌<br>今日</button>
   <button class="nav-tab"             id="tab-tasks"  onclick="switchTab('tasks')">✅<br>任務</button>
   <button class="nav-tab"             id="tab-weight" onclick="switchTab('weight')">⚖️<br>體重</button>
+  <button class="nav-tab"             id="tab-run"    onclick="switchTab('run')">🏃<br>跑步</button>
+  <button class="nav-tab"             id="tab-period" onclick="switchTab('period')">🌙<br>生理期</button>
   <button class="nav-tab"             id="tab-kb"     onclick="switchTab('kb')">📝<br>知識庫</button>
   <button class="nav-tab"             id="tab-sync"   onclick="switchTab('sync')">🔄<br>同步</button>
 </div>
@@ -412,6 +451,62 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   <div id="wt-chart-area"></div>
   <div class="wt-hist-label">歷史記錄</div>
   <div id="wt-list"></div>
+</div>
+
+<!-- RUNNING SECTION -->
+<div class="section" id="sec-run">
+  <div class="sec-label" style="color:var(--blue)">跑步紀錄・跑量統計</div>
+  <div class="run-card">
+    <div class="field-label">新增跑步紀錄</div>
+    <div class="run-input-row">
+      <input type="date" class="run-number" id="run-date-input" min="2020-01-01" max="2099-12-31">
+      <input type="number" class="run-number" id="run-km-input" placeholder="公里" step="0.1" min="0" max="200">
+      <span class="wt-unit">km</span>
+    </div>
+    <button class="run-save-btn" onclick="saveRunFromInput()">儲存跑步紀錄</button>
+  </div>
+  <div class="run-summary-grid">
+    <div class="run-stat"><div class="run-stat-label">本月跑量</div><div class="run-stat-val" id="run-month-total">0 km</div><div class="run-stat-sub" id="run-month-sub">本月尚未記錄</div></div>
+    <div class="run-stat"><div class="run-stat-label">今年跑量</div><div class="run-stat-val" id="run-year-total">0 km</div><div class="run-stat-sub" id="run-year-sub">今年尚未記錄</div></div>
+  </div>
+  <div class="run-period-row">
+    <button class="run-period-btn active" data-view="daily" onclick="setRunView(this)">每日</button>
+    <button class="run-period-btn" data-view="month" onclick="setRunView(this)">每月</button>
+    <button class="run-period-btn" data-view="year" onclick="setRunView(this)">每年</button>
+  </div>
+  <div class="wt-hist-label" style="color:var(--blue)">趨勢圖</div>
+  <div id="run-chart-area"></div>
+  <div class="wt-hist-label" style="color:var(--blue)">歷史記錄</div>
+  <div id="run-list"></div>
+</div>
+
+<!-- PERIOD SECTION -->
+<div class="section" id="sec-period">
+  <div class="sec-label" style="color:var(--red)">生理期紀錄・週期預測</div>
+  <div class="period-card">
+    <div class="field-label">新增生理期開始日</div>
+    <div class="period-input-row">
+      <input type="date" class="period-number" id="period-start-input" min="2020-01-01" max="2099-12-31">
+    </div>
+    <button class="period-save-btn" onclick="savePeriodFromInput()">儲存開始日</button>
+  </div>
+  <div class="period-card">
+    <div class="field-label">預測設定</div>
+    <div class="period-settings-grid">
+      <div>
+        <div class="period-field-label">週期天數</div>
+        <input type="number" class="period-number" id="period-cycle-input" min="15" max="60" step="1">
+      </div>
+      <div>
+        <div class="period-field-label">經期長度</div>
+        <input type="number" class="period-number" id="period-length-input" min="1" max="14" step="1">
+      </div>
+    </div>
+    <button class="period-save-btn" onclick="savePeriodSettings()">更新預測設定</button>
+  </div>
+  <div id="period-next-area"></div>
+  <div class="wt-hist-label" style="color:var(--red)">歷史記錄</div>
+  <div id="period-list"></div>
 </div>
 
 <!-- KB SECTION -->
@@ -547,7 +642,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
 <script>
 // ═══════════ STORAGE KEYS ═══════════
-const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
+const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', KB_KEY='kb_v1', RUN_KEY='run_v1', PERIOD_KEY='period_v1', PERIOD_SETTINGS_KEY='period_settings_v1', DATE_KEY='last_date_v1';
 
 // ═══════════ STATE ═══════════
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)||'[]');
@@ -567,7 +662,11 @@ if(!events.length){
 let weightLog=JSON.parse(localStorage.getItem(WT_KEY)||'[]');
 let weightGoal=parseFloat(localStorage.getItem(WT_GOAL_KEY)||'0')||0;
 let kbNotes=JSON.parse(localStorage.getItem(KB_KEY)||'[]');
+let runLog=JSON.parse(localStorage.getItem(RUN_KEY)||'[]');
+let periodLog=JSON.parse(localStorage.getItem(PERIOD_KEY)||'[]');
+let periodSettings=JSON.parse(localStorage.getItem(PERIOD_SETTINGS_KEY)||'{"cycle":28,"length":5}');
 let chartMonths=1;
+let runView='daily';
 let kbFilter='all';
 
 let currentTab='cal';
@@ -588,7 +687,22 @@ function saveEvents(){ localStorage.setItem(EVENTS_KEY,JSON.stringify(events)); 
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
 function saveGoal(){ localStorage.setItem(WT_GOAL_KEY,String(weightGoal)); }
 function saveKB(){ localStorage.setItem(KB_KEY,JSON.stringify(kbNotes)); }
+function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
+function savePeriod(){ localStorage.setItem(PERIOD_KEY,JSON.stringify(periodLog)); }
+function savePeriodSettingsStore(){ localStorage.setItem(PERIOD_SETTINGS_KEY,JSON.stringify(periodSettings)); }
 function uid(){ return 'id'+(Date.now())+(Math.random()*1000|0); }
+
+function parseDateLocal(dateStr){
+  const [y,m,d]=dateStr.split('-').map(Number);
+  return new Date(y,m-1,d);
+}
+function addDays(dateStr,n){
+  const d=parseDateLocal(dateStr);
+  d.setDate(d.getDate()+n);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function daysBetween(a,b){ return Math.round((parseDateLocal(b)-parseDateLocal(a))/86400000); }
+function fmtKm(v){ return (Math.round((parseFloat(v)||0)*10)/10).toFixed(1).replace(/\.0$/,''); }
 
 function fmtDate(d){
   if(!d)return '';
@@ -981,6 +1095,7 @@ function renderCalendar(){
     const dow=i%7;
     const holiday=getHoliday(dateStr);
     const solarTerm=!isOther?getSolarTerm(dateStr):null;
+    const periodInfo=!isOther?getPeriodInfo(dateStr):null;
     const isHoliday=!!holiday;
     const numClass=(dow===0||isHoliday)?'cal-num sun':dow===6?'cal-num sat':'cal-num';
     const lunar=getLunarText(dateStr);
@@ -1001,6 +1116,7 @@ function renderCalendar(){
     let pills='';
     if(holiday) pills+=`<span class="cal-holiday-name">${holiday}</span>`;
     else if(solarTerm) pills+=`<span class="cal-solar-term">🌿 ${solarTerm}</span>`;
+    if(periodInfo) pills+=`<span class="cal-event-pill" style="background:var(--red-s);color:var(--red)">${periodInfo.kind==='actual'?'生理期':'預測'} D${periodInfo.day}</span>`;
     allItems.slice(0,MAX).forEach(item=>{
       if(item.type){
         // event
@@ -1016,7 +1132,7 @@ function renderCalendar(){
       pills+=`<span class="cal-more">+${allItems.length-MAX}</span>`;
     }
 
-    cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''} ${isHoliday&&!isToday?'is-holiday':''}" onclick="selectDate('${dateStr}')">
+    cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''} ${isHoliday&&!isToday?'is-holiday':''} ${periodInfo&&!isToday?'is-period':''}" onclick="selectDate('${dateStr}')">
       <div class="cal-num-wrap"><div class="${numClass}">${day}</div></div>
       <div class="cal-lunar ${isLunarFirst?'holiday-lunar':''}">${isOther?'':lunar}</div>
       ${pills}
@@ -1053,6 +1169,7 @@ function renderDayPanel(){
   const dayNotes=kbNotes.filter(n=>n.dateStr===selectedDate);
   const holiday=getHoliday(selectedDate);
   const solarTerm=getSolarTerm(selectedDate);
+  const periodInfo=getPeriodInfo(selectedDate);
   const lunar=getLunarText(selectedDate);
   const holidayTag=holiday?`<span style="font-size:11px;color:var(--red);font-weight:700;margin-left:6px;">🎌 ${holiday}</span>`:'';
   const solarTermTag=solarTerm?`<span style="font-size:11px;color:#8a6a2a;font-weight:700;margin-left:6px;">🌿 ${solarTerm}</span>`:'';
@@ -1060,12 +1177,18 @@ function renderDayPanel(){
   title.innerHTML=`${fmtDate(selectedDate)}${selectedDate===todayStr()?' 今天':''}${lunarTag}${solarTermTag}${holidayTag}`;
   panel.style.display='block';
 
-  if(!dayEvts.length && !dayNotes.length){
+  if(!dayEvts.length && !dayNotes.length && !periodInfo){
     list.innerHTML=`<div class="cal-day-empty">這天沒有行程或任務<br><small>按右上角 🎙 新增</small></div>`;
     return;
   }
 
-  let html=dayEvts.map(e=>eventCardHTML(e)).join('');
+  let html=periodInfo?`<div class="event-card" style="border-left:3px solid var(--red);">
+    <div class="event-body" style="padding-right:0">
+      <div class="event-name">${periodInfo.kind==='actual'?'生理期紀錄':'生理期預測'} Day ${periodInfo.day}</div>
+      <div class="event-meta"><span class="etag" style="background:var(--red-s);color:var(--red)">${fmtDate(periodInfo.start)} ～ ${fmtDate(periodInfo.end)}</span></div>
+    </div>
+  </div>`:'';
+  html+=dayEvts.map(e=>eventCardHTML(e)).join('');
 
   if(dayNotes.length){
     const tl={'annual':'🎪 年會','study':'📚 Study','other':'🌿 其他'};
@@ -1215,6 +1338,8 @@ function renderAll(){
   renderToday();
   renderTasks();
   renderWeight();
+  renderRun();
+  renderPeriod();
   renderKB();
   updateBadges();
 }
@@ -1233,7 +1358,7 @@ function updateBadges(){
 // ═══════════ SWITCH TAB ═══════════
 function switchTab(tab){
   currentTab=tab;
-  ['cal','today','tasks','weight','kb','sync'].forEach(c=>{
+  ['cal','today','tasks','weight','run','period','kb','sync'].forEach(c=>{
     const el=document.getElementById('tab-'+c);
     const badge=el?.querySelector('.tab-badge');
     if(el){el.className='nav-tab'+(c===tab?' active-'+c:'');if(badge)el.appendChild(badge);}
@@ -1545,6 +1670,210 @@ function wtOverlayClick(e){ if(e.target.id==='wt-overlay') closeWtModal(); }
 function saveWeightFromModal(){ const v=parseFloat(document.getElementById('wt-quick-input').value); if(!v||v<20||v>300){showToast('請輸入正確體重');return;} weightLog.push({id:uid(),date:todayStr(),value:v}); saveWt(); renderWeight(); updateBadges(); closeWtModal(); showToast(`記錄成功：${v} kg ✓`); }
 function delWeight(id){ weightLog=weightLog.filter(w=>w.id!==id); saveWt(); renderWeight(); }
 
+// ═══════════ RUNNING ═══════════
+function runDateParts(dateStr){
+  const d=parseDateLocal(dateStr);
+  return {month:d.getMonth()+1,day:d.getDate(),dow:['日','一','二','三','四','五','六'][d.getDay()]};
+}
+function setRunView(btn){
+  runView=btn.dataset.view;
+  document.querySelectorAll('.run-period-btn').forEach(b=>b.classList.toggle('active',b===btn));
+  renderRunList();
+}
+function groupRunBy(mode){
+  const map={};
+  runLog.forEach(r=>{
+    const key=mode==='year'?r.date.slice(0,4):r.date.slice(0,7);
+    map[key]=(map[key]||0)+(parseFloat(r.km)||0);
+  });
+  return Object.keys(map).sort().map(date=>({date,km:Math.round(map[date]*10)/10}));
+}
+function renderRun(){
+  const dateInput=document.getElementById('run-date-input');
+  if(dateInput && !dateInput.value) dateInput.value=todayStr();
+  const ym=todayStr().slice(0,7), yy=todayStr().slice(0,4);
+  const monthRows=runLog.filter(r=>r.date&&r.date.slice(0,7)===ym);
+  const yearRows=runLog.filter(r=>r.date&&r.date.slice(0,4)===yy);
+  const monthTotal=monthRows.reduce((s,r)=>s+(parseFloat(r.km)||0),0);
+  const yearTotal=yearRows.reduce((s,r)=>s+(parseFloat(r.km)||0),0);
+  document.getElementById('run-month-total').textContent=`${fmtKm(monthTotal)} km`;
+  document.getElementById('run-year-total').textContent=`${fmtKm(yearTotal)} km`;
+  document.getElementById('run-month-sub').textContent=monthRows.length?`${monthRows.length} 筆紀錄`:'本月尚未記錄';
+  document.getElementById('run-year-sub').textContent=yearRows.length?`${yearRows.length} 筆紀錄`:'今年尚未記錄';
+  renderRunList();
+}
+function renderRunList(){
+  const listEl=document.getElementById('run-list');
+  const chartEl=document.getElementById('run-chart-area');
+  if(!listEl||!chartEl)return;
+  if(!runLog.length){
+    listEl.innerHTML=`<div class="run-empty">還沒有跑步紀錄<br>輸入今天跑了幾公里，就可以開始累積月跑量和年跑量。</div>`;
+    chartEl.innerHTML='';
+    return;
+  }
+  const daily=[...runLog].sort((a,b)=>a.date.localeCompare(b.date));
+  const data=runView==='daily'?daily:groupRunBy(runView==='year'?'year':'month');
+  renderRunChart(data);
+  if(runView==='daily'){
+    const rev=[...daily].reverse();
+    listEl.innerHTML=rev.map((r,i)=>{
+      const prev=rev[i+1];
+      let diff='';
+      if(prev){
+        const dv=(r.km-prev.km).toFixed(1);
+        const sym=dv>0?'▲':dv<0?'▼':'→';
+        diff=`<span class="run-entry-diff">${sym} ${Math.abs(dv)}</span>`;
+      }
+      const {month,day,dow}=runDateParts(r.date);
+      return `<div class="run-entry"><div class="run-entry-date">${month}/${day}（週${dow}）</div><div class="run-entry-val">${fmtKm(r.km)} km</div>${diff}<button class="run-del" onclick="delRun('${r.id}')">✕</button></div>`;
+    }).join('');
+  } else {
+    const rev=[...data].reverse();
+    listEl.innerHTML=rev.map(r=>{
+      const label=runView==='year'?`${r.date} 年`:`${parseInt(r.date.slice(5,7))} 月・${r.date.slice(0,4)}`;
+      return `<div class="run-entry"><div class="run-entry-date">${label}</div><div class="run-entry-val">${fmtKm(r.km)} km</div></div>`;
+    }).join('')||`<div class="run-empty">沒有可顯示的紀錄</div>`;
+  }
+}
+function renderRunChart(data){
+  const chartEl=document.getElementById('run-chart-area');
+  if(data.length<2){
+    chartEl.innerHTML=`<div class="run-chart"><div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:700;">記錄更多才能顯示趨勢圖</div></div>`;
+    return;
+  }
+  const vals=data.map(r=>parseFloat(r.km)||0);
+  const rawMax=Math.max(...vals), rawMin=Math.min(...vals,0);
+  const pv=(rawMax-rawMin)||1;
+  const mn=Math.max(0,rawMin-pv*.12), mx=rawMax+pv*.25;
+  const W=320,H=120,padL=36,padR=10,padT=12,padB=26,cW=W-padL-padR,cH=H-padT-padB;
+  const toX=i=>padL+(i/(data.length-1))*cW;
+  const toY=v=>padT+cH-((v-mn)/(mx-mn))*cH;
+  const pts=data.map((r,i)=>({x:toX(i),y:toY(r.km),v:r.km,date:r.date}));
+  const path=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
+  const area=`${path} L${pts[pts.length-1].x},${padT+cH} L${pts[0].x},${padT+cH} Z`;
+  const ySteps=[mn,(mn+mx)/2,mx];
+  const yLabels=ySteps.map(v=>`<text x="${padL-4}" y="${toY(v)+3}" text-anchor="end" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${fmtKm(v)}</text>`).join('');
+  const idxs=[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i&&data.length>1);
+  const xLabels=idxs.map(i=>{
+    const d=data[i].date;
+    const label=runView==='daily'?`${parseInt(d.slice(5,7))}/${parseInt(d.slice(8,10))}`:(runView==='month'?`${parseInt(d.slice(5,7))}月`:d);
+    return `<text x="${toX(i)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${label}</text>`;
+  }).join('');
+  const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#7b9bba" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${fmtKm(p.v)}km</title></circle>`).join('');
+  const periodLabel=runView==='daily'?'每日跑步公里數':runView==='month'?'月跑量趨勢':'年跑量趨勢';
+  const minV=fmtKm(Math.min(...vals)), maxV=fmtKm(Math.max(...vals));
+  chartEl.innerHTML=`<div class="run-chart"><div class="run-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} km</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7b9bba" stop-opacity=".22"/><stop offset="100%" stop-color="#7b9bba" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}<path d="${area}" fill="url(#rg1)"/><path d="${path}" fill="none" stroke="#7b9bba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
+}
+function saveRunFromInput(){
+  const d=document.getElementById('run-date-input').value||todayStr();
+  const km=parseFloat(document.getElementById('run-km-input').value);
+  if(!km||km<=0||km>200){showToast('請輸入正確公里數');return;}
+  runLog.push({id:uid(),date:d,km:Math.round(km*10)/10});
+  document.getElementById('run-km-input').value='';
+  saveRun(); renderRun(); showToast(`已記錄：${fmtKm(km)} km ✓`);
+}
+function delRun(id){ runLog=runLog.filter(r=>r.id!==id); saveRun(); renderRun(); }
+
+// ═══════════ PERIOD ═══════════
+function normalizePeriodSettings(){
+  periodSettings.cycle=parseInt(periodSettings.cycle)||28;
+  periodSettings.length=parseInt(periodSettings.length)||5;
+  if(periodSettings.cycle<15) periodSettings.cycle=15;
+  if(periodSettings.cycle>60) periodSettings.cycle=60;
+  if(periodSettings.length<1) periodSettings.length=1;
+  if(periodSettings.length>14) periodSettings.length=14;
+}
+function getPeriodEnd(p){ return p.end || addDays(p.start,(parseInt(periodSettings.length)||5)-1); }
+function sortedPeriods(){ return [...periodLog].filter(p=>p.start).sort((a,b)=>b.start.localeCompare(a.start)); }
+function getLatestPeriodStart(){
+  const sorted=sortedPeriods();
+  return sorted.length?sorted[0].start:null;
+}
+function getPeriodInfo(dateStr){
+  normalizePeriodSettings();
+  for(const p of periodLog){
+    if(!p.start) continue;
+    const end=getPeriodEnd(p);
+    if(p.start<=dateStr && end>=dateStr){
+      return {kind:'actual',start:p.start,end,day:daysBetween(p.start,dateStr)+1};
+    }
+  }
+  const base=getLatestPeriodStart();
+  if(!base) return null;
+  let start=base;
+  const cycle=periodSettings.cycle;
+  const len=periodSettings.length;
+  while(addDays(start,len-1)<dateStr){ start=addDays(start,cycle); }
+  const end=addDays(start,len-1);
+  if(start<=dateStr && end>=dateStr && end>=todayStr()){
+    return {kind:'predicted',start,end,day:daysBetween(start,dateStr)+1};
+  }
+  return null;
+}
+function getNextPeriodPrediction(){
+  normalizePeriodSettings();
+  const base=getLatestPeriodStart();
+  if(!base) return null;
+  let start=base;
+  while(addDays(start,periodSettings.length-1)<todayStr()){ start=addDays(start,periodSettings.cycle); }
+  return {start,end:addDays(start,periodSettings.length-1)};
+}
+function renderPeriod(){
+  normalizePeriodSettings();
+  const startInp=document.getElementById('period-start-input');
+  if(startInp && !startInp.value) startInp.value=todayStr();
+  if(document.getElementById('period-cycle-input')) document.getElementById('period-cycle-input').value=periodSettings.cycle;
+  if(document.getElementById('period-length-input')) document.getElementById('period-length-input').value=periodSettings.length;
+
+  const next=getNextPeriodPrediction();
+  const nextArea=document.getElementById('period-next-area');
+  if(nextArea){
+    if(next){
+      const days=daysBetween(todayStr(),next.start);
+      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">${fmtDate(next.start)} ～ ${fmtDate(next.end)}</div><div class="period-next-sub">約 ${days} 天後開始。預測依據：週期 ${periodSettings.cycle} 天、經期 ${periodSettings.length} 天。</div></div>`;
+    } else {
+      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">尚未有足夠資料</div><div class="period-next-sub">先記錄至少一次生理期開始日，就能自動推算下一次。</div></div>`;
+    }
+  }
+
+  const list=document.getElementById('period-list');
+  if(!list) return;
+  const rows=sortedPeriods();
+  if(!rows.length){
+    list.innerHTML=`<div class="period-empty">尚未有生理期紀錄<br>先輸入開始日，之後就能自動預測。</div>`;
+    return;
+  }
+  list.innerHTML=rows.map(p=>{
+    const end=getPeriodEnd(p);
+    const len=daysBetween(p.start,end)+1;
+    return `<div class="period-entry"><div class="period-entry-date">${fmtDate(p.start)} ～ ${fmtDate(end)}</div><div class="period-entry-val">${len} 天</div><span class="period-entry-tag">週期 ${periodSettings.cycle}</span><button class="period-del" onclick="delPeriod('${p.id}')">✕</button></div>`;
+  }).join('');
+}
+function savePeriodFromInput(){
+  normalizePeriodSettings();
+  const start=document.getElementById('period-start-input').value||todayStr();
+  periodLog.push({id:uid(),start});
+  savePeriod();
+  document.getElementById('period-start-input').value=todayStr();
+  renderAll();
+  showToast('✓ 已儲存生理期開始日');
+}
+function savePeriodSettings(){
+  const cycle=parseInt(document.getElementById('period-cycle-input').value);
+  const len=parseInt(document.getElementById('period-length-input').value);
+  if(!cycle || cycle<15 || cycle>60){ showToast('⚠️ 週期請填 15-60 天'); return; }
+  if(!len || len<1 || len>14){ showToast('⚠️ 經期長度請填 1-14 天'); return; }
+  periodSettings={cycle,length:len};
+  savePeriodSettingsStore();
+  renderAll();
+  showToast('✓ 已更新預測設定');
+}
+function delPeriod(id){
+  periodLog=periodLog.filter(p=>p.id!==id);
+  savePeriod();
+  renderAll();
+}
+
 // ═══════════ KB ═══════════
 function setKBFilter(btn){ kbFilter=btn.dataset.topic; document.querySelectorAll('.kb-filter-btn').forEach(b=>{b.className='kb-filter-btn'+(b===btn?' act-'+kbFilter:'');}); renderKB(); }
 function renderKB(){
@@ -1577,7 +1906,7 @@ function delKB(id){ kbNotes=kbNotes.filter(n=>n.id!==id); saveKB(); renderKB(); 
 // ═══════════ SYNC ═══════════
 function exportData(){
   const data={
-    events, weightLog, weightGoal, kbNotes,
+    events, weightLog, weightGoal, runLog, periodLog, periodSettings, kbNotes,
     exportedAt: new Date().toISOString(),
     version: 1
   };
@@ -1601,13 +1930,16 @@ function importData(event){
   reader.onload=e=>{
     try{
       const data=JSON.parse(e.target.result);
-      if(!data.events&&!data.weightLog&&!data.kbNotes){
+      if(!data.events&&!data.weightLog&&!data.runLog&&!data.periodLog&&!data.kbNotes){
         showToast('⚠️ 檔案格式錯誤'); return;
       }
       if(!confirm('匯入後會覆蓋這台的現有資料，確定嗎？')){return;}
       if(data.events)    { events=data.events;     saveEvents(); }
       if(data.weightLog) { weightLog=data.weightLog; saveWt(); }
       if(data.weightGoal){ weightGoal=data.weightGoal; saveGoal(); }
+      if(data.runLog)    { runLog=data.runLog;     saveRun(); }
+      if(data.periodLog) { periodLog=data.periodLog; savePeriod(); }
+      if(data.periodSettings){ periodSettings=data.periodSettings; savePeriodSettingsStore(); }
       if(data.kbNotes)   { kbNotes=data.kbNotes;   saveKB(); }
       renderAll();
       const d=new Date();
