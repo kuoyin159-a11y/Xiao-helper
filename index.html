@@ -312,9 +312,9 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .period-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
 .period-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .period-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
-.cal-cell.is-period{background:#eef4f1;}
-.cal-cell.is-period .cal-lunar{color:#6f938c;}
-.cal-event-pill.period-actual,.cal-event-pill.period-predict{background:#dfece8;color:#5f827c;}
+.cal-cell.is-period{background:#f0f5f8;}
+.cal-cell.is-period .cal-lunar{color:#6f8fa1;}
+.cal-event-pill.period-actual,.cal-event-pill.period-predict{background:#dfeaf0;color:#5f7f92;}
 
 /* ── KB ── */
 .kb-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:600;outline:none;margin-bottom:10px;}
@@ -1334,7 +1334,7 @@ function renderDayPanel(){
     html+=`<div class="event-card" style="border-left:3px solid ${actual?'var(--red)':'var(--purple)'};">
       <div class="event-body" style="padding-right:0">
         <div class="event-name">${actual?'🌙 生理期':'♡ 生理期預測'}第 ${menstrualInfo.day} 天</div>
-        <div class="event-meta"><span class="etag" style="background:#dfece8;color:#5f827c">${fmtDate(menstrualInfo.start)} ～ ${fmtDate(menstrualInfo.end)}</span></div>
+        <div class="event-meta"><span class="etag" style="background:#dfeaf0;color:#5f7f92">${fmtDate(menstrualInfo.start)} ～ ${fmtDate(menstrualInfo.end)}</span></div>
       </div>
     </div>`;
   }
