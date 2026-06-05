@@ -613,6 +613,13 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
   </div>
 
   <div class="sync-card">
+    <div class="sync-card-title">📆 匯出行事曆</div>
+    <div class="sync-card-desc">把所有有日期的行程匯出成 .ics 檔，手機打開後可加入內建行事曆，提醒就交給手機系統處理。</div>
+    <button class="sync-btn sync-btn-export" onclick="exportCalendar()">匯出行事曆檔</button>
+    <div class="sync-last" id="calendar-export-last"></div>
+  </div>
+
+  <div class="sync-card">
     <div class="sync-card-title">📥 匯入資料</div>
     <div class="sync-card-desc">選擇從另一台匯出的檔案，匯入後會覆蓋這台的現有資料，請確認後再操作。</div>
     <button class="sync-btn sync-btn-import" onclick="document.getElementById('import-file').click()">選擇檔案匯入</button>
@@ -1376,6 +1383,7 @@ function eventCardHTML(e){
       <div class="event-meta">${tags}</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
+      ${e.type==='schedule'?`<button class="event-del" style="position:relative;right:auto;top:auto;" onclick="exportEventCalendar('${e.id}')" title="加入行事曆">📆</button>`:''}
       <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="openEditModal('${e.id}')">✏️</button>
       <button class="event-del" style="position:relative;right:auto;top:auto;" onclick="deleteEvent('${e.id}')">✕</button>
     </div>
@@ -2063,6 +2071,92 @@ function delPeriod(id){
   periodLog=periodLog.filter(p=>p.id!==id);
   savePeriod();
   renderAll();
+}
+
+// ═══════════ CALENDAR EXPORT ═══════════
+function pad2(n){ return String(n).padStart(2,'0'); }
+function icsEscape(text){
+  return String(text||'')
+    .replace(/\\/g,'\\\\')
+    .replace(/\n/g,'\\n')
+    .replace(/,/g,'\\,')
+    .replace(/;/g,'\\;');
+}
+function icsFold(line){
+  let out='', rest=line;
+  while(rest.length>70){
+    out+=rest.slice(0,70)+'\r\n ';
+    rest=rest.slice(70);
+  }
+  return out+rest;
+}
+function icsDate(dateStr){ return dateStr.replace(/-/g,''); }
+function icsDateTimeLocal(dateStr,timeStr){
+  const [h='09',m='00']=String(timeStr||'09:00').split(':');
+  return `${icsDate(dateStr)}T${pad2(h)}${pad2(m)}00`;
+}
+function icsStamp(){
+  const d=new Date();
+  return `${d.getUTCFullYear()}${pad2(d.getUTCMonth()+1)}${pad2(d.getUTCDate())}T${pad2(d.getUTCHours())}${pad2(d.getUTCMinutes())}${pad2(d.getUTCSeconds())}Z`;
+}
+function addMinutesToLocal(dateStr,timeStr,minutes){
+  const [y,m,d]=dateStr.split('-').map(Number);
+  const [hh='09',mm='00']=String(timeStr||'09:00').split(':');
+  const dt=new Date(y,m-1,d,parseInt(hh)||0,parseInt(mm)||0);
+  dt.setMinutes(dt.getMinutes()+minutes);
+  return `${dt.getFullYear()}-${pad2(dt.getMonth()+1)}-${pad2(dt.getDate())}T${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
+}
+function eventToICS(e){
+  const lines=[
+    'BEGIN:VEVENT',
+    `UID:${e.id || uid()}@xiao-helper`,
+    `DTSTAMP:${icsStamp()}`,
+    `SUMMARY:${icsEscape(e.name||'行程')}`
+  ];
+  if(e.time){
+    const endLocal=addMinutesToLocal(e.date,e.time,60);
+    const [endDate,endTime]=endLocal.split('T');
+    lines.push(`DTSTART:${icsDateTimeLocal(e.date,e.time)}`);
+    lines.push(`DTEND:${icsDateTimeLocal(endDate,endTime)}`);
+    lines.push('BEGIN:VALARM','TRIGGER:-PT30M','ACTION:DISPLAY',`DESCRIPTION:${icsEscape(e.name||'行程')}`,'END:VALARM');
+  } else {
+    const endDate=e.endDate&&e.endDate>=e.date?addDays(e.endDate,1):addDays(e.date,1);
+    lines.push(`DTSTART;VALUE=DATE:${icsDate(e.date)}`);
+    lines.push(`DTEND;VALUE=DATE:${icsDate(endDate)}`);
+    lines.push('BEGIN:VALARM',`TRIGGER;VALUE=DATE-TIME:${icsDateTimeLocal(e.date,'09:00')}`,'ACTION:DISPLAY',`DESCRIPTION:${icsEscape(e.name||'行程')}`,'END:VALARM');
+  }
+  if(e.trip) lines.push('CATEGORIES:出差');
+  lines.push('END:VEVENT');
+  return lines.map(icsFold).join('\r\n');
+}
+function buildICS(items){
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Xiao Helper//Calendar Export//ZH-TW','CALSCALE:GREGORIAN','METHOD:PUBLISH',...items.map(eventToICS),'END:VCALENDAR'].join('\r\n');
+}
+function downloadICS(filename,content){
+  const blob=new Blob([content],{type:'text/calendar;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function safeFileName(name){ return String(name||'calendar').replace(/[\\/:*?"<>|]/g,'_').slice(0,40)||'calendar'; }
+function exportEventCalendar(id){
+  const e=events.find(x=>x.id===id);
+  if(!e||e.type!=='schedule'||!e.date){ showToast('這筆行程沒有日期'); return; }
+  downloadICS(`${safeFileName(e.name)}.ics`,buildICS([e]));
+  showToast('已匯出行事曆檔');
+}
+function exportCalendar(){
+  const rows=events.filter(e=>e.type==='schedule'&&e.date).sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
+  if(!rows.length){ showToast('沒有可匯出的行程'); return; }
+  const d=new Date();
+  downloadICS(`小幫手行事曆_${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}.ics`,buildICS(rows));
+  const now=`${d.getMonth()+1}/${d.getDate()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  const el=document.getElementById('calendar-export-last');
+  if(el) el.textContent=`上次匯出：${now}`;
+  showToast(`已匯出 ${rows.length} 筆行程`);
 }
 
 // ═══════════ SYNC ═══════════

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xiao-helper-offline-v1';
+const CACHE_NAME = 'xiao-helper-offline-v2';
 const APP_SHELL = [
   './',
   './index.html'
