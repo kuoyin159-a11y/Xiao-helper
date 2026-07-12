@@ -2256,6 +2256,13 @@ function normalizePeriodSettings(){
 }
 function getPeriodEnd(p){ return p.end || addDays(p.start,(parseInt(periodSettings.length)||5)-1); }
 function sortedPeriods(){ return [...periodLog].filter(p=>p.start).sort((a,b)=>b.start.localeCompare(a.start)); }
+function getActualPeriodCycleDays(periodItem){
+  if(!periodItem || !periodItem.start) return null;
+  const previous=periodLog
+    .filter(p=>p.start && p.start<periodItem.start)
+    .sort((a,b)=>b.start.localeCompare(a.start))[0];
+  return previous?daysBetween(previous.start,periodItem.start):null;
+}
 function getLatestPeriodStart(){
   const sorted=sortedPeriods();
   return sorted.length?sorted[0].start:null;
@@ -2327,7 +2334,10 @@ function renderPeriod(){
   if(nextArea){
     if(next){
       const days=daysBetween(todayStr(),next.start);
-      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">${fmtDate(next.start)} ～ ${fmtDate(next.end)}</div><div class="period-next-sub">約 ${days} 天後開始。預測依據：週期 ${periodSettings.cycle} 天、經期 ${periodSettings.length} 天。</div></div>`;
+      const latest=sortedPeriods()[0];
+      const actualCycle=latest?getActualPeriodCycleDays(latest):null;
+      const actualText=actualCycle?`最近實際週期 ${actualCycle} 天。`:'再記錄一次後會顯示實際週期。';
+      nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">${fmtDate(next.start)} ～ ${fmtDate(next.end)}</div><div class="period-next-sub">${actualText} 約 ${days} 天後開始。預測設定：週期 ${periodSettings.cycle} 天、經期 ${periodSettings.length} 天。</div></div>`;
     } else {
       nextArea.innerHTML=`<div class="period-next"><div class="period-next-title">下一次預測</div><div class="period-next-main">尚未有足夠資料</div><div class="period-next-sub">先記錄至少一次生理期開始日，就能自動推算下一次。</div></div>`;
     }
@@ -2343,7 +2353,9 @@ function renderPeriod(){
   list.innerHTML=rows.map(p=>{
     const end=getPeriodEnd(p);
     const len=daysBetween(p.start,end)+1;
-    return `<div class="period-entry"><div class="period-entry-date">${fmtDate(p.start)} ～ ${fmtDate(end)}</div><div class="period-entry-val">${len} 天</div><span class="period-entry-tag">週期 ${periodSettings.cycle}</span><button class="period-del" onclick="delPeriod('${p.id}')">✕</button></div>`;
+    const actualCycle=getActualPeriodCycleDays(p);
+    const cycleLabel=actualCycle?`週期 ${actualCycle} 天`:'首筆紀錄';
+    return `<div class="period-entry"><div class="period-entry-date">${fmtDate(p.start)} ～ ${fmtDate(end)}</div><div class="period-entry-val">${len} 天</div><span class="period-entry-tag">${cycleLabel}</span><button class="period-del" onclick="delPeriod('${p.id}')">✕</button></div>`;
   }).join('');
 }
 function savePeriodFromInput(){
@@ -2354,7 +2366,8 @@ function savePeriodFromInput(){
   savePeriod();
   document.getElementById('period-start-input').value=todayStr();
   renderAll();
-  showToast('✓ 已儲存生理期開始日');
+  const actualCycle=getActualPeriodCycleDays({start});
+  showToast(actualCycle?`✓ 已儲存，本次週期 ${actualCycle} 天`:'✓ 已儲存生理期開始日');
 }
 function savePeriodSettings(){
   const cycle=parseInt(document.getElementById('period-cycle-input').value);
