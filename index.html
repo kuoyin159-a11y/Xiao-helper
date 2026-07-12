@@ -241,16 +241,51 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .chart-svg{width:100%;overflow:visible;display:block;}
 .wt-hist-label{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:14px 0 8px;display:flex;align-items:center;gap:5px;}
 .wt-hist-label::before{content:'';width:3px;height:12px;border-radius:2px;background:var(--orange);flex-shrink:0;}
-.wt-entry{display:flex;align-items:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
+.wt-entry{display:flex;flex-direction:column;align-items:stretch;gap:6px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:11px 12px;margin-bottom:7px;}
+.wt-entry-top{display:flex;align-items:center;gap:6px;}
+.wt-entry-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .wt-entry-date{font-size:11px;color:var(--muted);font-weight:700;flex:1;}
 .wt-entry-val{font-size:17px;font-weight:800;color:var(--orange);}
+.wt-entry-avg{font-size:10px;color:var(--muted);font-weight:700;}
 .wt-entry-diff{font-size:10px;font-weight:700;padding:2px 7px;border-radius:7px;}
 .wt-entry-diff.up{background:var(--red-s);color:var(--red);}
 .wt-entry-diff.down{background:#e6f0e8;color:#5a8f66;}
 .wt-entry-diff.same{background:var(--bg);color:var(--muted);}
+.wt-tag-period{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:var(--red-s);color:var(--red);white-space:nowrap;}
+.wt-tag-pre{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:#f6ece3;color:#a07040;white-space:nowrap;}
 .wt-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
 .wt-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .wt-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;}
+
+/* ── WEIGHT: summary card ── */
+.wt-summary-card{background:linear-gradient(135deg,var(--orange-s),#f5efe4);border:1.5px solid #d4a87c;border-radius:16px;padding:16px;margin-bottom:12px;}
+.wt-summary-top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.wt-summary-label{font-size:11px;font-weight:800;color:#a07040;margin-bottom:2px;}
+.wt-summary-main{font-size:30px;font-weight:800;color:#8a5c30;line-height:1.1;}
+.wt-summary-date{font-size:10px;color:#a07040;font-weight:700;margin-top:2px;}
+.wt-summary-diff{font-size:12px;font-weight:800;padding:5px 10px;border-radius:10px;white-space:nowrap;}
+.wt-summary-diff.up{background:var(--red-s);color:var(--red);}
+.wt-summary-diff.down{background:#e6f0e8;color:#5a8f66;}
+.wt-summary-diff.same{background:var(--surface);color:var(--muted);}
+.wt-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.wt-summary-item{background:var(--surface);border-radius:12px;padding:9px 10px;}
+.wt-summary-item-label{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:3px;}
+.wt-summary-item-val{font-size:15px;font-weight:800;color:#8a5c30;}
+.wt-summary-item-val.pos{color:#5a8f66;}
+.wt-summary-item-val.neg{color:var(--red);}
+.wt-milestone-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.wt-milestone-chip{font-size:10px;font-weight:800;padding:3px 9px;border-radius:10px;background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+.wt-milestone-chip.done{background:var(--orange);color:#fff;border-color:var(--orange);}
+
+/* ── WEIGHT: period tip ── */
+.wt-tip{border-radius:14px;padding:11px 14px;margin-bottom:12px;font-size:11px;font-weight:700;line-height:1.6;background:#dfeaf0;color:#5f7f92;border:1.5px solid #c3d8e2;}
+
+/* ── WEIGHT: weekly goal ── */
+.wt-weekly-summary{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:11px;color:var(--text);font-weight:700;line-height:1.9;}
+.wt-weekly-summary b{color:var(--orange);}
+.wt-weekly-tag{font-size:9px;font-weight:800;padding:2px 7px;border-radius:6px;margin-left:4px;}
+.wt-weekly-tag.hit{background:#e6f0e8;color:#5a8f66;}
+.wt-weekly-tag.miss{background:var(--red-s);color:var(--red);}
 
 
 
@@ -488,11 +523,13 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
 <!-- WEIGHT SECTION -->
 <div class="section" id="sec-weight">
-  <div class="sec-label" style="color:var(--orange)">每週體重記錄</div>
+  <div class="sec-label" style="color:var(--orange)">每日體重記錄</div>
+  <div id="wt-summary-area"></div>
+  <div id="wt-period-tip-area"></div>
   <div id="wt-reminder-area"></div>
   <div class="wt-goal-card">
     <div class="wt-goal-row">
-      <span class="wt-goal-label">🎯 目標體重</span>
+      <span class="wt-goal-label">🎯 最終目標體重</span>
       <span class="wt-goal-val" id="wt-goal-display">未設定</span>
     </div>
     <div class="wt-goal-inp-row">
@@ -505,12 +542,24 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
       <div class="wt-goal-meta"><span id="wt-goal-meta-l">—</span><span id="wt-goal-meta-r">—</span></div>
     </div>
   </div>
+  <div class="wt-goal-card">
+    <div class="wt-goal-row">
+      <span class="wt-goal-label">📅 每週目標體重</span>
+    </div>
+    <div class="wt-goal-inp-row">
+      <input type="date" class="wt-goal-input" id="wt-weekly-date-input" style="flex:1.3" min="2020-01-01" max="2099-12-31">
+      <input type="number" class="wt-goal-input" id="wt-weekly-value-input" placeholder="kg" step="0.1" min="20" max="300">
+      <button class="wt-goal-set-btn" onclick="addWeeklyGoal()">新增</button>
+    </div>
+    <div id="wt-weekly-summary"></div>
+    <div id="wt-weekly-list"></div>
+  </div>
   <div class="wt-period-row">
     <button class="wt-period-btn active" data-months="1" onclick="setPeriod(this)">近 1 個月</button>
     <button class="wt-period-btn" data-months="3" onclick="setPeriod(this)">近 3 個月</button>
     <button class="wt-period-btn" data-months="0" onclick="setPeriod(this)">全部</button>
   </div>
-  <div class="wt-hist-label">趨勢圖</div>
+  <div class="wt-hist-label">趨勢圖（含 7 日移動平均）</div>
   <div id="wt-chart-area"></div>
   <div class="wt-hist-label">歷史記錄</div>
   <div id="wt-list"></div>
@@ -711,7 +760,9 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 <div class="wt-overlay" id="wt-overlay" onclick="wtOverlayClick(event)">
   <div class="wt-modal">
     <div class="modal-handle"></div>
-    <div class="wt-modal-title">⚖️ 記錄本週體重</div>
+    <div class="wt-modal-title">⚖️ 記錄每日體重</div>
+    <div class="field-label">日期</div>
+    <input type="date" class="field-input" id="wt-quick-date" min="2020-01-01" max="2099-12-31" onchange="onWtDateChange()">
     <div class="wt-inp-row">
       <input type="number" class="wt-number" id="wt-quick-input" placeholder="0.0" step="0.1" min="30" max="200">
       <span class="wt-unit">kg</span>
@@ -726,6 +777,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 <script>
 // ═══════════ STORAGE KEYS ═══════════
 const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', RUN_KEY='run_v1', PERIOD_KEY='period_v1', PERIOD_SETTINGS_KEY='period_settings_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
+const WT_WEEKLY_GOAL_KEY='wt_weekly_goal_v1', WT_MILESTONE_KEY='wt_milestone_v1';
 
 // ═══════════ STATE ═══════════
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)||'[]');
@@ -744,6 +796,16 @@ if(!events.length){
 
 let weightLog=JSON.parse(localStorage.getItem(WT_KEY)||'[]');
 let weightGoal=parseFloat(localStorage.getItem(WT_GOAL_KEY)||'0')||0;
+let weeklyWeightGoals=JSON.parse(localStorage.getItem(WT_WEEKLY_GOAL_KEY)||'[]');
+let weightMilestonesAchieved=JSON.parse(localStorage.getItem(WT_MILESTONE_KEY)||'{}');
+const WEIGHT_MILESTONES=[55,53,52];
+// 同一天只保留一筆體重紀錄；若舊資料中同一天有多筆，合併為最後一筆並存回。
+(function dedupeWeightLogByDate(){
+  const map={};
+  weightLog.forEach(w=>{ map[w.date]=w; });
+  const deduped=Object.values(map).sort((a,b)=>a.date.localeCompare(b.date));
+  if(deduped.length!==weightLog.length){ weightLog=deduped; localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
+})();
 let runLog=JSON.parse(localStorage.getItem(RUN_KEY)||'[]');
 let periodLog=JSON.parse(localStorage.getItem(PERIOD_KEY)||'[]');
 let periodSettings=JSON.parse(localStorage.getItem(PERIOD_SETTINGS_KEY)||'{"cycle":28,"length":5}');
@@ -778,6 +840,8 @@ function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
 function savePeriod(){ localStorage.setItem(PERIOD_KEY,JSON.stringify(periodLog)); }
 function savePeriodSettingsStore(){ localStorage.setItem(PERIOD_SETTINGS_KEY,JSON.stringify(periodSettings)); }
 function saveGoal(){ localStorage.setItem(WT_GOAL_KEY,String(weightGoal)); }
+function saveWeeklyGoals(){ localStorage.setItem(WT_WEEKLY_GOAL_KEY,JSON.stringify(weeklyWeightGoals)); }
+function saveMilestones(){ localStorage.setItem(WT_MILESTONE_KEY,JSON.stringify(weightMilestonesAchieved)); }
 function saveKB(){ localStorage.setItem(KB_KEY,JSON.stringify(kbNotes)); }
 function uid(){ return 'id'+(Date.now())+(Math.random()*1000|0); }
 
@@ -795,6 +859,7 @@ function getWeekKey(dateStr){
   return `${d.getFullYear()}-W${String(wk).padStart(2,'0')}`;
 }
 function hasWeightThisWeek(){ return weightLog.some(w=>getWeekKey(w.date)===getWeekKey(todayStr())); }
+function hasWeightToday(){ return weightLog.some(w=>w.date===todayStr()); }
 
 // ═══════════ DAY CHANGE (carry-over) ═══════════
 function runDayChange(){
@@ -1508,7 +1573,7 @@ function updateBadges(){
   if(unfinishedToday>0){const b=document.createElement('span');b.className='tab-badge';b.textContent=unfinishedToday;todayTab.appendChild(b);}
   const wtTab=document.getElementById('tab-weight');
   wtTab.querySelector('.tab-badge')?.remove();
-  if(!hasWeightThisWeek()){const b=document.createElement('span');b.className='tab-badge';b.textContent='!';wtTab.appendChild(b);}
+  if(!hasWeightToday()){const b=document.createElement('span');b.className='tab-badge';b.textContent='!';wtTab.appendChild(b);}
 }
 
 // ═══════════ SWITCH TAB ═══════════
@@ -1726,20 +1791,194 @@ function startModalSR(SR){
 function stopModalVoice(){ modalVoiceRecording=false; document.getElementById('voice-area').classList.remove('active'); if(modalVoiceRec){try{modalVoiceRec.stop();}catch(e){} modalVoiceRec=null;} }
 
 // ═══════════ WEIGHT ═══════════
+function getSortedWeightLog(){ return [...weightLog].sort((a,b)=>a.date.localeCompare(b.date)); }
+
+// 7 日移動平均：取該筆與之前最多 6 筆「有效紀錄」平均，不足 7 筆就用現有筆數平均，不補日曆空值。
+function computeWeightMA(sortedArr){
+  return sortedArr.map((w,i)=>{
+    const start=Math.max(0,i-6);
+    const win=sortedArr.slice(start,i+1);
+    const avg=win.reduce((s,x)=>s+x.value,0)/win.length;
+    return {...w,ma7:avg};
+  });
+}
+
+function getWeightTrendDirection(){
+  if(weightGoal>0 && weightLog.length){
+    const first=getSortedWeightLog()[0].value;
+    if(first!==weightGoal) return first>weightGoal?-1:1;
+  }
+  if(weeklyWeightGoals.length>=2){
+    const sorted=[...weeklyWeightGoals].sort((a,b)=>a.date.localeCompare(b.date));
+    const f=sorted[0].value,l=sorted[sorted.length-1].value;
+    if(f!==l) return f>l?-1:1;
+  }
+  return -1;
+}
+
+function checkMilestones(latestValue){
+  if(latestValue==null) return;
+  let changed=false;
+  WEIGHT_MILESTONES.forEach(m=>{
+    if(latestValue<=m && !weightMilestonesAchieved[m]){
+      weightMilestonesAchieved[m]=true; changed=true;
+      showToast(`🎉 達成里程碑：${m} kg！`);
+    }
+  });
+  if(changed) saveMilestones();
+}
+
+function getWeeklyGoalStatus(){
+  const today=todayStr();
+  const sortedGoals=[...weeklyWeightGoals].sort((a,b)=>a.date.localeCompare(b.date));
+  const thisWeekGoal=sortedGoals.find(g=>getWeekKey(g.date)===getWeekKey(today))||null;
+  const futureGoals=sortedGoals.filter(g=>g.date>=today);
+  const nextGoal=thisWeekGoal?(futureGoals.find(g=>g.id!==thisWeekGoal.id)||null):(futureGoals[0]||null);
+  let achieved=false, diff=null;
+  if(thisWeekGoal && weightLog.length){
+    const latest=getSortedWeightLog().slice(-1)[0].value;
+    diff=latest-thisWeekGoal.value;
+    const dir=getWeightTrendDirection();
+    achieved=dir===-1?latest<=thisWeekGoal.value:latest>=thisWeekGoal.value;
+  }
+  return {thisWeekGoal,nextGoal,achieved,diff};
+}
+
+function renderWeightSummary(){
+  const area=document.getElementById('wt-summary-area');
+  if(!area) return;
+  if(!weightLog.length){
+    area.innerHTML=`<div class="wt-summary-card"><div class="wt-summary-label">最新體重</div><div class="wt-summary-main" style="font-size:18px">尚無紀錄</div><div class="wt-milestone-row">${WEIGHT_MILESTONES.map(m=>`<span class="wt-milestone-chip">${m}kg</span>`).join('')}</div></div>`;
+    return;
+  }
+  const maSorted=computeWeightMA(getSortedWeightLog());
+  const latestRow=maSorted[maSorted.length-1];
+  const prevRow=maSorted.length>=2?maSorted[maSorted.length-2]:null;
+  const firstRow=maSorted[0];
+  checkMilestones(latestRow.value);
+  const[,m,d]=latestRow.date.split('-');
+  const dayName=['日','一','二','三','四','五','六'][new Date(latestRow.date).getDay()];
+  let diffHtml='<span class="wt-summary-diff same">首筆紀錄</span>';
+  if(prevRow){
+    const dv=latestRow.value-prevRow.value;
+    const cls=dv>0?'up':dv<0?'down':'same';
+    const sym=dv>0?'▲':dv<0?'▼':'→';
+    diffHtml=`<span class="wt-summary-diff ${cls}">${sym} ${Math.abs(dv).toFixed(1)} kg</span>`;
+  }
+  let goalDistHtml='<div class="wt-summary-item-val">未設定</div>';
+  if(weightGoal>0){
+    const gd=latestRow.value-weightGoal;
+    const cls=gd>0?'neg':gd<0?'pos':'';
+    goalDistHtml=`<div class="wt-summary-item-val ${cls}">${gd==0?'已達標':Math.abs(gd).toFixed(1)+' kg'}</div>`;
+  }
+  const totalChange=latestRow.value-firstRow.value;
+  const totalCls=totalChange>0?'neg':totalChange<0?'pos':'';
+  const totalLabel=totalChange>0?`增加 ${totalChange.toFixed(1)}`:totalChange<0?`減少 ${Math.abs(totalChange).toFixed(1)}`:'持平';
+  const wk=getWeeklyGoalStatus();
+  let wkHtml='<div class="wt-summary-item-val">未設定</div>';
+  if(wk.thisWeekGoal && wk.diff!=null){
+    const cls=wk.achieved?'pos':'neg';
+    wkHtml=`<div class="wt-summary-item-val ${cls}">${wk.diff==0?'已達標':(wk.diff>0?'+':'')+wk.diff.toFixed(1)+' kg'}</div>`;
+  }
+  area.innerHTML=`<div class="wt-summary-card">
+    <div class="wt-summary-top">
+      <div>
+        <div class="wt-summary-label">最新體重</div>
+        <div class="wt-summary-main">${latestRow.value}<span style="font-size:13px"> kg</span></div>
+        <div class="wt-summary-date">${parseInt(m)}/${parseInt(d)}（週${dayName}）</div>
+      </div>
+      ${diffHtml}
+    </div>
+    <div class="wt-summary-grid">
+      <div class="wt-summary-item"><div class="wt-summary-item-label">7 日平均</div><div class="wt-summary-item-val">${latestRow.ma7.toFixed(1)} kg</div></div>
+      <div class="wt-summary-item"><div class="wt-summary-item-label">本週目標差距</div>${wkHtml}</div>
+      <div class="wt-summary-item"><div class="wt-summary-item-label">距最終目標</div>${goalDistHtml}</div>
+      <div class="wt-summary-item"><div class="wt-summary-item-label">累積變化</div><div class="wt-summary-item-val ${totalCls}">${totalLabel} kg</div></div>
+    </div>
+    <div class="wt-milestone-row">${WEIGHT_MILESTONES.map(m2=>`<span class="wt-milestone-chip ${weightMilestonesAchieved[m2]?'done':''}">${weightMilestonesAchieved[m2]?'✓':'○'} ${m2}kg</span>`).join('')}</div>
+  </div>`;
+}
+
+function renderPeriodTip(){
+  const area=document.getElementById('wt-period-tip-area');
+  if(!area) return;
+  if(!weightLog.length){ area.innerHTML=''; return; }
+  const latest=getSortedWeightLog().slice(-1)[0];
+  const status=getPeriodStatusForDate(latest.date);
+  if(status==='period'){
+    area.innerHTML=`<div class="wt-tip">🌙 生理期期間：目前可能有水分波動，請以 7 日平均為主。</div>`;
+  } else if(status==='pre'){
+    area.innerHTML=`<div class="wt-tip">🌙 生理期前 7 天：體重可能因黃體期水分滯留而上升，請勿因單日數字過度調整飲食。</div>`;
+  } else {
+    area.innerHTML='';
+  }
+}
+
+function renderWeeklyGoals(){
+  const sumEl=document.getElementById('wt-weekly-summary');
+  const listEl=document.getElementById('wt-weekly-list');
+  if(!sumEl||!listEl) return;
+  const status=getWeeklyGoalStatus();
+  const parts=[];
+  if(status.thisWeekGoal){
+    parts.push(`本週目標：<b>${status.thisWeekGoal.value} kg</b>（${fmtDate(status.thisWeekGoal.date)}）`);
+    if(status.diff!=null){
+      const tag=status.achieved?`<span class="wt-weekly-tag hit">✓ 已達標</span>`:`<span class="wt-weekly-tag miss">尚未達標</span>`;
+      parts.push(`與本週目標差距：${status.diff>0?'+':''}${status.diff.toFixed(1)} kg ${tag}`);
+    }
+  } else {
+    parts.push('本週尚未設定目標');
+  }
+  if(status.nextGoal){
+    parts.push(`下一個目標：${fmtDate(status.nextGoal.date)}　<b>${status.nextGoal.value} kg</b>`);
+  }
+  sumEl.innerHTML=`<div class="wt-weekly-summary">${parts.join('<br>')}</div>`;
+  const sortedGoals=[...weeklyWeightGoals].sort((a,b)=>a.date.localeCompare(b.date));
+  if(!sortedGoals.length){ listEl.innerHTML=''; return; }
+  const latestVal=weightLog.length?getSortedWeightLog().slice(-1)[0].value:null;
+  const dir=getWeightTrendDirection();
+  listEl.innerHTML=sortedGoals.map(g=>{
+    let tag='';
+    if(g.date<=todayStr() && latestVal!=null){
+      const hit=dir===-1?latestVal<=g.value:latestVal>=g.value;
+      tag=hit?`<span class="wt-weekly-tag hit">✓ 達標</span>`:`<span class="wt-weekly-tag miss">未達標</span>`;
+    }
+    return `<div class="wt-entry"><div class="wt-entry-top"><span class="wt-entry-date">${fmtDate(g.date)}</span>${tag}<button class="wt-del" onclick="delWeeklyGoal('${g.id}')">✕</button></div><div class="wt-entry-bottom"><span class="wt-entry-val">${g.value} kg</span></div></div>`;
+  }).join('');
+}
+
+function addWeeklyGoal(){
+  const dateInp=document.getElementById('wt-weekly-date-input');
+  const valInp=document.getElementById('wt-weekly-value-input');
+  const date=dateInp.value;
+  const v=parseFloat(valInp.value);
+  if(!date){ showToast('請選擇日期'); return; }
+  if(!v||v<20||v>300){ showToast('請輸入正確體重'); return; }
+  const existing=weeklyWeightGoals.find(g=>g.date===date);
+  if(existing){ existing.value=v; } else { weeklyWeightGoals.push({id:uid(),date,value:v}); }
+  saveWeeklyGoals();
+  valInp.value=''; dateInp.value='';
+  renderWeight();
+  showToast('✓ 已設定每週目標');
+}
+function delWeeklyGoal(id){ weeklyWeightGoals=weeklyWeightGoals.filter(g=>g.id!==id); saveWeeklyGoals(); renderWeight(); }
+
 function renderWeight(){
   const area=document.getElementById('wt-reminder-area');
-  const needLog=!hasWeightThisWeek();
+  const needLog=!hasWeightToday();
   if(needLog){
-    area.innerHTML=`<div class="wt-reminder"><div class="wt-icon">⚖️</div><div class="wt-reminder-body"><div class="wt-reminder-title">本週還沒量體重</div><div class="wt-reminder-sub">每週量一次追蹤健康趨勢 💪</div></div><button class="wt-log-btn" onclick="openWtModal()">記錄</button></div>`;
+    area.innerHTML=`<div class="wt-reminder"><div class="wt-icon">⚖️</div><div class="wt-reminder-body"><div class="wt-reminder-title">今天還沒量體重</div><div class="wt-reminder-sub">每天量一次追蹤健康趨勢 💪</div></div><button class="wt-log-btn" onclick="openWtModal()">記錄</button></div>`;
   } else {
-    const latest=weightLog.filter(w=>getWeekKey(w.date)===getWeekKey(todayStr())).slice(-1)[0];
+    const latest=weightLog.find(w=>w.date===todayStr());
     const [,m,d]=latest.date.split('-');
     const dayName=['日','一','二','三','四','五','六'][new Date(latest.date).getDay()];
-    const nextDate=new Date(latest.date); nextDate.setDate(nextDate.getDate()+7);
-    const nextLabel=`下次建議：${nextDate.getMonth()+1}/${nextDate.getDate()}`;
-    area.innerHTML=`<div class="wt-reminder" style="background:linear-gradient(135deg,#eaf4ec,#d8eedd);border-color:#8fc49a;"><div class="wt-icon">✅</div><div class="wt-reminder-body"><div class="wt-reminder-title" style="color:#3a7a48">本週已記錄！</div><div class="wt-reminder-sub" style="color:#4a9058"><strong>${latest.value} kg</strong>　${parseInt(m)}/${parseInt(d)}（週${dayName}）<br>${nextLabel}</div></div><button class="wt-log-btn" style="background:#5a9a68" onclick="openWtModal()">更新</button></div>`;
+    area.innerHTML=`<div class="wt-reminder" style="background:linear-gradient(135deg,#eaf4ec,#d8eedd);border-color:#8fc49a;"><div class="wt-icon">✅</div><div class="wt-reminder-body"><div class="wt-reminder-title" style="color:#3a7a48">今天已記錄！</div><div class="wt-reminder-sub" style="color:#4a9058"><strong>${latest.value} kg</strong>　${parseInt(m)}/${parseInt(d)}（週${dayName}）</div></div><button class="wt-log-btn" style="background:#5a9a68" onclick="openWtModal()">更新</button></div>`;
   }
-  renderGoalBar(); renderWeightList();
+  renderWeightSummary();
+  renderPeriodTip();
+  renderGoalBar();
+  renderWeeklyGoals();
+  renderWeightList();
 }
 
 function setGoal(){
@@ -1755,7 +1994,7 @@ function renderGoalBar(){
   if(!weightGoal){disp.textContent='未設定';prog.style.display='none';return;}
   disp.textContent=weightGoal+' kg';
   if(!weightLog.length){prog.style.display='none';return;}
-  const sorted=[...weightLog].sort((a,b)=>a.date.localeCompare(b.date));
+  const sorted=getSortedWeightLog();
   const latest=sorted[sorted.length-1].value;
   const first=sorted[0].value;
   const totalNeeded=Math.abs(first-weightGoal)||1;
@@ -1776,31 +2015,42 @@ function filterByPeriod(log){ if(!chartMonths)return[...log]; const cutoff=new D
 function renderWeightList(){
   const listEl=document.getElementById('wt-list'); const chartEl=document.getElementById('wt-chart-area');
   if(!weightLog.length){listEl.innerHTML=`<div class="wt-empty">🌱 還沒有記錄，開始量體重吧！</div>`;chartEl.innerHTML='';return;}
-  const allSorted=[...weightLog].sort((a,b)=>a.date.localeCompare(b.date));
-  const filtered=filterByPeriod(allSorted);
+  const allWithMA=computeWeightMA(getSortedWeightLog());
+  const filtered=filterByPeriod(allWithMA);
   if(filtered.length<2){chartEl.innerHTML=`<div class="wt-chart"><div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;font-weight:700;">記錄更多才能顯示趨勢圖</div></div>`;}
   else{
     const vals=filtered.map(w=>w.value);
-    const allVals=weightGoal>0?[...vals,weightGoal]:vals;
+    const maVals=filtered.map(w=>w.ma7);
+    const domainStart=filtered[0].date, domainEnd=filtered[filtered.length-1].date;
+    const weeklyGoalsInRange=weeklyWeightGoals.filter(g=>g.date>=domainStart&&g.date<=domainEnd);
+    const allVals=[...vals,...maVals];
+    if(weightGoal>0) allVals.push(weightGoal);
+    weeklyGoalsInRange.forEach(g=>allVals.push(g.value));
     const raw_mn=Math.min(...allVals),raw_mx=Math.max(...allVals);
     const pv=(raw_mx-raw_mn)||2;
     const mn=raw_mn-pv*.25,mx=raw_mx+pv*.25;
     const W=320,H=110,padL=36,padR=10,padT=12,padB=24,cW=W-padL-padR,cH=H-padT-padB;
-    const toX=i=>padL+(i/(filtered.length-1))*cW;
+    const firstTime=parseDateLocal(domainStart).getTime();
+    const lastTime=parseDateLocal(domainEnd).getTime();
+    const timeSpan=(lastTime-firstTime)||1;
+    const toX=dateStr=>padL+((parseDateLocal(dateStr).getTime()-firstTime)/timeSpan)*cW;
     const toY=v=>padT+cH-((v-mn)/(mx-mn))*cH;
-    const pts=filtered.map((w,i)=>({x:toX(i),y:toY(w.value),v:w.value,date:w.date}));
+    const pts=filtered.map(w=>({x:toX(w.date),y:toY(w.value),v:w.value,date:w.date}));
+    const maPts=filtered.map(w=>({x:toX(w.date),y:toY(w.ma7),v:w.ma7,date:w.date}));
     const path=pts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
+    const maPath=maPts.map((p,i)=>i===0?`M${p.x},${p.y}`:`L${p.x},${p.y}`).join(' ');
     const area=`${path} L${pts[pts.length-1].x},${padT+cH} L${pts[0].x},${padT+cH} Z`;
     const ySteps=[mn,(mn+mx)/2,mx];
     const yLabels=ySteps.map(v=>`<text x="${padL-4}" y="${toY(v)+3}" text-anchor="end" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${v.toFixed(1)}</text>`).join('');
     const idxs=[0,Math.floor((filtered.length-1)/2),filtered.length-1].filter((v,i,a)=>a.indexOf(v)===i&&filtered.length>1);
-    const xLabels=idxs.map(i=>{const[,m,d]=filtered[i].date.split('-');return `<text x="${toX(i)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${parseInt(m)}/${parseInt(d)}</text>`;}).join('');
+    const xLabels=idxs.map(i=>{const[,m,d]=filtered[i].date.split('-');return `<text x="${toX(filtered[i].date)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${parseInt(m)}/${parseInt(d)}</text>`;}).join('');
     let goalLine='';
     if(weightGoal>0&&weightGoal>=mn&&weightGoal<=mx){const gy=toY(weightGoal);goalLine=`<line x1="${padL}" y1="${gy}" x2="${padL+cW}" y2="${gy}" stroke="#7b9bba" stroke-width="1.5" stroke-dasharray="5,4" opacity=".7"/><text x="${padL+cW-2}" y="${gy-4}" text-anchor="end" font-size="9" fill="#7b9bba" font-weight="800" font-family="Nunito,sans-serif">目標 ${weightGoal}</text>`;}
+    const weeklyMarks=weeklyGoalsInRange.map(g=>{const gx=toX(g.date),gy=toY(g.value);return `<line x1="${gx}" y1="${gy-5}" x2="${gx}" y2="${gy+5}" stroke="#9e8db5" stroke-width="1.5" stroke-dasharray="2,2"/><circle cx="${gx}" cy="${gy}" r="3" fill="none" stroke="#9e8db5" stroke-width="1.5"><title>每週目標 ${g.date} · ${g.value}kg</title></circle>`;}).join('');
     const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#b5936a" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${p.v}kg</title></circle>`).join('');
     const periodLabel=chartMonths===1?'近 1 個月':chartMonths===3?'近 3 個月':'全部記錄';
     const minV=Math.min(...vals).toFixed(1),maxV=Math.max(...vals).toFixed(1);
-    chartEl.innerHTML=`<div class="wt-chart"><div class="wt-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} kg</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b5936a" stop-opacity=".22"/><stop offset="100%" stop-color="#b5936a" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}${goalLine}<path d="${area}" fill="url(#wg3)"/><path d="${path}" fill="none" stroke="#b5936a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
+    chartEl.innerHTML=`<div class="wt-chart"><div class="wt-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} kg</span></div><div style="display:flex;gap:12px;margin-bottom:6px;font-size:9px;font-weight:800;color:var(--muted)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#b5936a;margin-right:3px"></span>每日體重</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6b4a2f;margin-right:3px"></span>7日平均</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b5936a" stop-opacity=".22"/><stop offset="100%" stop-color="#b5936a" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}${goalLine}${weeklyMarks}<path d="${area}" fill="url(#wg3)"/><path d="${maPath}" fill="none" stroke="#6b4a2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/><path d="${path}" fill="none" stroke="#b5936a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
   }
   const rev=[...filtered].reverse();
   listEl.innerHTML=rev.map((w,i)=>{
@@ -1809,15 +2059,38 @@ function renderWeightList(){
     if(prev){const dv=(w.value-prev.value).toFixed(1);const cls=dv>0?'up':dv<0?'down':'same';const sym=dv>0?'▲':dv<0?'▼':'→';diff=`<span class="wt-entry-diff ${cls}">${sym} ${Math.abs(dv)}</span>`;}
     const[,m,day]=w.date.split('-');
     const dayName=['日','一','二','三','四','五','六'][new Date(w.date).getDay()];
-    return `<div class="wt-entry"><div class="wt-entry-date">${parseInt(m)}/${parseInt(day)}（週${dayName}）</div><div class="wt-entry-val">${w.value} kg</div>${diff}<button class="wt-del" onclick="delWeight('${w.id}')">✕</button></div>`;
+    const pStatus=getPeriodStatusForDate(w.date);
+    const pTag=pStatus==='period'?`<span class="wt-tag-period">生理期</span>`:pStatus==='pre'?`<span class="wt-tag-pre">經期前</span>`:'';
+    return `<div class="wt-entry"><div class="wt-entry-top"><span class="wt-entry-date">${parseInt(m)}/${parseInt(day)}（週${dayName}）</span>${pTag}<button class="wt-del" onclick="delWeight('${w.id}')">✕</button></div><div class="wt-entry-bottom"><span class="wt-entry-val">${w.value} kg</span>${diff}<span class="wt-entry-avg">7日均 ${w.ma7.toFixed(1)}</span></div></div>`;
   }).join('')||`<div class="wt-empty">此時段沒有記錄</div>`;
 }
 
-function openWtModal(){ document.getElementById('wt-quick-input').value=''; document.getElementById('wt-overlay').classList.add('visible'); setTimeout(()=>document.getElementById('wt-quick-input').focus(),300); }
+function openWtModal(dateStr){
+  const d=dateStr||todayStr();
+  document.getElementById('wt-quick-date').value=d;
+  const existing=weightLog.find(w=>w.date===d);
+  document.getElementById('wt-quick-input').value=existing?existing.value:'';
+  document.getElementById('wt-overlay').classList.add('visible');
+  setTimeout(()=>document.getElementById('wt-quick-input').focus(),300);
+}
 function closeWtModal(){ document.getElementById('wt-overlay').classList.remove('visible'); }
 function wtOverlayClick(e){ if(e.target.id==='wt-overlay') closeWtModal(); }
-function saveWeightFromModal(){ const v=parseFloat(document.getElementById('wt-quick-input').value); if(!v||v<20||v>300){showToast('請輸入正確體重');return;} weightLog.push({id:uid(),date:todayStr(),value:v}); saveWt(); renderWeight(); updateBadges(); closeWtModal(); showToast(`記錄成功：${v} kg ✓`); }
-function delWeight(id){ weightLog=weightLog.filter(w=>w.id!==id); saveWt(); renderWeight(); }
+function onWtDateChange(){
+  const d=document.getElementById('wt-quick-date').value||todayStr();
+  const existing=weightLog.find(w=>w.date===d);
+  document.getElementById('wt-quick-input').value=existing?existing.value:'';
+}
+function saveWeightFromModal(){
+  const v=parseFloat(document.getElementById('wt-quick-input').value);
+  const dateVal=document.getElementById('wt-quick-date').value||todayStr();
+  if(!v||v<20||v>300){showToast('請輸入正確體重');return;}
+  // 同一天只保留一筆：已有當天紀錄就更新，否則新增。
+  const existing=weightLog.find(w=>w.date===dateVal);
+  if(existing){ existing.value=v; } else { weightLog.push({id:uid(),date:dateVal,value:v}); }
+  saveWt(); renderWeight(); updateBadges(); closeWtModal();
+  showToast(existing?`已更新：${v} kg ✓`:`記錄成功：${v} kg ✓`);
+}
+function delWeight(id){ weightLog=weightLog.filter(w=>w.id!==id); saveWt(); renderWeight(); updateBadges(); }
 
 
 // ═══════════ RUNNING ═══════════
@@ -2016,6 +2289,30 @@ function getNextPeriodPrediction(){
   while(addDays(start,periodSettings.length-1)<todayStr()){ start=addDays(start,periodSettings.cycle); }
   return {start,end:addDays(start,periodSettings.length-1)};
 }
+// 供體重分頁使用：判斷某一天是否落在「生理期期間」或「預測生理期前 7 天」，只讀取 periodLog / periodSettings，不改動生理期功能本身。
+function getPeriodStatusForDate(dateStr){
+  if(!dateStr) return null;
+  normalizePeriodSettings();
+  for(const p of periodLog){
+    if(!p.start) continue;
+    const end=getPeriodEnd(p);
+    if(p.start<=dateStr && end>=dateStr) return 'period';
+  }
+  const base=getLatestPeriodStart();
+  if(!base) return null;
+  const cycle=periodSettings.cycle, len=periodSettings.length;
+  let start=base;
+  while(start>dateStr){ start=addDays(start,-cycle); }
+  while(addDays(start,cycle)<=dateStr){ start=addDays(start,cycle); }
+  const end=addDays(start,len-1);
+  if(start<=dateStr && end>=dateStr) return 'period';
+  const preStart=addDays(start,-7), preEnd=addDays(start,-1);
+  if(preStart<=dateStr && preEnd>=dateStr) return 'pre';
+  const nextStart=addDays(start,cycle);
+  const nextPreStart=addDays(nextStart,-7), nextPreEnd=addDays(nextStart,-1);
+  if(nextPreStart<=dateStr && nextPreEnd>=dateStr) return 'pre';
+  return null;
+}
 function renderPeriod(){
   normalizePeriodSettings();
   const startInp=document.getElementById('period-start-input');
@@ -2162,7 +2459,7 @@ function exportCalendar(){
 // ═══════════ SYNC ═══════════
 function exportData(){
   const data={
-    events, weightLog, weightGoal, runLog, periodLog, periodSettings, kbNotes,
+    events, weightLog, weightGoal, weeklyWeightGoals, weightMilestonesAchieved, runLog, periodLog, periodSettings, kbNotes,
     exportedAt: new Date().toISOString(),
     version: 1
   };
@@ -2193,6 +2490,8 @@ function importData(event){
       if(data.events)    { events=data.events;     saveEvents(); }
       if(data.weightLog) { weightLog=data.weightLog; saveWt(); }
       if(data.weightGoal){ weightGoal=data.weightGoal; saveGoal(); }
+      if(data.weeklyWeightGoals){ weeklyWeightGoals=data.weeklyWeightGoals; saveWeeklyGoals(); }
+      if(data.weightMilestonesAchieved){ weightMilestonesAchieved=data.weightMilestonesAchieved; saveMilestones(); }
       if(data.runLog)    { runLog=data.runLog;     saveRun(); }
       if(data.periodLog) { periodLog=data.periodLog; savePeriod(); }
       if(data.periodSettings){ periodSettings=data.periodSettings; savePeriodSettingsStore(); }
