@@ -1873,7 +1873,7 @@ function renderWeightSummary(){
   }
   const totalChange=latestRow.value-firstRow.value;
   const totalCls=totalChange>0?'neg':totalChange<0?'pos':'';
-  const totalLabel=totalChange>0?`增加 ${totalChange.toFixed(1)}`:totalChange<0?`減少 ${Math.abs(totalChange).toFixed(1)}`:'持平';
+  const totalLabel=totalChange>0?`增加 ${totalChange.toFixed(1)} kg`:totalChange<0?`減少 ${Math.abs(totalChange).toFixed(1)} kg`:'持平';
   const wk=getWeeklyGoalStatus();
   let wkHtml='<div class="wt-summary-item-val">未設定</div>';
   if(wk.thisWeekGoal && wk.diff!=null){
@@ -1893,7 +1893,7 @@ function renderWeightSummary(){
       <div class="wt-summary-item"><div class="wt-summary-item-label">7 日平均</div><div class="wt-summary-item-val">${latestRow.ma7.toFixed(1)} kg</div></div>
       <div class="wt-summary-item"><div class="wt-summary-item-label">本週目標差距</div>${wkHtml}</div>
       <div class="wt-summary-item"><div class="wt-summary-item-label">距最終目標</div>${goalDistHtml}</div>
-      <div class="wt-summary-item"><div class="wt-summary-item-label">累積變化</div><div class="wt-summary-item-val ${totalCls}">${totalLabel} kg</div></div>
+      <div class="wt-summary-item"><div class="wt-summary-item-label">累積變化</div><div class="wt-summary-item-val ${totalCls}">${totalLabel}</div></div>
     </div>
     <div class="wt-milestone-row">${WEIGHT_MILESTONES.map(m2=>`<span class="wt-milestone-chip ${weightMilestonesAchieved[m2]?'done':''}">${weightMilestonesAchieved[m2]?'✓':'○'} ${m2}kg</span>`).join('')}</div>
   </div>`;
@@ -1925,6 +1925,8 @@ function renderWeeklyGoals(){
     if(status.diff!=null){
       const tag=status.achieved?`<span class="wt-weekly-tag hit">✓ 已達標</span>`:`<span class="wt-weekly-tag miss">尚未達標</span>`;
       parts.push(`與本週目標差距：${status.diff>0?'+':''}${status.diff.toFixed(1)} kg ${tag}`);
+    } else {
+      parts.push('與本週目標差距：尚無體重紀錄');
     }
   } else {
     parts.push('本週尚未設定目標');
@@ -2056,7 +2058,7 @@ function renderWeightList(){
   listEl.innerHTML=rev.map((w,i)=>{
     const prev=rev[i+1];
     let diff='';
-    if(prev){const dv=(w.value-prev.value).toFixed(1);const cls=dv>0?'up':dv<0?'down':'same';const sym=dv>0?'▲':dv<0?'▼':'→';diff=`<span class="wt-entry-diff ${cls}">${sym} ${Math.abs(dv)}</span>`;}
+    if(prev){const dv=w.value-prev.value;const cls=dv>0?'up':dv<0?'down':'same';const sym=dv>0?'▲':dv<0?'▼':'→';diff=`<span class="wt-entry-diff ${cls}">${sym} ${Math.abs(dv).toFixed(1)} kg</span>`;}
     const[,m,day]=w.date.split('-');
     const dayName=['日','一','二','三','四','五','六'][new Date(w.date).getDay()];
     const pStatus=getPeriodStatusForDate(w.date);
