@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🌳 小幫手</title>
+<title>🌳💗 小幫手</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="小幫手">
@@ -20,20 +20,15 @@
   // background circle
   ctx.fillStyle='#7a9e87';
   ctx.beginPath();ctx.arc(96,96,96,0,Math.PI*2);ctx.fill();
-  // trunk
-  ctx.fillStyle='#5c4033';
-  ctx.fillRect(82,130,28,45);
-  // tree layers
+  // heart
   ctx.fillStyle='#ffffff';
-  // bottom layer
-  ctx.beginPath();ctx.moveTo(96,30);ctx.lineTo(148,95);ctx.lineTo(44,95);ctx.closePath();ctx.fill();
-  // middle layer
-  ctx.beginPath();ctx.moveTo(96,50);ctx.lineTo(142,108);ctx.lineTo(50,108);ctx.closePath();ctx.fill();
-  // top layer
-  ctx.beginPath();ctx.moveTo(96,68);ctx.lineTo(136,122);ctx.lineTo(56,122);ctx.closePath();ctx.fill();
-  // overlap fix - redraw trunk on top
-  ctx.fillStyle='#5c4033';
-  ctx.fillRect(82,122,28,48);
+  ctx.beginPath();
+  ctx.moveTo(96,152);
+  ctx.bezierCurveTo(38,110,32,62,66,48);
+  ctx.bezierCurveTo(84,41,96,56,96,68);
+  ctx.bezierCurveTo(96,56,108,41,126,48);
+  ctx.bezierCurveTo(160,62,154,110,96,152);
+  ctx.closePath();ctx.fill();
 
   const png=c.toDataURL('image/png');
   // set favicon
@@ -58,8 +53,8 @@
   --green:#7a9e87; --green-d:#5c7f6c; --green-s:#e0ede6;
   --blue:#7b9bba; --blue-s:#e2eaf3;
   --purple:#9e8db5; --purple-s:#eae6f2;
-  --orange:#b5936a; --orange-s:#f2e8dc;
-  --red:#b5746a; --red-s:#f2e0de;
+  --orange:#c2a032; --orange-s:#faf3d6;
+  --red:#f06292; --red-s:#fde0eb;
   --text:#3c403a; --muted:#8e9488;
   --shadow:rgba(122,158,135,.12);
 }
@@ -89,7 +84,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .section{padding:0 16px 90px;display:none;}
 .section.visible{display:block;}
 .sec-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:5px;}
-.sec-label::before{content:'';width:3px;height:12px;border-radius:2px;background:currentColor;flex-shrink:0;}
+.sec-label::before{content:'\2665';font-size:10px;color:currentColor;flex-shrink:0;}
 
 /* ── CALENDAR ── */
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
@@ -122,7 +117,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .cal-event-pill{display:block;width:100%;font-size:9px;font-weight:700;padding:1px 4px;border-radius:3px;margin-bottom:1px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.5;}
 .cal-event-pill.schedule{background:var(--green-s);color:var(--green-d);}
 .cal-event-pill.schedule.multi-day{background:#d0e8d8;color:#3a6b4a;}
-.cal-event-pill.trip{background:var(--orange-s);color:#8a5c30;}
+.cal-event-pill.trip{background:var(--orange-s);color:#8a7420;}
 .cal-event-pill.task-soon{background:var(--blue-s);color:var(--blue);}
 .cal-event-pill.task-year{background:var(--purple-s);color:var(--purple);}
 .cal-more{font-size:9px;font-weight:700;color:var(--muted);padding:0 4px;}
@@ -195,8 +190,8 @@ textarea.field-input{resize:none;line-height:1.5;}
 .field-row .field-input{margin-bottom:0;}
 
 /* trip toggle */
-.trip-toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;background:var(--orange-s);border-radius:12px;padding:10px 14px;border:1.5px solid #d4a87c;}
-.trip-toggle-label{flex:1;font-size:13px;font-weight:700;color:#8a5c30;}
+.trip-toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;background:var(--orange-s);border-radius:12px;padding:10px 14px;border:1.5px solid #e8d58a;}
+.trip-toggle-label{flex:1;font-size:13px;font-weight:700;color:#8a7420;}
 .toggle-switch{position:relative;width:40px;height:22px;flex-shrink:0;}
 .toggle-switch input{opacity:0;width:0;height:0;}
 .toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:11px;cursor:pointer;transition:.2s;}
@@ -214,23 +209,23 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .voice-area.active{border-color:var(--green);color:var(--green-d);background:var(--green-s);}
 
 /* ── WEIGHT ── */
-.wt-reminder{background:linear-gradient(135deg,var(--orange-s),#ede5d8);border:1.5px solid #d4a87c;border-radius:16px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+.wt-reminder{background:linear-gradient(135deg,var(--orange-s),#f7efc9);border:1.5px solid #e8d58a;border-radius:16px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
 .wt-icon{font-size:30px;flex-shrink:0;}
 .wt-reminder-body{flex:1;}
-.wt-reminder-title{font-size:14px;font-weight:800;color:#8a5c30;margin-bottom:2px;}
-.wt-reminder-sub{font-size:11px;color:#a07040;font-weight:600;}
+.wt-reminder-title{font-size:14px;font-weight:800;color:#8a7420;margin-bottom:2px;}
+.wt-reminder-sub{font-size:11px;color:#a58c2e;font-weight:600;}
 .wt-log-btn{padding:9px 14px;border-radius:10px;border:none;background:var(--orange);color:#fff;font-size:12px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;white-space:nowrap;}
 .wt-goal-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
 .wt-goal-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
 .wt-goal-label{font-size:12px;font-weight:800;color:var(--muted);flex:1;}
 .wt-goal-val{font-size:14px;font-weight:800;color:var(--orange);}
 .wt-goal-inp-row{display:flex;gap:8px;align-items:center;}
-.wt-goal-input{flex:1;background:var(--orange-s);border:1.5px solid #d4a87c;border-radius:10px;padding:9px 12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:15px;font-weight:800;outline:none;text-align:center;}
+.wt-goal-input{flex:1;background:var(--orange-s);border:1.5px solid #e8d58a;border-radius:10px;padding:9px 12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:15px;font-weight:800;outline:none;text-align:center;}
 .wt-goal-input:focus{border-color:var(--orange);}
 .wt-goal-set-btn{padding:9px 14px;border-radius:10px;border:none;background:var(--orange);color:#fff;font-size:12px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;}
 .wt-goal-progress{margin-top:10px;}
 .wt-goal-track{width:100%;height:7px;background:var(--bg);border-radius:5px;overflow:hidden;margin-bottom:4px;}
-.wt-goal-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--orange),#c8aa80);transition:width .6s ease;}
+.wt-goal-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--orange),#e3cf7d);transition:width .6s ease;}
 .wt-goal-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-weight:700;}
 .wt-period-row{display:flex;gap:6px;margin-bottom:12px;}
 .wt-period-btn{flex:1;padding:7px 4px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:800;font-family:'Nunito','Noto Sans TC',sans-serif;cursor:pointer;text-align:center;}
@@ -252,17 +247,17 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-entry-diff.down{background:#e6f0e8;color:#5a8f66;}
 .wt-entry-diff.same{background:var(--bg);color:var(--muted);}
 .wt-tag-period{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:var(--red-s);color:var(--red);white-space:nowrap;}
-.wt-tag-pre{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:#f6ece3;color:#a07040;white-space:nowrap;}
+.wt-tag-pre{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;background:#faf2d2;color:#a58c2e;white-space:nowrap;}
 .wt-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
 .wt-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .wt-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;}
 
 /* ── WEIGHT: summary card ── */
-.wt-summary-card{background:linear-gradient(135deg,var(--orange-s),#f5efe4);border:1.5px solid #d4a87c;border-radius:16px;padding:16px;margin-bottom:12px;}
+.wt-summary-card{background:linear-gradient(135deg,var(--orange-s),#fbf6dd);border:1.5px solid #e8d58a;border-radius:16px;padding:16px;margin-bottom:12px;}
 .wt-summary-top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:12px;}
-.wt-summary-label{font-size:11px;font-weight:800;color:#a07040;margin-bottom:2px;}
-.wt-summary-main{font-size:30px;font-weight:800;color:#8a5c30;line-height:1.1;}
-.wt-summary-date{font-size:10px;color:#a07040;font-weight:700;margin-top:2px;}
+.wt-summary-label{font-size:11px;font-weight:800;color:#a58c2e;margin-bottom:2px;}
+.wt-summary-main{font-size:30px;font-weight:800;color:#8a7420;line-height:1.1;}
+.wt-summary-date{font-size:10px;color:#a58c2e;font-weight:700;margin-top:2px;}
 .wt-summary-diff{font-size:12px;font-weight:800;padding:5px 10px;border-radius:10px;white-space:nowrap;}
 .wt-summary-diff.up{background:var(--red-s);color:var(--red);}
 .wt-summary-diff.down{background:#e6f0e8;color:#5a8f66;}
@@ -270,7 +265,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
 .wt-summary-item{background:var(--surface);border-radius:12px;padding:9px 10px;}
 .wt-summary-item-label{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:3px;}
-.wt-summary-item-val{font-size:15px;font-weight:800;color:#8a5c30;}
+.wt-summary-item-val{font-size:15px;font-weight:800;color:#8a7420;}
 .wt-summary-item-val.pos{color:#5a8f66;}
 .wt-summary-item-val.neg{color:var(--red);}
 .wt-milestone-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
@@ -278,7 +273,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .wt-milestone-chip.done{background:var(--orange);color:#fff;border-color:var(--orange);}
 
 /* ── WEIGHT: period tip ── */
-.wt-tip{border-radius:14px;padding:11px 14px;margin-bottom:12px;font-size:11px;font-weight:700;line-height:1.6;background:#dfeaf0;color:#5f7f92;border:1.5px solid #c3d8e2;}
+.wt-tip{border-radius:14px;padding:11px 14px;margin-bottom:12px;font-size:11px;font-weight:700;line-height:1.6;background:#ffd6e2;color:#d94f7e;border:1.5px solid #ffc2d4;}
 
 /* ── WEIGHT: weekly goal ── */
 .wt-weekly-summary{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:11px;color:var(--text);font-weight:700;line-height:1.9;}
@@ -327,15 +322,15 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .period-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;}
 .period-date{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:12px;font-weight:700;outline:none;color-scheme:light;-webkit-appearance:none;}
 .period-date:focus{border-color:var(--red);}
-.period-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--red);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(181,116,106,.16);}
+.period-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--red);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(240,98,146,.25);}
 .period-save-btn:active{opacity:.85;}
 .period-help{font-size:11px;color:var(--muted);font-weight:700;line-height:1.6;margin:-2px 2px 12px;}
 .period-settings-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.period-setting-box{background:var(--red-s);border:1.5px solid #d8a09a;border-radius:12px;padding:10px;}
+.period-setting-box{background:var(--red-s);border:1.5px solid #f7b6cc;border-radius:12px;padding:10px;}
 .period-setting-label{font-size:11px;color:var(--red);font-weight:800;margin-bottom:6px;}
-.period-number{width:100%;background:var(--surface);border:1.5px solid #d8a09a;border-radius:10px;padding:9px 10px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:18px;font-weight:800;text-align:center;outline:none;}
+.period-number{width:100%;background:var(--surface);border:1.5px solid #f7b6cc;border-radius:10px;padding:9px 10px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:18px;font-weight:800;text-align:center;outline:none;}
 .period-number:focus{border-color:var(--red);}
-.period-next{background:linear-gradient(135deg,var(--red-s),#f6e9e7);border:1.5px solid #d8a09a;border-radius:14px;padding:13px;margin-bottom:12px;}
+.period-next{background:linear-gradient(135deg,var(--red-s),#ffeaf1);border:1.5px solid #f7b6cc;border-radius:14px;padding:13px;margin-bottom:12px;}
 .period-next-title{font-size:13px;font-weight:800;color:var(--red);margin-bottom:4px;}
 .period-next-main{font-size:18px;font-weight:800;color:var(--text);margin-bottom:3px;}
 .period-next-sub{font-size:11px;color:var(--muted);font-weight:700;line-height:1.6;}
@@ -346,9 +341,9 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .period-del{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
 .period-del:active{background:var(--red-s);color:var(--red);border-color:var(--red);}
 .period-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12px;font-weight:600;line-height:1.8;}
-.cal-cell.is-period{background:#f0f5f8;}
-.cal-cell.is-period .cal-lunar{color:#6f8fa1;}
-.cal-event-pill.period-actual,.cal-event-pill.period-predict{background:#dfeaf0;color:#5f7f92;}
+.cal-cell.is-period{background:#ffe4ec;}
+.cal-cell.is-period .cal-lunar{color:#e07a9c;}
+.cal-event-pill.period-actual,.cal-event-pill.period-predict{background:#ffd6e2;color:#d94f7e;}
 
 /* ── KB ── */
 .kb-search{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:600;outline:none;margin-bottom:10px;}
@@ -376,10 +371,10 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 /* ── WEIGHT MODAL ── */
 .wt-overlay{position:fixed;inset:0;background:rgba(40,44,38,.4);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:110;}
 .wt-overlay.visible{display:flex;}
-.wt-modal{background:var(--surface);border-radius:24px 24px 0 0;padding:18px 20px 44px;width:100%;max-width:480px;border-top:2px solid #d4a87c;animation:slideUp .25s ease;}
+.wt-modal{background:var(--surface);border-radius:24px 24px 0 0;padding:18px 20px 44px;width:100%;max-width:480px;border-top:2px solid #e8d58a;animation:slideUp .25s ease;}
 .wt-modal-title{font-size:20px;font-weight:800;color:var(--orange);margin-bottom:16px;}
 .wt-inp-row{display:flex;gap:8px;align-items:center;margin-bottom:16px;}
-.wt-number{flex:1;background:var(--orange-s);border:1.5px solid #d4a87c;border-radius:12px;padding:12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:22px;font-weight:800;outline:none;text-align:center;}
+.wt-number{flex:1;background:var(--orange-s);border:1.5px solid #e8d58a;border-radius:12px;padding:12px;color:var(--text);font-family:'Nunito','Noto Sans TC',sans-serif;font-size:22px;font-weight:800;outline:none;text-align:center;}
 .wt-number:focus{border-color:var(--orange);}
 .wt-unit{font-size:14px;color:var(--muted);font-weight:700;}
 
@@ -542,6 +537,15 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
       <div class="wt-goal-meta"><span id="wt-goal-meta-l">—</span><span id="wt-goal-meta-r">—</span></div>
     </div>
   </div>
+  <div class="wt-period-row">
+    <button class="wt-period-btn active" data-months="1" onclick="setPeriod(this)">近 1 個月</button>
+    <button class="wt-period-btn" data-months="3" onclick="setPeriod(this)">近 3 個月</button>
+    <button class="wt-period-btn" data-months="0" onclick="setPeriod(this)">全部</button>
+  </div>
+  <div class="wt-hist-label">趨勢圖（含 7 日移動平均）</div>
+  <div id="wt-chart-area"></div>
+  <div class="wt-hist-label">歷史記錄</div>
+  <div id="wt-list"></div>
   <div class="wt-goal-card">
     <div class="wt-goal-row">
       <span class="wt-goal-label">📅 每週目標體重</span>
@@ -554,15 +558,6 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
     <div id="wt-weekly-summary"></div>
     <div id="wt-weekly-list"></div>
   </div>
-  <div class="wt-period-row">
-    <button class="wt-period-btn active" data-months="1" onclick="setPeriod(this)">近 1 個月</button>
-    <button class="wt-period-btn" data-months="3" onclick="setPeriod(this)">近 3 個月</button>
-    <button class="wt-period-btn" data-months="0" onclick="setPeriod(this)">全部</button>
-  </div>
-  <div class="wt-hist-label">趨勢圖（含 7 日移動平均）</div>
-  <div id="wt-chart-area"></div>
-  <div class="wt-hist-label">歷史記錄</div>
-  <div id="wt-list"></div>
 </div>
 
 <!-- RUNNING SECTION -->
@@ -1405,7 +1400,7 @@ function renderDayPanel(){
     html+=`<div class="event-card" style="border-left:3px solid ${actual?'var(--red)':'var(--purple)'};">
       <div class="event-body" style="padding-right:0">
         <div class="event-name">${actual?'🌙 生理期':'♡ 生理期預測'}第 ${menstrualInfo.day} 天</div>
-        <div class="event-meta"><span class="etag" style="background:#dfeaf0;color:#5f7f92">${fmtDate(menstrualInfo.start)} ～ ${fmtDate(menstrualInfo.end)}</span></div>
+        <div class="event-meta"><span class="etag" style="background:#ffd6e2;color:#d94f7e">${fmtDate(menstrualInfo.start)} ～ ${fmtDate(menstrualInfo.end)}</span></div>
       </div>
     </div>`;
   }
@@ -2049,10 +2044,10 @@ function renderWeightList(){
     let goalLine='';
     if(weightGoal>0&&weightGoal>=mn&&weightGoal<=mx){const gy=toY(weightGoal);goalLine=`<line x1="${padL}" y1="${gy}" x2="${padL+cW}" y2="${gy}" stroke="#7b9bba" stroke-width="1.5" stroke-dasharray="5,4" opacity=".7"/><text x="${padL+cW-2}" y="${gy-4}" text-anchor="end" font-size="9" fill="#7b9bba" font-weight="800" font-family="Nunito,sans-serif">目標 ${weightGoal}</text>`;}
     const weeklyMarks=weeklyGoalsInRange.map(g=>{const gx=toX(g.date),gy=toY(g.value);return `<line x1="${gx}" y1="${gy-5}" x2="${gx}" y2="${gy+5}" stroke="#9e8db5" stroke-width="1.5" stroke-dasharray="2,2"/><circle cx="${gx}" cy="${gy}" r="3" fill="none" stroke="#9e8db5" stroke-width="1.5"><title>每週目標 ${g.date} · ${g.value}kg</title></circle>`;}).join('');
-    const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#b5936a" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${p.v}kg</title></circle>`).join('');
+    const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#c2a032" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${p.v}kg</title></circle>`).join('');
     const periodLabel=chartMonths===1?'近 1 個月':chartMonths===3?'近 3 個月':'全部記錄';
     const minV=Math.min(...vals).toFixed(1),maxV=Math.max(...vals).toFixed(1);
-    chartEl.innerHTML=`<div class="wt-chart"><div class="wt-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} kg</span></div><div style="display:flex;gap:12px;margin-bottom:6px;font-size:9px;font-weight:800;color:var(--muted)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#b5936a;margin-right:3px"></span>每日體重</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6b4a2f;margin-right:3px"></span>7日平均</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#b5936a" stop-opacity=".22"/><stop offset="100%" stop-color="#b5936a" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}${goalLine}${weeklyMarks}<path d="${area}" fill="url(#wg3)"/><path d="${maPath}" fill="none" stroke="#6b4a2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/><path d="${path}" fill="none" stroke="#b5936a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
+    chartEl.innerHTML=`<div class="wt-chart"><div class="wt-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} kg</span></div><div style="display:flex;gap:12px;margin-bottom:6px;font-size:9px;font-weight:800;color:var(--muted)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c2a032;margin-right:3px"></span>每日體重</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#7d6a1e;margin-right:3px"></span>7日平均</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c2a032" stop-opacity=".22"/><stop offset="100%" stop-color="#c2a032" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}${goalLine}${weeklyMarks}<path d="${area}" fill="url(#wg3)"/><path d="${maPath}" fill="none" stroke="#7d6a1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/><path d="${path}" fill="none" stroke="#c2a032" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
   }
   const rev=[...filtered].reverse();
   listEl.innerHTML=rev.map((w,i)=>{
