@@ -135,3 +135,40 @@ function cancelGarminImport(){
   document.getElementById('garmin-unit').value='';
   document.getElementById('garmin-message').textContent='';
 }
+
+// Import a compact, private transfer link. Fragments are not sent to the server.
+function importGarminLink(){
+  if(!location.hash.startsWith('#garmin-km='))return;
+  const payload=location.hash.slice('#garmin-km='.length);
+  history.replaceState(null,'',location.pathname+location.search);
+  switchTab('run');
+  try{
+    if(!payload||payload.length>50000)throw Error('匯入連結不完整，請重新開啟');
+    const lines=payload.split(';').map(row=>{
+      if(!/^[rt],\d{8}T\d{6},\d+(?:\.\d+)?$/.test(row))throw Error('匯入連結格式不正確');
+      const [kind,stamp,km]=row.split(',');
+      const date=`${stamp.slice(0,4)}-${stamp.slice(4,6)}-${stamp.slice(6,8)} ${stamp.slice(9,11)}:${stamp.slice(11,13)}:${stamp.slice(13,15)}`;
+      return `${kind==='t'?'跑步機':'跑步'},${date},${km}`;
+    });
+    const parsed=parseGarminCSV('活動類型,日期,距離\n'+lines.join('\n'));
+    if(parsed.invalid||!parsed.activities.length)throw Error('匯入連結包含無效日期或距離');
+    garminPending=parsed;
+    garminChoices={};
+    document.getElementById('garmin-filename').textContent='Garmin 跑量匯入連結（公里）';
+    document.getElementById('garmin-unit').value='km';
+    document.getElementById('garmin-preview').hidden=false;
+    const plan=planGarminImport(parsed,'km',runLog,garminChoices);
+    if(plan.unresolved.length){
+      previewGarmin();
+      document.getElementById('garmin-message').textContent='部分日期已有手動紀錄，請先選擇保留或取代，避免重複計算。';
+    }else if(!plan.added.length){
+      cancelGarminImport();
+      document.getElementById('garmin-message').textContent='這些跑步紀錄已經匯入，不會重複計算。';
+    }else confirmGarminImport();
+  }catch(err){
+    cancelGarminImport();
+    document.getElementById('garmin-message').textContent=err.message||'無法讀取匯入連結';
+  }
+}
+window.addEventListener('hashchange',importGarminLink);
+importGarminLink();
