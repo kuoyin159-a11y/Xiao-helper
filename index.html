@@ -143,6 +143,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .medication-toggle{display:block;width:100%;min-height:44px;margin:10px 0;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface);color:var(--green-d);font:inherit;font-size:14px;font-weight:700;cursor:pointer;text-align:left;}
 .medication-toggle[aria-pressed="true"]{background:var(--green-s);border-color:var(--green);}
 .medication-toggle:focus-visible{outline:2px solid var(--green-d);outline-offset:3px;}
+#medication-toggle{width:48px;height:48px;padding:0;text-align:center;font-size:26px;}
 /* autocomplete */
 .autocomplete-list{position:absolute;left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:200;overflow:hidden;margin-top:2px;}
 .autocomplete-item{padding:10px 14px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;border-bottom:1px solid var(--border);}
@@ -517,7 +518,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
   <div class="cal-day-panel" id="cal-day-panel" style="display:none">
     <div class="cal-day-title" id="cal-day-title"></div>
-    <button type="button" class="medication-toggle" id="medication-toggle" onclick="toggleMedication()" aria-pressed="false">🐻 標記已吃藥</button>
+    <button type="button" class="medication-toggle" id="medication-toggle" onclick="toggleMedication()" aria-pressed="false" aria-label="標記已吃藥">🐻</button>
     <div id="cal-day-list"></div>
   </div>
 </div>
@@ -886,7 +887,6 @@ function toggleMedication(){
   }
   medicationDays=next;
   renderCalendar();
-  showToast(marked?'已取消吃藥標記':'🐻 已標記吃藥');
 }
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
 function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
@@ -1403,7 +1403,7 @@ function renderCalendar(){
 
     cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''} ${isHoliday&&!isToday?'is-holiday':''} ${menstrualInfo&&!isToday?'is-period':''}" onclick="selectDate('${dateStr}')">
       <div class="cal-num-wrap"><div class="${numClass}">${day}</div></div>
-      ${medicationDays.includes(dateStr)?'<span class="cal-medication-icon" role="img" aria-label="已吃藥" title="已吃藥">🐻</span>':''}
+      ${medicationDays.includes(dateStr)?'<span class="cal-medication-icon" role="img" aria-label="已吃藥">🐻</span>':''}
       <div class="cal-lunar ${isLunarFirst?'holiday-lunar':''}">${isOther?'':lunar}</div>
       ${pills}
     </div>`;
@@ -1449,7 +1449,7 @@ function renderDayPanel(){
   const medicationButton=document.getElementById('medication-toggle');
   const medicationMarked=medicationDays.includes(selectedDate);
   medicationButton.setAttribute('aria-pressed',String(medicationMarked));
-  medicationButton.textContent=medicationMarked?'🐻 已吃藥 · 再按一次取消':'🐻 標記已吃藥';
+  medicationButton.textContent='🐻';
   medicationButton.setAttribute('aria-label',`${selectedDate} ${medicationMarked?'已吃藥，按下取消標記':'標記已吃藥'}`);
 
   if(!dayEvts.length && !dayNotes.length && !menstrualInfo){
