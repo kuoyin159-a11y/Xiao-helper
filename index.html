@@ -2111,7 +2111,7 @@ function renderWeightList(){
     const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#c2a032" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${p.v}kg</title></circle>`).join('');
     const periodLabel=chartMonths===1?'近 1 個月':chartMonths===3?'近 3 個月':'全部記錄';
     const minV=Math.min(...vals).toFixed(1),maxV=Math.max(...vals).toFixed(1);
-    chartEl.innerHTML=`<div class="wt-chart"><div class="wt-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} kg</span></div><div style="display:flex;gap:12px;margin-bottom:6px;font-size:9px;font-weight:800;color:var(--muted)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c2a032;margin-right:3px"></span>每日體重</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#7d6a1e;margin-right:3px"></span>7日平均</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c2a032" stop-opacity=".22"/><stop offset="100%" stop-color="#c2a032" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}${goalLine}${weeklyMarks}<path d="${area}" fill="url(#wg3)"/><path d="${maPath}" fill="none" stroke="#7d6a1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/><path d="${path}" fill="none" stroke="#c2a032" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
+    chartEl.innerHTML=`<div class="wt-chart"><div class="wt-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} kg</span></div><div style="display:flex;gap:12px;margin-bottom:6px;font-size:9px;font-weight:800;color:var(--muted)"><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#c2a032;margin-right:3px"></span>每日體重</span><span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#7d6a1e;margin-right:3px"></span>7日平均</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="wg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c2a032" stop-opacity=".22"/><stop offset="100%" stop-color="#c2a032" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}${goalLine}${weeklyMarks}<path d="${area}" fill="url(#wg3)"/><path d="${maPath}" fill="none" stroke="#7d6a1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/><path d="${path}" fill="none" stroke="#c2a032" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div></div>`;
   }
   const rev=[...filtered].reverse();
   listEl.innerHTML=rev.map((w,i)=>{
@@ -2206,16 +2206,9 @@ function renderRunList(){
   renderRunChart(data);
   if(runView==='daily'){
     const rev=[...daily].reverse();
-    listEl.innerHTML=rev.map((r,i)=>{
-      const prev=rev[i+1];
-      let diff='';
-      if(prev){
-        const dv=(r.km-prev.km).toFixed(1);
-        const sym=dv>0?'▲':dv<0?'▼':'→';
-        diff=`<span class="run-entry-diff">${sym} ${Math.abs(dv)}</span>`;
-      }
+    listEl.innerHTML=rev.map(r=>{
       const {month,day,dow}=runDateParts(r.date);
-      return `<div class="run-entry"><div class="run-entry-date">${month}/${day}（週${dow}）</div><div class="run-entry-val">${fmtKm(r.km)} km</div>${diff}<button class="run-del" onclick="delRun('${r.id}')">✕</button></div>`;
+      return `<div class="run-entry"><div class="run-entry-date">${month}/${day}（週${dow}）</div><div class="run-entry-val">${fmtKm(r.km)} km</div><button class="run-del" onclick="delRun('${r.id}')">✕</button></div>`;
     }).join('');
   } else {
     const rev=[...data].reverse();
@@ -2235,7 +2228,7 @@ function renderRunChart(data){
   const rawMax=Math.max(...vals), rawMin=Math.min(...vals,0);
   const pv=(rawMax-rawMin)||1;
   const mn=Math.max(0,rawMin-pv*.12), mx=rawMax+pv*.25;
-  const W=320,H=120,padL=36,padR=10,padT=12,padB=26,cW=W-padL-padR,cH=H-padT-padB;
+  const W=runView==='month'?Math.max(320,data.length*50+46):320,H=120,padL=36,padR=24,padT=12,padB=26,cW=W-padL-padR,cH=H-padT-padB;
   const toX=i=>padL+(i/(data.length-1))*cW;
   const toY=v=>padT+cH-((v-mn)/(mx-mn))*cH;
   const pts=data.map((r,i)=>({x:toX(i),y:toY(r.km),v:r.km,date:r.date}));
@@ -2243,16 +2236,17 @@ function renderRunChart(data){
   const area=`${path} L${pts[pts.length-1].x},${padT+cH} L${pts[0].x},${padT+cH} Z`;
   const ySteps=[mn,(mn+mx)/2,mx];
   const yLabels=ySteps.map(v=>`<text x="${padL-4}" y="${toY(v)+3}" text-anchor="end" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${fmtKm(v)}</text>`).join('');
-  const idxs=[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i&&data.length>1);
+  const idxs=runView==='month'?data.map((_,i)=>i):[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i&&data.length>1);
+  const spansYears=data[0].date.slice(0,4)!==data[data.length-1].date.slice(0,4);
   const xLabels=idxs.map(i=>{
     const d=data[i].date;
-    const label=runView==='daily'?`${parseInt(d.slice(5,7))}/${parseInt(d.slice(8,10))}`:(runView==='month'?`${parseInt(d.slice(5,7))}月`:d);
+    const label=runView==='daily'?`${parseInt(d.slice(5,7))}/${parseInt(d.slice(8,10))}`:(runView==='month'?`${spansYears?d.slice(0,4)+'/':''}${parseInt(d.slice(5,7))}月`:d);
     return `<text x="${toX(i)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#8e9488" font-weight="700" font-family="Nunito,sans-serif">${label}</text>`;
   }).join('');
   const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#7b9bba" stroke="#fff" stroke-width="1.5"><title>${p.date} · ${fmtKm(p.v)}km</title></circle>`).join('');
   const periodLabel=runView==='daily'?'每日跑步公里數':runView==='month'?'月跑量趨勢':'年跑量趨勢';
   const minV=fmtKm(Math.min(...vals)), maxV=fmtKm(Math.max(...vals));
-  chartEl.innerHTML=`<div class="run-chart"><div class="run-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} km</span></div><svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7b9bba" stop-opacity=".22"/><stop offset="100%" stop-color="#7b9bba" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}<path d="${area}" fill="url(#rg1)"/><path d="${path}" fill="none" stroke="#7b9bba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div>`;
+  chartEl.innerHTML=`<div class="run-chart"><div class="run-chart-title"><span>${periodLabel}</span><span>最低 ${minV} · 最高 ${maxV} km</span></div><div style="overflow-x:auto"><svg class="chart-svg" style="min-width:${runView==='month'&&W>320?W:0}px" viewBox="0 0 ${W} ${H}" height="${H}"><defs><linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7b9bba" stop-opacity=".22"/><stop offset="100%" stop-color="#7b9bba" stop-opacity="0"/></linearGradient></defs>${ySteps.map(v=>`<line x1="${padL}" y1="${toY(v)}" x2="${padL+cW}" y2="${toY(v)}" stroke="#d8ddd4" stroke-width="1"/>`).join('')}<path d="${area}" fill="url(#rg1)"/><path d="${path}" fill="none" stroke="#7b9bba" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${yLabels}${xLabels}</svg></div></div>`;
 }
 function saveRunFromInput(){
   const d=document.getElementById('run-date-input').value||todayStr();
