@@ -139,6 +139,10 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .cal-more{font-size:9px;font-weight:700;color:var(--muted);padding:0 4px;}
 .cal-today-btn{font-size:11px;font-weight:800;color:var(--green-d);background:var(--green-s);border:1.5px solid var(--green);border-radius:16px;padding:4px 12px;cursor:pointer;}
 .cal-today-btn:active{opacity:.8;}
+.cal-medication-icon{position:absolute;top:5px;right:3px;font-size:15px;line-height:20px;}
+.medication-toggle{display:block;width:100%;min-height:44px;margin:10px 0;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface);color:var(--green-d);font:inherit;font-size:14px;font-weight:700;cursor:pointer;text-align:left;}
+.medication-toggle[aria-pressed="true"]{background:var(--green-s);border-color:var(--green);}
+.medication-toggle:focus-visible{outline:2px solid var(--green-d);outline-offset:3px;}
 /* autocomplete */
 .autocomplete-list{position:absolute;left:0;right:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.1);z-index:200;overflow:hidden;margin-top:2px;}
 .autocomplete-item{padding:10px 14px;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;border-bottom:1px solid var(--border);}
@@ -311,6 +315,11 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 .run-unit{font-size:14px;color:var(--muted);font-weight:700;}
 .run-save-btn{width:100%;padding:12px;border-radius:12px;border:none;background:var(--blue);color:#fff;font-family:'Nunito','Noto Sans TC',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(123,155,186,.16);}
 .run-save-btn:active{opacity:.85;}
+.run-save-btn:disabled{opacity:.5;cursor:default;}
+.garmin-help{font-size:12px;line-height:1.7;color:var(--muted);margin:8px 0;}
+.garmin-select{width:100%;min-height:44px;margin:6px 0 12px;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:14px;}
+.garmin-list{max-height:300px;overflow:auto;margin:12px 0;font-size:13px;}
+.garmin-row{padding:10px 0;border-bottom:1px solid var(--border);line-height:1.6;overflow-wrap:anywhere;}
 .run-summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
 .run-summary-card{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:13px;text-align:center;}
 .run-summary-label{font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px;}
@@ -508,6 +517,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 
   <div class="cal-day-panel" id="cal-day-panel" style="display:none">
     <div class="cal-day-title" id="cal-day-title"></div>
+    <button type="button" class="medication-toggle" id="medication-toggle" onclick="toggleMedication()" aria-pressed="false">🐻 標記已吃藥</button>
     <div id="cal-day-list"></div>
   </div>
 </div>
@@ -579,6 +589,23 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 <!-- RUNNING SECTION -->
 <div class="section" id="sec-run">
   <div class="sec-label" style="color:var(--blue)">跑步紀錄</div>
+  <div class="run-card">
+    <button type="button" class="run-save-btn" onclick="document.getElementById('garmin-file').click()">⌚ 匯入 Garmin</button>
+    <input type="file" id="garmin-file" accept=".csv,text/csv" onchange="readGarminFile(this)" hidden>
+    <p class="garmin-help">選取手機「下載」裡的 Activities.csv，確認預覽後再加入跑量。包含跑步機；已匯入的活動會略過。</p>
+    <div id="garmin-preview" hidden>
+      <div id="garmin-filename" class="garmin-help"></div>
+      <label for="garmin-unit">Garmin 匯出時的距離單位</label>
+      <select id="garmin-unit" class="garmin-select" onchange="previewGarmin()">
+        <option value="">請確認單位</option><option value="km">公里（km）</option><option value="mi">英里（mi）</option>
+      </select>
+      <div id="garmin-summary" role="status"></div>
+      <div id="garmin-list" class="garmin-list"></div>
+      <button type="button" id="garmin-confirm" class="run-save-btn" onclick="confirmGarminImport()" disabled>確認匯入</button>
+      <button type="button" class="medication-toggle" onclick="cancelGarminImport()">取消匯入</button>
+    </div>
+    <p id="garmin-message" class="garmin-help" role="status"></p>
+  </div>
   <div class="run-card">
     <div class="field-label">日期與公里數</div>
     <div class="run-input-row">
@@ -789,6 +816,7 @@ input:checked+.toggle-slider::before{transform:translateX(18px);}
 // ═══════════ STORAGE KEYS ═══════════
 const EVENTS_KEY='events_v1', WT_KEY='wt_v1', WT_GOAL_KEY='wt_goal_v1', RUN_KEY='run_v1', PERIOD_KEY='period_v1', PERIOD_SETTINGS_KEY='period_settings_v1', KB_KEY='kb_v1', DATE_KEY='last_date_v1';
 const WT_WEEKLY_GOAL_KEY='wt_weekly_goal_v1', WT_MILESTONE_KEY='wt_milestone_v1';
+const MEDICATION_KEY='medication_days_v1';
 
 // ═══════════ STATE ═══════════
 let events = JSON.parse(localStorage.getItem(EVENTS_KEY)||'[]');
@@ -821,6 +849,7 @@ let runLog=JSON.parse(localStorage.getItem(RUN_KEY)||'[]');
 let periodLog=JSON.parse(localStorage.getItem(PERIOD_KEY)||'[]');
 let periodSettings=JSON.parse(localStorage.getItem(PERIOD_SETTINGS_KEY)||'{"cycle":28,"length":5}');
 let kbNotes=JSON.parse(localStorage.getItem(KB_KEY)||'[]');
+let medicationDays=JSON.parse(localStorage.getItem(MEDICATION_KEY)||'[]');
 let chartMonths=1;
 let runView='daily';
 let kbFilter='all';
@@ -846,6 +875,19 @@ function offsetDate(n){
 }
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function saveEvents(){ localStorage.setItem(EVENTS_KEY,JSON.stringify(events)); }
+function toggleMedication(){
+  const marked=medicationDays.includes(selectedDate);
+  const next=marked?medicationDays.filter(date=>date!==selectedDate):[...medicationDays,selectedDate];
+  try{
+    localStorage.setItem(MEDICATION_KEY,JSON.stringify(next));
+  }catch(err){
+    showToast('無法儲存標記，請再試一次');
+    return;
+  }
+  medicationDays=next;
+  renderCalendar();
+  showToast(marked?'已取消吃藥標記':'🐻 已標記吃藥');
+}
 function saveWt(){ localStorage.setItem(WT_KEY,JSON.stringify(weightLog)); }
 function saveRun(){ localStorage.setItem(RUN_KEY,JSON.stringify(runLog)); }
 function savePeriod(){ localStorage.setItem(PERIOD_KEY,JSON.stringify(periodLog)); }
@@ -1361,6 +1403,7 @@ function renderCalendar(){
 
     cells+=`<div class="cal-cell ${isOther?'other-month':''} ${isToday?'is-today':''} ${isSel&&!isToday?'selected':''} ${isHoliday&&!isToday?'is-holiday':''} ${menstrualInfo&&!isToday?'is-period':''}" onclick="selectDate('${dateStr}')">
       <div class="cal-num-wrap"><div class="${numClass}">${day}</div></div>
+      ${medicationDays.includes(dateStr)?'<span class="cal-medication-icon" role="img" aria-label="已吃藥" title="已吃藥">🐻</span>':''}
       <div class="cal-lunar ${isLunarFirst?'holiday-lunar':''}">${isOther?'':lunar}</div>
       ${pills}
     </div>`;
@@ -1403,6 +1446,11 @@ function renderDayPanel(){
   const lunarTag=lunar?`<span style="font-size:11px;color:var(--muted);font-weight:600;margin-left:6px;">農曆${lunar}</span>`:'';
   title.innerHTML=`${fmtDate(selectedDate)}${selectedDate===todayStr()?' 今天':''}${lunarTag}${solarTermTag}${holidayTag}`;
   panel.style.display='block';
+  const medicationButton=document.getElementById('medication-toggle');
+  const medicationMarked=medicationDays.includes(selectedDate);
+  medicationButton.setAttribute('aria-pressed',String(medicationMarked));
+  medicationButton.textContent=medicationMarked?'🐻 已吃藥 · 再按一次取消':'🐻 標記已吃藥';
+  medicationButton.setAttribute('aria-label',`${selectedDate} ${medicationMarked?'已吃藥，按下取消標記':'標記已吃藥'}`);
 
   if(!dayEvts.length && !dayNotes.length && !menstrualInfo){
     list.innerHTML=`<div class="cal-day-empty">這天沒有行程、任務或生理期預測<br><small>按右上角 🎙 新增</small></div>`;
@@ -2114,7 +2162,7 @@ function runDateParts(dateStr){
 function runMonthKey(dateStr){ return (dateStr||'').slice(0,7); }
 function runYearKey(dateStr){ return (dateStr||'').slice(0,4); }
 function sumRun(list){ return list.reduce((s,r)=>s+(parseFloat(r.km)||0),0); }
-function fmtKm(v){ const n=Math.round((v||0)*10)/10; return Number.isInteger(n)?String(n):n.toFixed(1); }
+function fmtKm(v){ return String(Math.round((v||0)*100)/100); }
 function groupRunBy(period){
   const map={};
   runLog.forEach(r=>{
@@ -2485,7 +2533,7 @@ function exportCalendar(){
 // ═══════════ SYNC ═══════════
 function exportData(){
   const data={
-    events, weightLog, weightGoal, weeklyWeightGoals, weightMilestonesAchieved, runLog, periodLog, periodSettings, kbNotes,
+    events, weightLog, weightGoal, weeklyWeightGoals, weightMilestonesAchieved, runLog, periodLog, periodSettings, kbNotes, medicationDays,
     exportedAt: new Date().toISOString(),
     version: 1
   };
@@ -2509,6 +2557,9 @@ function importData(event){
   reader.onload=e=>{
     try{
       const data=JSON.parse(e.target.result);
+      if(data.medicationDays!==undefined&&(!Array.isArray(data.medicationDays)||!data.medicationDays.every(date=>typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)))){
+        showToast('⚠️ 吃藥標記格式錯誤'); return;
+      }
       if(!data.events&&!data.weightLog&&!data.runLog&&!data.periodLog&&!data.kbNotes){
         showToast('⚠️ 檔案格式錯誤'); return;
       }
@@ -2522,6 +2573,7 @@ function importData(event){
       if(data.periodLog) { periodLog=data.periodLog; savePeriod(); }
       if(data.periodSettings){ periodSettings=data.periodSettings; savePeriodSettingsStore(); }
       if(data.kbNotes)   { kbNotes=data.kbNotes;   saveKB(); }
+      if(data.medicationDays){ medicationDays=[...new Set(data.medicationDays)]; localStorage.setItem(MEDICATION_KEY,JSON.stringify(medicationDays)); }
       renderAll();
       const d=new Date();
       const now=`${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
@@ -2683,5 +2735,6 @@ setInterval(()=>{
   renderAll();
 },60000);
 </script>
+<script src="./garmin-import.js"></script>
 </body>
 </html>

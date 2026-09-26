@@ -1,7 +1,8 @@
-const CACHE_NAME = 'xiao-helper-offline-v2';
+const CACHE_NAME = 'xiao-helper-offline-v6';
 const APP_SHELL = [
   './',
-  './index.html'
+  './index.html',
+  './garmin-import.js'
 ];
 
 self.addEventListener('install', event => {
